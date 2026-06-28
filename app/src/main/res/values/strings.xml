@@ -20,12 +20,15 @@
     <string name="cd_logo">Logo de Aura</string>
     <string name="cd_toggle_password">Mostrar u ocultar contraseña</string>
     <string name="cd_back">Regresar</string>
-    <string name="cd_notifications">Notificaciones</string>
+    <string name="cd_notifications">Avisos</string>
     <string name="cd_profile">Perfil</string>
     <string name="cd_next">Siguiente</string>
 
     <!-- Navigation -->
     <string name="nav_home">Inicio</string>
+    <string name="nav_notifications">Avisos</string>
+    <string name="nav_messages">Mensajes</string>
+    <string name="nav_profile">Perfil</string>
     <string name="nav_settings">Configuración</string>
     
     <!-- Settings -->
@@ -40,4 +43,8 @@
     
     <!-- Home -->
     <string name="home_welcome">¡Bienvenido a Aura!</string>
+    
+    <!-- Misc -->
+    <string name="coming_soon">Próximamente disponible</string>
+    <string name="cd_messages">Mensajes</string>
 </resources>
