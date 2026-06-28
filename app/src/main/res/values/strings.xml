@@ -47,4 +47,9 @@
     <!-- Misc -->
     <string name="coming_soon">Próximamente disponible</string>
     <string name="cd_messages">Mensajes</string>
+    
+    <!-- Profile -->
+    <string name="profile_default_name">Alex</string>
+    <string name="profile_default_email">alex@aura.com</string>
+    <string name="profile_edit">Editar Perfil</string>
 </resources>

@@ -1,60 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="?attr/colorSurface">
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:background="?attr/android:colorBackground">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings_security"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="?attr/colorOnSurface"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="24dp"/>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switchFingerprint"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/security_fingerprint"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnSurface"
-        android:paddingVertical="16dp" />
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/aura_white"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="16dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/aura_white"
+            android:orientation="vertical"
+            android:padding="16dp">
+            
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchFingerprint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/security_fingerprint"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:paddingVertical="12dp" />
+                
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOutlineVariant"
+                android:layout_marginVertical="4dp"/>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchLockOnExit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/security_lock_on_exit"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:paddingVertical="12dp" />
+                
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/aura_info"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="16dp"
+        app:strokeWidth="0dp">
         
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="8dp"
-        android:background="?attr/colorOutlineVariant" />
+        <TextView
+            android:id="@+id/btnChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/aura_info"
+            android:text="@string/security_change_password"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_text_on_primary"
+            android:padding="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
+            app:drawableTint="?attr/colorOnSurfaceVariant"/>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switchLockOnExit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/security_lock_on_exit"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnSurface"
-        android:paddingVertical="16dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="8dp"
-        android:background="?attr/colorOutlineVariant" />
-
-    <TextView
-        android:id="@+id/btnChangePassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/security_change_password"
-        android:textSize="18sp"
-        android:textColor="?attr/colorPrimary"
-        android:paddingVertical="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

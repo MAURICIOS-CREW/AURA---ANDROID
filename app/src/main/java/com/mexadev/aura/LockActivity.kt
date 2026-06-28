@@ -8,6 +8,7 @@ import com.mexadev.aura.core.session.BiometricHelper
 class LockActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         // Reusamos el layout del splash para mantener la estética limpia
         setContentView(R.layout.activity_splash)
         
