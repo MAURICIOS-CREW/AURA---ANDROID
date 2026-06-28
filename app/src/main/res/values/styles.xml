@@ -293,5 +293,9 @@
         <item name="android:layout_height">@dimen/border_thin</item>
         <item name="android:background">@color/aura_divider</item>
     </style>
+    
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

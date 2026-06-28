@@ -53,7 +53,15 @@
         android:id="@+id/nav_profile"
         android:name="com.mexadev.aura.ui.profile.ProfileFragment"
         android:label="Perfil"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_nav_profile_to_nav_security_settings"
+            app:destination="@id/nav_security_settings"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"/>
+    </fragment>
 
     <!-- ─── CONFIGURACIÓN (accesible desde el perfil o internamente) ─── -->
     <fragment
