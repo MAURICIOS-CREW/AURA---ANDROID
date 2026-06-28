@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary -->
+    <color name="aura_primary">#1B4B8A</color>
+    <color name="aura_primary_dark">#0D2B52</color>
+    <color name="aura_primary_light">#2E6DB4</color>
+    <color name="aura_primary_surface">#E8F0FA</color>
+    <color name="aura_primary_highlight">#3A7BD5</color>
+
+    <!-- Neutral -->
+    <color name="aura_white">#FFFFFF</color>
+    <color name="aura_background">#F5F7FA</color>
+    <color name="aura_surface">#FFFFFF</color>
+    <color name="aura_surface_variant">#F0F3F8</color>
+
+    <!-- Text -->
+    <color name="aura_text_primary">#0D2B52</color>
+    <color name="aura_text_secondary">#6B7B8D</color>
+    <color name="aura_text_tertiary">#9EAAB8</color>
+    <color name="aura_text_on_primary">#FFFFFF</color>
+    <color name="aura_text_link">#3A7BD5</color>
+
+    <!-- Border -->
+    <color name="aura_border">#E0E5EC</color>
+    <color name="aura_border_light">#EDF1F7</color>
+    <color name="aura_divider">#E8ECF1</color>
+
+    <!-- Status -->
+    <color name="aura_success">#2EAD67</color>
+    <color name="aura_success_light">#E6F7EE</color>
+    <color name="aura_error">#E53E3E</color>
+    <color name="aura_error_light">#FDE8E8</color>
+    <color name="aura_warning">#F59E0B</color>
+    <color name="aura_warning_light">#FEF3CD</color>
+    <color name="aura_info">#3B82F6</color>
+    <color name="aura_info_light">#DBEAFE</color>
+
+    <!-- Overlay -->
+    <color name="aura_overlay_white">#CCFFFFFF</color>
+    <color name="aura_shadow">#1A000000</color>
+
+    <!-- Bottom Nav -->
+    <color name="aura_nav_active">#1B4B8A</color>
+    <color name="aura_nav_inactive">#9EAAB8</color>
+
+    <!-- Legacy -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

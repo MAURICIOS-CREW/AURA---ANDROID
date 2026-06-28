@@ -1,0 +1,300 @@
+================================================================================
+                            AURA - MODELADO DE DATOS
+================================================================================
+Este documento contiene la estructura detallada de la base de datos de Aura,
+basada en las migraciones de Laravel disponibles en el backend.
+
+--------------------------------------------------------------------------------
+ÍNDICE DE TABLAS
+--------------------------------------------------------------------------------
+I.   MÓDULO DE MULTITENANCY Y NÚCLEO
+     1. tenants
+     2. modules
+     3. tenant_modules (Pivot)
+II.  MÓDULO DE CONTROL DE ACCESOS Y USUARIOS
+     4. permissions
+     5. roles
+     6. role_permission (Pivot)
+     7. users
+     8. user_sessions
+     9. banned_users
+III. MÓDULO DE RESIDENCIAS Y COMUNIDAD
+     10. address
+     11. residences
+     12. user_residences (Pivot)
+     13. vehicles
+     14. packages
+     15. access_codes
+     16. access_logs
+IV.  MÓDULO FINANCIERO E INCIDENTES
+     17. financial_charges
+     18. payments
+     19. incidents
+V.   TABLAS DEL SISTEMA DE LARAVEL
+     20. personal_access_tokens (Sanctum)
+     21. cache & cache_locks
+     22. jobs, job_batches & failed_jobs
+
+--------------------------------------------------------------------------------
+DETALLE DE TABLAS
+--------------------------------------------------------------------------------
+
+1. tenants
+   Maneja las configuraciones de los condominios/clientes de la plataforma.
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - name: VARCHAR(255) (Nombre del condominio/tenant)
+   - db_host: VARCHAR(255) (Host de la base de datos para este tenant, Nullable)
+   - db_name: VARCHAR(255) (Nombre de la base de datos para este tenant, Nullable)
+   - db_user: VARCHAR(255) (Usuario de la base de datos para este tenant, Nullable)
+   - db_password: VARCHAR(255) (Contraseña de la base de datos, Nullable)
+   - status: VARCHAR(255) (Estado del tenant, Default: 'active', Enum: tenant_status)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+2. modules
+   Módulos del sistema que pueden activarse para diferentes tenants.
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - name: VARCHAR(255) (Nombre del módulo)
+   - slug: VARCHAR(255) (Identificador único, Unique)
+   - is_core: BOOLEAN (Indica si es un módulo base del sistema, Default: false)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+3. tenant_modules (Pivot)
+   Tabla pivote que vincula los módulos activos en cada condominio (tenant).
+   - tenant_id: BIGINT (Clave Foránea -> tenants.id, Cascade Delete)
+   - module_id: BIGINT (Clave Foránea -> modules.id, Cascade Delete)
+   - is_active: BOOLEAN (Define si el módulo está habilitado para el tenant, Default: true)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+   * Clave Primaria Compuesta: (tenant_id, module_id)
+
+4. permissions
+   Permisos específicos asignables a roles del sistema.
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - name: VARCHAR(255) (Nombre del permiso)
+   - slug: VARCHAR(255) (Identificador único del permiso, Unique)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+5. roles
+   Roles del sistema (ej. Super Admin, Administrador, Guardia, Residente).
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - name: VARCHAR(255) (Nombre del rol)
+   - hierarchy_level: INT (Nivel jerárquico para control de permisos sobre otros, Default: 0)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+6. role_permission (Pivot)
+   Relación de muchos a muchos entre roles y sus respectivos permisos.
+   - role_id: BIGINT (Clave Foránea -> roles.id, Cascade Delete)
+   - permission_id: BIGINT (Clave Foránea -> permissions.id, Cascade Delete)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+   * Clave Primaria Compuesta: (role_id, permission_id)
+
+7. users
+   Tabla de usuarios de la plataforma (administradores, guardias, residentes).
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - tenant_id: BIGINT (Clave Foránea -> tenants.id, Nullable, Cascade Delete)
+   - name: VARCHAR(255) (Nombre completo)
+   - username: VARCHAR(255) (Nombre de usuario para login, Unique)
+   - email: VARCHAR(255) (Correo electrónico, Unique)
+   - password: VARCHAR(255) (Contraseña encriptada)
+   - phone: VARCHAR(255) (Número de teléfono móvil/contacto, Nullable)
+   - role_id: BIGINT (Clave Foránea -> roles.id, Nullable, Null on Delete)
+   - is_active: BOOLEAN (Indica si el usuario tiene acceso al sistema, Default: true)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+8. user_sessions
+   Control de sesiones activas de usuarios (particularmente tokens móviles).
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - user_id: BIGINT (Clave Foránea -> users.id, Cascade Delete)
+   - token_id: VARCHAR(255) (Identificador único de sesión/token, Unique)
+   - expires_at: TIMESTAMP (Fecha de expiración de sesión, Nullable)
+   - expired_at: TIMESTAMP (Fecha en la que fue expirada manualmente, Nullable)
+   - is_closed: BOOLEAN (Define si el usuario cerró la sesión voluntariamente, Default: false)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+9. banned_users
+   Registro de usuarios suspendidos/baneados del sistema.
+   - id: BIGINT (Clave Primaria, Auto Incrementable)
+   - user_id: BIGINT (Clave Foránea -> users.id, Cascade Delete)
+   - reason: TEXT (Motivo del baneo, Nullable)
+   - created_at: TIMESTAMP (Nullable)
+   - updated_at: TIMESTAMP (Nullable)
+
+10. address
+    Listado general de direcciones o secciones dentro del condominio.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - name: VARCHAR(255) (Nombre de la dirección o sector)
+    - cp: VARCHAR(255) (Código Postal)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+11. residences
+    Viviendas físicas asociadas a una dirección dentro de la comunidad.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - address_id: BIGINT (Clave Foránea -> address.id, Nullable, Null on Delete)
+    - block: INT (Bloque, edificio o etapa de la vivienda)
+    - number: VARCHAR(255) (Número de casa o departamento)
+    - intercom_number: VARCHAR(255) (Número para marcar el intercomunicador, Nullable)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+12. user_residences (Pivot)
+    Relación muchos a muchos entre usuarios (residentes) y sus viviendas.
+    - user_id: BIGINT (Clave Foránea -> users.id, Cascade Delete)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Cascade Delete)
+    - is_primary_owner: BOOLEAN (Indica si es el propietario principal de la cuenta de la vivienda, Default: false)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+    * Clave Primaria Compuesta: (user_id, residence_id)
+
+13. vehicles
+    Vehículos registrados asociados a viviendas para control de acceso.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Cascade Delete)
+    - plate: VARCHAR(255) (Placa o matrícula del vehículo)
+    - brand: VARCHAR(255) (Marca del vehículo, Nullable)
+    - color: VARCHAR(255) (Color del vehículo, Nullable)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+14. packages
+    Control de paquetería entregada a la caseta de vigilancia para residentes.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Cascade Delete)
+    - receiver_guard_id: BIGINT (Clave Foránea -> users.id, Nullable, Null on Delete. Guardia que recibe el paquete)
+    - courier_company: VARCHAR(255) (Empresa de paquetería/reparto, Nullable)
+    - status: VARCHAR(255) (Estado del paquete, Default: 'pending', Enum: package_status)
+    - delivery_evidence: VARCHAR(255) (Ruta de foto o firma de evidencia, Nullable)
+    - received_at: TIMESTAMP (Fecha de recepción en caseta, Nullable)
+    - delivered_at: TIMESTAMP (Fecha de entrega final al residente, Nullable)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+15. access_codes
+    Códigos de acceso de invitados generados por residentes.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Cascade Delete)
+    - guest_name: VARCHAR(255) (Nombre de la visita, Nullable)
+    - code: VARCHAR(255) (Código generado para ingreso)
+    - type: VARCHAR(255) (Tipo de código, Enum: code_type)
+    - valid_from: TIMESTAMP (Fecha/hora de inicio de validez, Nullable)
+    - valid_until: TIMESTAMP (Fecha/hora fin de validez, Nullable)
+    - uses: INT (Número de usos registrados del código, Default: 0)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+16. access_logs
+    Historial detallado de todas las entradas y salidas del condominio.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - access_type: VARCHAR(255) (Enum: access_type)
+    - method: VARCHAR(255) (Enum: access_method)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Nullable, Null on Delete)
+    - vehicle_id: BIGINT (Clave Foránea -> vehicles.id, Nullable, Null on Delete)
+    - access_code_id: BIGINT (Clave Foránea -> access_codes.id, Nullable, Null on Delete)
+    - guard_user_id: BIGINT (Clave Foránea -> users.id, Nullable, Null on Delete)
+    - status: VARCHAR(255) (Enum: access_status)
+    - ai_confidence: FLOAT (Nivel de confianza de IA si fue lectura automática de placa, Nullable)
+    - timestamp: TIMESTAMP (Fecha/hora del registro de acceso, Default: CURRENT_TIMESTAMP)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+17. financial_charges
+    Cargos de mantenimiento u otros conceptos generados para las viviendas.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - residence_id: BIGINT (Clave Foránea -> residences.id, Cascade Delete)
+    - amount: DECIMAL(10, 2) (Monto cargado)
+    - month: INT (Mes correspondiente del cobro)
+    - year: INT (Año correspondiente del cobro)
+    - status: VARCHAR(255) (Estado del cargo, Default: 'pending', Enum: charge_status)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+18. payments
+    Registro de pagos realizados por los residentes para saldar los cargos financieros.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - charge_id: BIGINT (Clave Foránea -> financial_charges.id, Cascade Delete)
+    - user_id: BIGINT (Clave Foránea -> users.id, Cascade Delete. Residente que realiza el pago)
+    - amount: DECIMAL(10, 2) (Monto pagado)
+    - payment_method: VARCHAR(255) (Enum: payment_method)
+    - receipt: VARCHAR(255) (Ruta del comprobante de pago/archivo adjunto, Nullable)
+    - validator_admin_id: BIGINT (Clave Foránea -> users.id, Nullable, Null on Delete. Admin que aprueba/rechaza el pago)
+    - status: VARCHAR(255) (Estado del pago, Default: 'pending', Enum: payment_status)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+19. incidents
+    Reporte de incidentes o problemas dentro de la comunidad.
+    - id: BIGINT (Clave Primaria, Auto Incrementable)
+    - reporter_user_id: BIGINT (Clave Foránea -> users.id, Cascade Delete. Usuario que reporta)
+    - title: VARCHAR(255) (Título del incidente)
+    - description: TEXT (Detalle de la problemática, Nullable)
+    - status: VARCHAR(255) (Estado actual del reporte, Default: 'open', Enum: incident_status)
+    - created_at: TIMESTAMP (Nullable)
+    - updated_at: TIMESTAMP (Nullable)
+
+--------------------------------------------------------------------------------
+RELACIONES PRINCIPALES (CARDINALIDAD)
+--------------------------------------------------------------------------------
+
+1.  [tenants] 1 : N [users]
+    - Un condominio tiene muchos usuarios; un usuario opcionalmente pertenece a un condominio (null en caso de admin global).
+
+2.  [tenants] N : M [modules]  (vía [tenant_modules])
+    - Un condominio tiene múltiples módulos activos; un módulo puede estar activo en múltiples condominios.
+
+3.  [roles] N : M [permissions]  (vía [role_permission])
+    - Un rol puede tener múltiples permisos; un permiso puede ser otorgado a múltiples roles.
+
+4.  [roles] 1 : N [users]
+    - Un rol puede asignarse a múltiples usuarios; un usuario posee un rol (opcionalmente nulo).
+
+5.  [users] 1 : N [user_sessions]
+    - Un usuario puede registrar múltiples sesiones activas o inactivas.
+
+6.  [users] 1 : N [banned_users]
+    - Un usuario suspendido tiene registros asociados a su suspensión.
+
+7.  [users] N : M [residences]  (vía [user_residences])
+    - Un usuario puede residir o tener relación con múltiples viviendas (ej. propietario de varias casas); una vivienda puede tener varios usuarios asociados.
+
+8.  [address] 1 : N [residences]
+    - Una dirección/etapa engloba múltiples viviendas.
+
+9.  [residences] 1 : N [vehicles]
+    - Una vivienda tiene registrados múltiples vehículos.
+
+10. [residences] 1 : N [packages]
+    - Los paquetes se dirigen a una vivienda.
+    - Relación adicional: [users] (como guardias) 1 : N [packages] (recibidos).
+
+11. [residences] 1 : N [access_codes]
+    - Un código de acceso es generado por y para una vivienda específica.
+
+12. [residences] 1 : N [access_logs]
+    - Los accesos quedan registrados para una vivienda específica (cuando aplica).
+    - Relaciones adicionales:
+      - [vehicles] 1 : N [access_logs] (acceso asociado a vehículo).
+      - [access_codes] 1 : N [access_logs] (acceso mediante código de visita).
+      - [users] (guardia) 1 : N [access_logs] (registro supervisado por un guardia).
+
+13. [residences] 1 : N [financial_charges]
+    - Los cargos financieros de mantenimiento se emiten para una vivienda.
+
+14. [financial_charges] 1 : N [payments]
+    - Un cargo financiero puede tener múltiples registros de pago (intentos, parcialidades o correcciones).
+    - Relación adicional:
+      - [users] (residente) 1 : N [payments] (pagos emitidos por el usuario).
+      - [users] (validador) 1 : N [payments] (pagos verificados por el administrador).
+
+15. [users] (reportero) 1 : N [incidents]
+    - Un usuario reporta uno o varios incidentes.
+
+================================================================================
+FIN DEL DOCUMENTO
+================================================================================

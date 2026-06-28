@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/aura_primary_dark">
+    <item>
+        <selector>
+            <item android:state_pressed="true" android:drawable="@drawable/bg_button_filled_pressed" />
+            <item android:drawable="@drawable/bg_button_filled" />
+        </selector>
+    </item>
+</ripple>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- BASE PARENTS (required for dot-inheritance) -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura" parent="" />
+    <style name="Aura.Button" />
+    <style name="Aura.Button.Tab" />
+    <style name="Aura.Text" />
+    <style name="Aura.Badge" />
+    <style name="Aura.Badge.Status" />
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- BUTTONS                                     -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Filled Button (Primary action) -->
+    <style name="Aura.Button.Filled">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:background">@drawable/selector_button_filled</item>
+        <item name="android:textColor">@color/aura_text_on_primary</item>
+        <item name="android:textSize">@dimen/text_body_lg</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_xl</item>
+        <item name="android:paddingEnd">@dimen/spacing_xl</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Aura.Button.Filled.Small">
+        <item name="android:layout_height">@dimen/button_height_sm</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <!-- Outline Button -->
+    <style name="Aura.Button.Outline">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:background">@drawable/bg_button_outline</item>
+        <item name="android:textColor">@color/aura_primary</item>
+        <item name="android:textSize">@dimen/text_body_lg</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_xl</item>
+        <item name="android:paddingEnd">@dimen/spacing_xl</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Aura.Button.Outline.Small">
+        <item name="android:layout_height">@dimen/button_height_sm</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <!-- Text Button (no background) -->
+    <style name="Aura.Button.Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/aura_text_link</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingTop">@dimen/spacing_xs</item>
+        <item name="android:paddingBottom">@dimen/spacing_xs</item>
+    </style>
+
+    <!-- Tab Active (pill filled) -->
+    <style name="Aura.Button.Tab.Active">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height_sm</item>
+        <item name="android:background">@drawable/bg_button_tab_active</item>
+        <item name="android:textColor">@color/aura_text_on_primary</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_lg</item>
+        <item name="android:paddingEnd">@dimen/spacing_lg</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Tab Inactive (pill outline) -->
+    <style name="Aura.Button.Tab.Inactive">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height_sm</item>
+        <item name="android:background">@drawable/bg_button_tab_inactive</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_lg</item>
+        <item name="android:paddingEnd">@dimen/spacing_lg</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- CARDS                                       -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Card Elevated (white + shadow) -->
+    <style name="Aura.Card">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:elevation">@dimen/elevation_sm</item>
+        <item name="android:padding">@dimen/spacing_base</item>
+    </style>
+
+    <!-- Card Flat (white + border, no elevation) -->
+    <style name="Aura.Card.Flat">
+        <item name="android:background">@drawable/bg_card_bordered</item>
+        <item name="android:elevation">@dimen/elevation_none</item>
+    </style>
+
+    <!-- Card Surface (light blue background) -->
+    <style name="Aura.Card.Surface">
+        <item name="android:background">@drawable/bg_card_surface</item>
+        <item name="android:elevation">@dimen/elevation_none</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- INPUT                                       -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura.Input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/input_height</item>
+        <item name="android:background">@drawable/selector_input</item>
+        <item name="android:paddingStart">@dimen/spacing_base</item>
+        <item name="android:paddingEnd">@dimen/spacing_huge</item>
+        <item name="android:paddingTop">@dimen/spacing_md</item>
+        <item name="android:paddingBottom">@dimen/spacing_md</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+        <item name="android:textColorHint">@color/aura_text_tertiary</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- BADGES                                      -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura.Badge.Dot">
+        <item name="android:layout_width">@dimen/badge_dot_size</item>
+        <item name="android:layout_height">@dimen/badge_dot_size</item>
+        <item name="android:background">@drawable/bg_badge_dot</item>
+    </style>
+
+    <style name="Aura.Badge.Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/badge_text_height</item>
+        <item name="android:background">@drawable/bg_badge_text</item>
+        <item name="android:textColor">@color/aura_text_on_primary</item>
+        <item name="android:textSize">@dimen/text_overline</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_sm</item>
+        <item name="android:paddingEnd">@dimen/spacing_sm</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Aura.Badge.Status.Success">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_badge_status_success</item>
+        <item name="android:textColor">@color/aura_success</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_sm</item>
+        <item name="android:paddingEnd">@dimen/spacing_sm</item>
+        <item name="android:paddingTop">@dimen/spacing_xxs</item>
+        <item name="android:paddingBottom">@dimen/spacing_xxs</item>
+    </style>
+
+    <style name="Aura.Badge.Status.Error">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_badge_status_error</item>
+        <item name="android:textColor">@color/aura_error</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/spacing_sm</item>
+        <item name="android:paddingEnd">@dimen/spacing_sm</item>
+        <item name="android:paddingTop">@dimen/spacing_xxs</item>
+        <item name="android:paddingBottom">@dimen/spacing_xxs</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- AVATAR                                      -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura.Avatar">
+        <item name="android:background">@drawable/bg_avatar</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/aura_primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <style name="Aura.Avatar.Small">
+        <item name="android:layout_width">@dimen/avatar_sm</item>
+        <item name="android:layout_height">@dimen/avatar_sm</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+    </style>
+
+    <style name="Aura.Avatar.Medium">
+        <item name="android:layout_width">@dimen/avatar_md</item>
+        <item name="android:layout_height">@dimen/avatar_md</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <style name="Aura.Avatar.Large">
+        <item name="android:layout_width">@dimen/avatar_lg</item>
+        <item name="android:layout_height">@dimen/avatar_lg</item>
+        <item name="android:textSize">@dimen/text_body_lg</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- TYPOGRAPHY                                  -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura.Text.Display">
+        <item name="android:textSize">@dimen/text_display</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.Headline">
+        <item name="android:textSize">@dimen/text_headline</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.Title">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.TitleSmall">
+        <item name="android:textSize">@dimen/text_title_sm</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.Body">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.BodyLarge">
+        <item name="android:textSize">@dimen/text_body_lg</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <style name="Aura.Text.Caption">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/aura_text_secondary</item>
+    </style>
+
+    <style name="Aura.Text.Overline">
+        <item name="android:textSize">@dimen/text_overline</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_secondary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="Aura.Text.Link">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_link</item>
+    </style>
+
+    <style name="Aura.Text.Amount">
+        <item name="android:textSize">@dimen/text_headline</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/aura_text_primary</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- DIVIDER                                     -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <style name="Aura.Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/border_thin</item>
+        <item name="android:background">@color/aura_divider</item>
+    </style>
+
+</resources>

@@ -1,3 +1,43 @@
 <resources>
     <string name="app_name">Aura</string>
+
+    <!-- Splash -->
+    <string name="splash_title">AURA</string>
+    <string name="splash_tagline">Tu comunidad, en perfecta armonía.</string>
+
+    <!-- Login -->
+    <string name="login_welcome">Bienvenido</string>
+    <string name="login_subtitle">Inicia sesión para continuar</string>
+    <string name="login_email_hint">Correo electrónico</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="login_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="login_divider_text">o continúa con</string>
+    <string name="login_no_account">¿No tienes cuenta? </string>
+    <string name="login_register">Regístrate</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_logo">Logo de Aura</string>
+    <string name="cd_toggle_password">Mostrar u ocultar contraseña</string>
+    <string name="cd_back">Regresar</string>
+    <string name="cd_notifications">Notificaciones</string>
+    <string name="cd_profile">Perfil</string>
+    <string name="cd_next">Siguiente</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_settings">Configuración</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Configuración</string>
+    <string name="settings_security">Seguridad</string>
+    <string name="settings_security_access">Seguridad y Acceso</string>
+    
+    <!-- Security Settings -->
+    <string name="security_fingerprint">Verificación con huella</string>
+    <string name="security_lock_on_exit">Bloquear al salir</string>
+    <string name="security_change_password">Solicitar cambio de contraseña</string>
+    
+    <!-- Home -->
+    <string name="home_welcome">¡Bienvenido a Aura!</string>
 </resources>

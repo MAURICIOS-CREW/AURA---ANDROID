@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.mexadev.aura.ui.home.HomeFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.mexadev.aura.ui.settings.SettingsFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_nav_settings_to_nav_security_settings"
+            app:destination="@id/nav_security_settings" />
+    </fragment>
+    
+    <fragment
+        android:id="@+id/nav_security_settings"
+        android:name="com.mexadev.aura.ui.settings.SecuritySettingsFragment"
+        android:label="Seguridad"
+        tools:layout="@layout/fragment_security_settings" />
+
+</navigation>

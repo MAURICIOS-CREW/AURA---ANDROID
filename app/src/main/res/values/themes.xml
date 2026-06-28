@@ -1,9 +1,28 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+
     <style name="Base.Theme.Aura" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/aura_primary</item>
+        <item name="colorPrimaryDark">@color/aura_primary_dark</item>
+        <item name="colorAccent">@color/aura_primary_highlight</item>
+        <item name="colorOnPrimary">@color/aura_text_on_primary</item>
+        <item name="colorSecondary">@color/aura_primary_light</item>
+        <item name="colorOnSecondary">@color/aura_text_on_primary</item>
+        <item name="colorSurface">@color/aura_surface</item>
+        <item name="colorOnSurface">@color/aura_text_primary</item>
+        <item name="colorError">@color/aura_error</item>
+        <item name="android:colorBackground">@color/aura_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/aura_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/aura_background</item>
     </style>
 
     <style name="Theme.Aura" parent="Base.Theme.Aura" />
+
+    <style name="Theme.Aura.Splash" parent="Base.Theme.Aura">
+        <item name="android:windowBackground">@color/aura_white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
 </resources>

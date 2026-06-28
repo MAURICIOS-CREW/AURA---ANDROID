@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_white">
+
+    <!-- Logo Container -->
+    <LinearLayout
+        android:id="@+id/splash_logo_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/splash_tagline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <!-- Decorative circle background -->
+        <FrameLayout
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            tools:ignore="UselessParent">
+
+            <!-- Outer glow circle -->
+            <View
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:background="@drawable/bg_avatar"
+                android:alpha="0.3" />
+
+            <!-- Inner circle -->
+
+            <!-- Icon -->
+            <View
+                android:layout_width="205dp"
+                android:layout_height="206dp"
+                android:layout_gravity="center"
+                android:alpha="0.5"
+                android:background="@drawable/bg_avatar" />
+
+            <ImageView
+                android:id="@+id/splash_icon"
+                android:layout_width="184dp"
+                android:layout_height="165dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/cd_logo"
+                android:src="@drawable/logo" />
+        </FrameLayout>
+
+        <!-- Title -->
+
+    </LinearLayout>
+
+    <!-- Tagline -->
+    <TextView
+        android:id="@+id/splash_tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:text="@string/splash_tagline"
+        android:textColor="@color/aura_text_secondary"
+        android:textSize="@dimen/text_body_lg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/splash_logo_container"
+        app:layout_constraintVertical_bias="0.08" />
+
+    <!-- Loading dots -->
+    <LinearLayout
+        android:id="@+id/splash_dots_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:id="@+id/splash_dot_1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/bg_badge_dot"
+            android:backgroundTint="@color/aura_primary" />
+
+        <View
+            android:id="@+id/splash_dot_2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:background="@drawable/bg_badge_dot"
+            android:backgroundTint="@color/aura_primary_light" />
+
+        <View
+            android:id="@+id/splash_dot_3"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:background="@drawable/bg_badge_dot"
+            android:backgroundTint="@color/aura_primary_surface" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

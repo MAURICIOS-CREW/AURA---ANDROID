@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background image (very subtle) -->
+    <ImageView
+        android:id="@+id/login_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_login_background"
+        android:importantForAccessibility="no" />
+
+    <!-- White overlay to fade background -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_overlay_white" />
+
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_padding_horizontal"
+            android:paddingEnd="@dimen/screen_padding_horizontal"
+            android:paddingTop="60dp"
+            android:paddingBottom="@dimen/spacing_xxl">
+
+            <!-- ═══ LOGO SECTION ═══ -->
+            <LinearLayout
+                android:id="@+id/login_logo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    tools:ignore="UselessParent">
+
+                    <View
+                        android:layout_width="170dp"
+                        android:layout_height="177dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:background="@drawable/bg_avatar" />
+
+                    <View
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:alpha="0.4"
+                        android:background="@drawable/bg_avatar" />
+
+                    <ImageView
+                        android:layout_width="153dp"
+                        android:layout_height="163dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/cd_logo"
+                        android:src="@drawable/logo" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <!-- ═══ WELCOME TEXT ═══ -->
+            <TextView
+                android:id="@+id/login_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxxl"
+                android:text="@string/login_welcome"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="@dimen/text_title_lg"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/login_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="@string/login_subtitle"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="@dimen/text_body" />
+
+            <!-- ═══ EMAIL INPUT ═══ -->
+            <FrameLayout
+                android:id="@+id/input_email_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:layout_marginTop="@dimen/spacing_xxl">
+
+                <EditText
+                    android:id="@+id/input_email"
+                    style="@style/Aura.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/login_email_hint"
+                    android:inputType="textEmailAddress"
+                    android:autofillHints="emailAddress"
+                    android:imeOptions="actionNext" />
+
+                <ImageView
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/spacing_base"
+                    android:src="@drawable/ic_email"
+                    android:importantForAccessibility="no"
+                    app:tint="@color/aura_text_tertiary" />
+            </FrameLayout>
+
+            <!-- ═══ PASSWORD INPUT ═══ -->
+            <FrameLayout
+                android:id="@+id/input_password_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:layout_marginTop="@dimen/spacing_base">
+
+                <EditText
+                    android:id="@+id/input_password"
+                    style="@style/Aura.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/login_password_hint"
+                    android:inputType="textPassword"
+                    android:autofillHints="password"
+                    android:imeOptions="actionDone" />
+
+                <ImageView
+                    android:id="@+id/toggle_password"
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/spacing_base"
+                    android:src="@drawable/ic_eye"
+                    android:contentDescription="@string/cd_toggle_password"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="2dp"
+                    app:tint="@color/aura_text_tertiary" />
+            </FrameLayout>
+
+            <!-- ═══ FORGOT PASSWORD ═══ -->
+            <TextView
+                android:id="@+id/link_forgot_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:gravity="end"
+                android:text="@string/login_forgot_password"
+                android:textColor="@color/aura_text_link"
+                android:textSize="@dimen/text_body_sm"
+                android:textStyle="bold" />
+
+            <!-- ═══ LOGIN BUTTON ═══ -->
+            <TextView
+                android:id="@+id/btn_login"
+                style="@style/Aura.Button.Filled"
+                android:layout_marginTop="@dimen/spacing_xxl"
+                android:text="@string/login_button" />
+
+            <!-- ═══ DIVIDER WITH TEXT ═══ -->
+
+            <!-- ═══ SOCIAL LOGIN BUTTONS ═══ -->
+            <LinearLayout
+                android:id="@+id/social_buttons_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:gravity="center"
+                android:orientation="horizontal"/>
+
+            <!-- ═══ REGISTER LINK ═══ -->
+            <LinearLayout
+                android:id="@+id/link_register_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_xxl"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_no_account"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="@dimen/text_body" />
+
+                <TextView
+                    android:id="@+id/link_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_register"
+                    android:textColor="@color/aura_primary"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
