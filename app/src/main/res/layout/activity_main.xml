@@ -1,31 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    activity_main.xml
+    Layout principal con:
+    - FragmentContainerView para el NavHostFragment
+    - Bottom Navigation bar personalizado con estilo AURA
+    - Botón FAB central elevado con el logo AURA
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/aura_background"
     tools:context=".MainActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- ViewPager2 para permitir deslizar entre fragments -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="80dp" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Contenedor del bottom nav flotante -->
+    <LinearLayout
+        android:id="@+id/bottom_nav_container"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_bottom_nav"
+        android:elevation="12dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Ítems izquierdos: Inicio y Notificaciones -->
+        <LinearLayout
+            android:id="@+id/nav_left_group"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            tools:ignore="NestedWeights">
+
+            <!-- Inicio -->
+            <LinearLayout
+                android:id="@+id/nav_item_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingTop="10dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/icon_home"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_nav_home_filled"
+                    android:contentDescription="@string/nav_home"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:id="@+id/label_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/nav_home"
+                    android:textSize="11sp"
+                    android:textColor="@color/aura_primary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.02"/>
+            </LinearLayout>
+
+            <!-- Notificaciones -->
+            <LinearLayout
+                android:id="@+id/nav_item_notifications"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingTop="10dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/icon_notifications"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_nav_notifications"
+                    android:contentDescription="@string/nav_notifications"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:id="@+id/label_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.02"
+                    android:text="@string/nav_notifications"
+                    android:textColor="@color/aura_nav_inactive"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Espacio central para el FAB — debe ser suficiente para el botón elevado -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- Ítems derechos: Mensajes y Perfil -->
+        <LinearLayout
+            android:id="@+id/nav_right_group"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            tools:ignore="NestedWeights">
+
+            <!-- Mensajes -->
+            <LinearLayout
+                android:id="@+id/nav_item_messages"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingTop="10dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/icon_messages"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_nav_messages"
+                    android:contentDescription="@string/nav_messages"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:id="@+id/label_messages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/nav_messages"
+                    android:textSize="11sp"
+                    android:textColor="@color/aura_nav_inactive"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.02"/>
+            </LinearLayout>
+
+            <!-- Perfil -->
+            <LinearLayout
+                android:id="@+id/nav_item_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingTop="10dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/icon_profile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_nav_profile"
+                    android:contentDescription="@string/nav_profile"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:id="@+id/label_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/nav_profile"
+                    android:textSize="11sp"
+                    android:textColor="@color/aura_nav_inactive"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.02"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+        Botón FAB central de AURA
+        Elevado por encima del bottom nav para el efecto visual de la maqueta
+        Posicionado en el centro con layout_gravity
+    -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fab_center"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="28dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="34dp"
+        app:cardBackgroundColor="@color/aura_primary"
+        app:cardElevation="16dp"
+        app:strokeWidth="0dp">
+
+        <ImageView
+            android:id="@+id/fab_icon"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_aura_logo_nav"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription"/>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

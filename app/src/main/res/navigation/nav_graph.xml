@@ -5,26 +5,75 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_home">
 
+    <!-- ─── INICIO ─── -->
     <fragment
         android:id="@+id/nav_home"
         android:name="com.mexadev.aura.ui.home.HomeFragment"
         android:label="Inicio"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_notifications"
+            app:destination="@id/nav_notifications"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"/>
+        <action
+            android:id="@+id/action_home_to_messages"
+            app:destination="@id/nav_messages"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"/>
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/nav_profile"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"/>
+    </fragment>
 
+    <!-- ─── NOTIFICACIONES ─── -->
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.mexadev.aura.ui.notifications.NotificationsFragment"
+        android:label="Notificaciones"
+        tools:layout="@layout/fragment_notifications"/>
+
+    <!-- ─── MENSAJES ─── -->
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.mexadev.aura.ui.messages.MessagesFragment"
+        android:label="Mensajes"
+        tools:layout="@layout/fragment_messages"/>
+
+    <!-- ─── PERFIL ─── -->
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.mexadev.aura.ui.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile"/>
+
+    <!-- ─── CONFIGURACIÓN (accesible desde el perfil o internamente) ─── -->
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.mexadev.aura.ui.settings.SettingsFragment"
         android:label="Configuración"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_nav_settings_to_nav_security_settings"
-            app:destination="@id/nav_security_settings" />
+            app:destination="@id/nav_security_settings"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"/>
     </fragment>
-    
+
     <fragment
         android:id="@+id/nav_security_settings"
         android:name="com.mexadev.aura.ui.settings.SecuritySettingsFragment"
         android:label="Seguridad"
-        tools:layout="@layout/fragment_security_settings" />
+        tools:layout="@layout/fragment_security_settings"/>
 
 </navigation>

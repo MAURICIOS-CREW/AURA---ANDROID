@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Circular background for the central FAB button with shadow effect -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item
+        android:left="2dp"
+        android:top="4dp"
+        android:right="2dp"
+        android:bottom="0dp">
+        <shape android:shape="oval">
+            <solid android:color="#22000000"/>
+            <size android:width="64dp" android:height="64dp"/>
+        </shape>
+    </item>
+    <!-- Main circle -->
+    <item android:bottom="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#1B4B8A"/>
+            <size android:width="64dp" android:height="64dp"/>
+        </shape>
+    </item>
+</layer-list>
