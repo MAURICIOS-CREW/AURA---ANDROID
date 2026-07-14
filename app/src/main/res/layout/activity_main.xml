@@ -33,8 +33,7 @@
         android:background="@drawable/bg_bottom_nav"
         android:elevation="12dp"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
+        android:clipToPadding="false">
 
         <!-- Ítems izquierdos: Inicio y Notificaciones -->
         <LinearLayout
@@ -230,5 +229,13 @@
             android:scaleType="fitCenter"
             tools:ignore="ContentDescription"/>
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Incluir la vista de detalles superpuesta (para animación fluida de contenedor) -->
+    <include
+        layout="@layout/fragment_detail"
+        android:id="@+id/detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

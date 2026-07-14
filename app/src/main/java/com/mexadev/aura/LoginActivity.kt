@@ -60,6 +60,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupLoginFlow() {
         val loginButton = findViewById<View>(R.id.btn_login)
+        val loginText = findViewById<android.widget.TextView>(R.id.btn_login_text)
+        val loginProgress = findViewById<android.widget.ProgressBar>(R.id.btn_login_progress)
         val emailInput = findViewById<EditText>(R.id.input_email)
         val passwordInput = findViewById<EditText>(R.id.input_password)
 
@@ -73,19 +75,42 @@ class LoginActivity : AppCompatActivity() {
             viewModel.loginState.collect { state ->
                 when (state) {
                     is LoginState.Loading -> {
-                        // Podríamos deshabilitar el botón y mostrar un loading
-                        loginButton?.alpha = 0.5f
                         loginButton?.isEnabled = false
+                        loginButton?.alpha = 0.8f
+                        loginText?.text = "Iniciando sesión..."
+                        loginProgress?.visibility = View.VISIBLE
+                        loginButton?.let {
+                            ObjectAnimator.ofFloat(it, "scaleX", 1f, 0.96f).apply { duration = 200 }.start()
+                            ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.96f).apply { duration = 200 }.start()
+                        }
                     }
                     is LoginState.Success -> {
-                        loginButton?.alpha = 1f
                         loginButton?.isEnabled = true
+                        loginButton?.alpha = 1f
+                        loginText?.text = "¡Éxito!"
+                        loginProgress?.visibility = View.GONE
+                        loginButton?.let {
+                            ObjectAnimator.ofFloat(it, "scaleX", 0.96f, 1f).apply { duration = 200 }.start()
+                            ObjectAnimator.ofFloat(it, "scaleY", 0.96f, 1f).apply { duration = 200 }.start()
+                        }
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         finish()
                     }
                     is LoginState.Error -> {
-                        loginButton?.alpha = 1f
                         loginButton?.isEnabled = true
+                        loginButton?.alpha = 1f
+                        loginText?.text = getString(R.string.login_button)
+                        loginProgress?.visibility = View.GONE
+                        loginButton?.let {
+                            ObjectAnimator.ofFloat(it, "scaleX", 0.96f, 1f).apply {
+                                duration = 300
+                                interpolator = OvershootInterpolator(2f)
+                            }.start()
+                            ObjectAnimator.ofFloat(it, "scaleY", 0.96f, 1f).apply {
+                                duration = 300
+                                interpolator = OvershootInterpolator(2f)
+                            }.start()
+                        }
                         Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
                     }
                     else -> {}

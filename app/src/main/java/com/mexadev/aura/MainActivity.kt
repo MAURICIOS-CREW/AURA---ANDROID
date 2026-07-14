@@ -18,7 +18,15 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.fragment.app.Fragment
 import android.graphics.drawable.LayerDrawable
+import android.graphics.Color
+import androidx.activity.OnBackPressedCallback
+import androidx.transition.TransitionManager
+import androidx.core.view.WindowInsetsControllerCompat
 import com.mexadev.aura.ui.home.HomeFragment
+import com.mexadev.aura.ui.home.DashboardNavigator
+import com.mexadev.aura.ui.home.DashboardItem
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.Hold
 import com.mexadev.aura.ui.notifications.NotificationsFragment
 import com.mexadev.aura.ui.messages.MessagesFragment
 import com.mexadev.aura.ui.profile.ProfileFragment
@@ -27,9 +35,12 @@ import com.mexadev.aura.databinding.ActivityMainBinding
 import com.mexadev.aura.core.session.SessionManager
 import com.mexadev.aura.core.session.BiometricHelper
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DashboardNavigator {
 
     private lateinit var binding: ActivityMainBinding
+    private var activeCardView: View? = null
+    private var activeItem: DashboardItem? = null
+    private lateinit var backCallback: OnBackPressedCallback
 
     private val tabIds = listOf(
         R.id.nav_item_home,
@@ -70,9 +81,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configurar callback para interceptar botón de regreso cuando el detalle esté visible
+        backCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeDetail()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
+
+        // Configurar el padding superior del encabezado del detalle para Edge-to-Edge
+        ViewCompat.setOnApplyWindowInsetsListener(binding.detailView.detailHeader) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, systemBars.top, v.paddingRight, v.paddingBottom)
+            insets
+        }
+
+        // Listener del botón de regreso del detalle
+        binding.detailView.btnBack.setOnClickListener {
+            closeDetail()
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            // Do not pad top here to allow Edge-to-Edge layouts to render behind the status bar.
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
 
@@ -139,6 +171,7 @@ class MainActivity : AppCompatActivity() {
                     currentTabId = newTabId
                     updateTabUI(oldTabId, newTabId)
                 }
+                restoreStatusBarTheme()
             }
         })
 
@@ -237,6 +270,145 @@ class MainActivity : AppCompatActivity() {
             duration = 300
             interpolator = OvershootInterpolator(3f)
             start()
+        }
+    }
+
+    // Implementación de DashboardNavigator (SOLID Navigation)
+    override fun navigateToTab(tabIndex: Int) {
+        if (tabIndex in tabIds.indices) {
+            binding.viewPager.currentItem = tabIndex
+        }
+    }
+
+    override fun navigateToDetail(cardView: View, item: DashboardItem) {
+        activeCardView = cardView
+        activeItem = item
+
+        val title = getString(item.titleRes)
+
+        // 1. Configurar los contenidos del detalle antes de la transición
+        binding.detailView.tvDetailTitle.text = title
+        binding.detailView.ivDetailIcon.setImageResource(item.iconRes)
+        binding.detailView.ivBigIcon.setImageResource(item.iconRes)
+        binding.detailView.tvComingSoonDesc.text = getString(R.string.coming_soon_description, title)
+
+        // 2. Configurar iconos oscuros en la barra de estado para el fondo blanco del detalle
+        val wic = WindowInsetsControllerCompat(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
+
+        // 3. Crear y configurar el Material Container Transform para la vista a vista
+        val transform = MaterialContainerTransform().apply {
+            startView = cardView
+            endView = binding.detailView.root
+            addTarget(binding.detailView.root)
+            duration = 450L
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(getColor(R.color.aura_white))
+        }
+
+        // 4. Iniciar la transición
+        TransitionManager.beginDelayedTransition(binding.main, transform)
+        binding.detailView.root.visibility = View.VISIBLE
+
+        // 5. Animar el contenido del detalle (fade-in) para una visualización fluida
+        binding.detailView.detailContent.alpha = 0f
+        binding.detailView.detailContent.animate()
+            .alpha(1f)
+            .setDuration(250)
+            .setStartDelay(200)
+            .start()
+
+        // 6. Habilitar callback de botón físico atrás
+        backCallback.isEnabled = true
+    }
+
+    override fun navigateToDetailWithFade(title: String, iconRes: Int) {
+        activeCardView = null
+        activeItem = null
+
+        // 1. Configurar los contenidos del detalle
+        binding.detailView.tvDetailTitle.text = title
+        binding.detailView.ivDetailIcon.setImageResource(iconRes)
+        binding.detailView.ivBigIcon.setImageResource(iconRes)
+        binding.detailView.tvComingSoonDesc.text = getString(R.string.coming_soon_description, title)
+
+        // 2. Configurar barra de estado
+        val wic = WindowInsetsControllerCompat(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
+
+        // 3. Mostrar la vista con animación de fade/alpha
+        binding.detailView.root.alpha = 0f
+        binding.detailView.root.visibility = View.VISIBLE
+        binding.detailView.detailContent.alpha = 1f // El contenido interno se ve directamente con el padre
+        
+        binding.detailView.root.animate()
+            .alpha(1f)
+            .setDuration(300L)
+            .start()
+
+        // 4. Habilitar callback de botón físico atrás
+        backCallback.isEnabled = true
+    }
+
+    private fun closeDetail() {
+        backCallback.isEnabled = false
+        val card = activeCardView
+
+        if (card == null) {
+            // Animación de fade-out cuando no hay tarjeta de origen (ej: desde "Ver todo")
+            binding.detailView.root.animate()
+                .alpha(0f)
+                .setDuration(250L)
+                .withEndAction {
+                    binding.detailView.root.visibility = View.GONE
+                    restoreStatusBarTheme()
+                }
+                .start()
+            return
+        }
+
+        // 1. Iniciar la transformación inversa de inmediato para que sea súper reactiva y fluida
+        val transform = MaterialContainerTransform().apply {
+            startView = binding.detailView.root
+            endView = card
+            addTarget(card)
+            duration = 350L // Duración ágil para un retorno fluido
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(getColor(R.color.aura_white))
+        }
+
+        TransitionManager.beginDelayedTransition(binding.main, transform)
+        binding.detailView.root.visibility = View.GONE
+
+        // 2. Desvanecer el contenido interno en paralelo mientras se encoge la tarjeta
+        binding.detailView.detailContent.animate()
+            .alpha(0f)
+            .setDuration(180)
+            .start()
+
+        // 3. Restaurar el estilo de barra de estado correspondiente al Dashboard
+        restoreStatusBarTheme()
+
+        activeCardView = null
+        activeItem = null
+    }
+
+    private fun restoreStatusBarTheme() {
+        val currentTab = binding.viewPager.currentItem
+        val wic = WindowInsetsControllerCompat(window, window.decorView)
+        if (currentTab == 0) {
+            // Obtener el fragmento de Dashboard si es que está disponible para consultar su scroll
+            val homeFragment = supportFragmentManager.findFragmentByTag("f0") as? HomeFragment
+            if (homeFragment != null && homeFragment.isAdded && homeFragment.view != null) {
+                // Si el fragmento está disponible, restaurar su tema según el scroll actual
+                homeFragment.updateStatusBarTheme()
+            } else {
+                // Fallback seguro: restaurar según el scroll que tendría (generalmente light icons si no se ha scrolled)
+                wic.isAppearanceLightStatusBars = false
+            }
+        } else {
+            // Para cualquier otra pestaña, los iconos de la barra de estado deben ser negros (fondo claro)
+            wic.isAppearanceLightStatusBars = true
         }
     }
 

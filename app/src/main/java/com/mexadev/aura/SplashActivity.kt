@@ -103,9 +103,14 @@ class SplashActivity : AppCompatActivity() {
             }
         }, 1000)
 
-        // Navigate to LoginActivity
+        // Navigate to LoginActivity or MainActivity based on session
         handler.postDelayed({
-            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            val sessionManager = com.mexadev.aura.core.session.SessionManager(this@SplashActivity)
+            if (sessionManager.getAccessToken() != null) {
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            }
             @Suppress("DEPRECATION")
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()

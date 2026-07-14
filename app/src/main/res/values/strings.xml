@@ -46,10 +46,31 @@
     
     <!-- Misc -->
     <string name="coming_soon">Próximamente disponible</string>
+    <string name="coming_soon_description">La sección de %1$s estará disponible próximamente en Aura.</string>
     <string name="cd_messages">Mensajes</string>
     
     <!-- Profile -->
     <string name="profile_default_name">Alex</string>
     <string name="profile_default_email">alex@aura.com</string>
     <string name="profile_edit">Editar Perfil</string>
+    
+    <!-- Dashboard / Home -->
+    <string name="home_welcome_name">¡Bienvenido, %1$s!</string>
+    <string name="home_residential_name">Residencial Los Encinos</string>
+    <string name="dashboard_accesos">Accesos</string>
+    <string name="dashboard_avisos">Avisos</string>
+    <string name="dashboard_incidencias">Incidencias</string>
+    <string name="dashboard_pagos">Pagos</string>
+    <string name="dashboard_reservas">Reservas</string>
+    <string name="dashboard_documentos">Documentos</string>
+    <string name="dashboard_comunidad">Comunidad</string>
+    <string name="dashboard_encuestas">Encuestas</string>
+    <string name="dashboard_ia">IA Asistente</string>
+    <string name="dashboard_badge_new">NUEVO</string>
+    <string name="dashboard_quick_summary">Resumen rápido</string>
+    <string name="dashboard_see_all">Ver todo</string>
+    <string name="dashboard_current_balance">Saldo actual</string>
+    <string name="dashboard_maintenance_fee">Cuota de mantenimiento</string>
+    <string name="dashboard_next_payment">Próximo pago</string>
+    <string name="dashboard_pay_now">Pagar ahora</string>
 </resources>

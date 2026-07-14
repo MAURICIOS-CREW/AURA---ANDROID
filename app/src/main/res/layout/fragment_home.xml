@@ -1,20 +1,750 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/aura_background">
+    android:background="@color/aura_background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:overScrollMode="never">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/aura_white"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- Top Spacer for Status Bar & Header height padding -->
+            <View
+                android:id="@+id/vTopSpacer"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Background Image with Fade -->
+            <ImageView
+                android:id="@+id/ivBackground"
+                android:layout_width="0dp"
+                android:layout_height="340dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_residential_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/vBackgroundGradient"
+                android:layout_width="0dp"
+                android:layout_height="340dp"
+                android:background="@drawable/bg_dashboard_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Solid White Background for scroll transition -->
+            <View
+                android:id="@+id/vSolidWhiteBackground"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/aura_white"
+                android:alpha="0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="171dp"
+                android:layout_height="186dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vTopSpacer" />
+
+            <!-- Welcome Text -->
+            <TextView
+                android:id="@+id/tvWelcomeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivLogo"
+                tools:text="¡Bienvenido, Alex!" />
+
+            <!-- Skeleton for Welcome Text -->
+            <View
+                android:id="@+id/skeletonWelcomeName"
+                android:layout_width="180dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_skeleton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+
+            <TextView
+                android:id="@+id/tvResidentialName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWelcomeName"
+                tools:text="Residencial Los Encinos" />
+
+            <!-- Skeleton for Residential -->
+            <View
+                android:id="@+id/skeletonResidential"
+                android:layout_width="140dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_skeleton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/skeletonWelcomeName" />
+
+        <!-- Grid Layout for 9 buttons -->
+        <LinearLayout
+            android:id="@+id/gridContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvResidentialName">
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Accesos -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnAccesos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconAccesos"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_lock"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleAccesos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_accesos"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconAccesos" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Avisos -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnAvisos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconAvisos"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_megaphone"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleAvisos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_avisos"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconAvisos" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Incidencias -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnIncidencias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconIncidencias"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_warning"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleIncidencias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_incidencias"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconIncidencias" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <!-- Pagos -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnPagos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconPagos"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_wallet"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitlePagos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_pagos"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconPagos" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Reservas -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnReservas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconReservas"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleReservas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_reservas"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconReservas" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Documentos -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnDocumentos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconDocumentos"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_document"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleDocumentos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_documentos"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconDocumentos" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <!-- Row 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <!-- Comunidad -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnComunidad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconComunidad"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_people"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleComunidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_comunidad"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconComunidad" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Encuestas -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btnEncuestas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:padding="12dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivIconEncuestas"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_chart"
+                        app:tint="@color/aura_primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvTitleEncuestas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/dashboard_encuestas"
+                        android:textAlignment="center"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivIconEncuestas" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Quick Summary Section -->
+        <TextView
+            android:id="@+id/tvQuickSummaryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/dashboard_quick_summary"
+            android:textColor="@color/aura_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gridContainer" />
+
+        <TextView
+            android:id="@+id/tvSeeAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="@string/dashboard_see_all"
+            android:textColor="@color/aura_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/tvQuickSummaryTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvQuickSummaryTitle" />
+
+        <!-- Saldo Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardSaldo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_dashboard_card"
+            android:elevation="2dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvQuickSummaryTitle">
+
+            <TextView
+                android:id="@+id/tvSaldoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dashboard_current_balance"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSaldoValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSaldoLabel"
+                tools:text="$1,250.00 MXN" />
+                
+            <!-- Skeleton for Saldo -->
+            <View
+                android:id="@+id/skeletonSaldo"
+                android:layout_width="140dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_skeleton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSaldoLabel" />
+
+            <TextView
+                android:id="@+id/tvCuotaMantenimiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/dashboard_maintenance_fee"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSaldoValue" />
+
+            <!-- Wallet Icon Button -->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivWalletBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_btn_primary"
+                android:padding="12dp"
+                android:src="@drawable/ic_wallet"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/aura_white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Proximo Pago Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardProximoPago"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_dashboard_card"
+            android:elevation="2dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardSaldo">
+
+            <TextView
+                android:id="@+id/tvProximoPagoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dashboard_next_payment"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvProximoPagoValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProximoPagoLabel"
+                tools:text="15 de junio, 2024" />
+                
+            <!-- Skeleton for Proximo Pago -->
+            <View
+                android:id="@+id/skeletonProximoPago"
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_skeleton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProximoPagoLabel" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivCalendarBtn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/aura_text_tertiary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Button Pagar Ahora -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPagarAhora"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_btn_primary"
+            android:text="@string/dashboard_pay_now"
+            android:textAllCaps="false"
+            android:textColor="@color/aura_white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardProximoPago" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Sticky Header Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topHeaderBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/home_welcome"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:elevation="6dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Header Background View (for fade and color changes) -->
+        <View
+            android:id="@+id/vHeaderBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/aura_white"
+            android:alpha="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivNotifications"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_top_icon"
+            android:padding="10dp"
+            android:src="@drawable/ic_bell"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toStartOf="@id/ivProfile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/aura_text_secondary" />
+
+        <!-- Sticky Header Content (logo + user name, format: logo left, name right) -->
+        <LinearLayout
+            android:id="@+id/layoutHeaderUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:alpha="0"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ivHeaderLogo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:src="@drawable/logo"
+                android:scaleType="fitCenter"
+                android:contentDescription="AURA Logo" />
+
+            <TextView
+                android:id="@+id/tvHeaderUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Alex" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_top_icon"
+            android:padding="10dp"
+            android:src="@drawable/ic_person"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/aura_text_secondary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
