@@ -59,6 +59,7 @@
     <string name="home_residential_name">Sin residencia asignada</string>
     <string name="dashboard_accesos">Accesos</string>
     <string name="dashboard_avisos">Avisos</string>
+    <string name="dashboard_vehiculos">Vehículos</string>
     <string name="dashboard_incidencias">Incidencias</string>
     <string name="dashboard_pagos">Pagos</string>
     <string name="dashboard_reservas">Reservas</string>

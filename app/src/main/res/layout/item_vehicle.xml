@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    item_vehicle.xml
+    Card de vehículo con dos estados: COLAPSADO y EXPANDIDO (formulario).
+    La transición entre estados se maneja vía VehiclesAdapter con ChangeBounds + Fade.
+    El formulario usa LinearLayout vertical para evitar superposición de vistas.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardVehicle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/bg_dashboard_card"
+    android:elevation="4dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ═══════════════════════════════════════════════
+             ESTADO COLAPSADO: Muestra info básica del vehículo
+             ═══════════════════════════════════════════════ -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutCollapsed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <FrameLayout
+                android:id="@+id/iconContainer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_car"
+                    app:tint="@color/aura_primary" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvPlate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.04"
+                app:layout_constraintStart_toEndOf="@id/iconContainer"
+                app:layout_constraintEnd_toStartOf="@id/ivEditIcon"
+                app:layout_constraintTop_toTopOf="@id/iconContainer"
+                app:layout_constraintBottom_toTopOf="@id/tvBrandColor"
+                tools:text="ABC-1234" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toEndOf="@id/iconContainer"
+                app:layout_constraintEnd_toStartOf="@id/ivEditIcon"
+                app:layout_constraintTop_toBottomOf="@id/tvPlate"
+                app:layout_constraintBottom_toBottomOf="@id/iconContainer">
+
+                <TextView
+                    android:id="@+id/tvBrandColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp"
+                    tools:text="Nissan" />
+
+                <View
+                    android:id="@+id/vColorDot"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_color_dot"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivEditIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/aura_text_tertiary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- ═══════════════════════════════════════════════
+             ESTADO EXPANDIDO: Formulario de edición/creación
+             Usa LinearLayout vertical para que los campos NO
+             se superpongan. Cada campo tiene su propio espacio.
+             ═══════════════════════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/layoutExpanded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <!-- Header del formulario -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvFormTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Vehículo"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/aura_text_primary" />
+
+                <ImageView
+                    android:id="@+id/btnFormMinimize"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/aura_text_secondary"
+                    android:rotation="270" />
+
+            </LinearLayout>
+
+            <!-- Divider decorativo -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/aura_border_light" />
+
+            <!-- Campo: Placas -->
+            <EditText
+                android:id="@+id/etPlate"
+                style="@style/Aura.Input"
+                android:layout_marginTop="16dp"
+                android:hint="Placas *"
+                android:inputType="textCapCharacters"
+                android:imeOptions="actionNext"
+                android:maxLines="1" />
+
+            <!-- Campo: Marca -->
+            <EditText
+                android:id="@+id/etBrand"
+                style="@style/Aura.Input"
+                android:layout_marginTop="12dp"
+                android:hint="Marca (Opcional)"
+                android:inputType="textCapWords"
+                android:imeOptions="actionNext"
+                android:maxLines="1" />
+
+            <!-- Campo: Color (Selector) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Color"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="14sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llColorContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="4dp" />
+            </HorizontalScrollView>
+
+            <!-- Botón Guardar -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Guardar"
+                    android:textColor="@color/aura_white"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/aura_primary"
+                    app:cornerRadius="12dp"
+                    app:rippleColor="@color/aura_ripple" />
+
+                <ProgressBar
+                    android:id="@+id/pbSave"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:elevation="4dp"
+                    android:indeterminateTint="@color/aura_white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Botón Eliminar (solo para vehículos existentes) -->
+            <FrameLayout
+                android:id="@+id/layoutDelete"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Eliminar vehículo"
+                    android:textColor="@color/aura_error"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/aura_error_light"
+                    app:cornerRadius="12dp"
+                    app:rippleColor="#33E53E3E"
+                    app:strokeColor="@color/aura_error"
+                    app:strokeWidth="0dp" />
+
+                <ProgressBar
+                    android:id="@+id/pbDelete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:elevation="4dp"
+                    android:indeterminateTint="@color/aura_error"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

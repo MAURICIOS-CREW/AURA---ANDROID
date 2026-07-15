@@ -34,7 +34,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.Aura" />
+            android:theme="@style/Theme.Aura"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

@@ -128,6 +128,19 @@ data class Vehicle(
     @SerializedName("updated_at") val updatedAt: String?
 )
 
+data class VehicleCreateRequest(
+    @SerializedName("residence_id") val residenceId: Long,
+    val plate: String,
+    val brand: String?,
+    val color: String?
+)
+
+data class VehicleUpdateRequest(
+    val plate: String?,
+    val brand: String?,
+    val color: String?
+)
+
 data class DeliveryPackage(
     val id: Long,
     @SerializedName("residence_id") val residenceId: Long,

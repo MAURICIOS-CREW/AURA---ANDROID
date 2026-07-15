@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#F5F5F5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <View
+            android:id="@+id/iconSkeleton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_icon_container"
+            android:backgroundTint="#E0E0E0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <View
+            android:id="@+id/textSkeleton1"
+            android:layout_width="120dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintStart_toEndOf="@id/iconSkeleton"
+            app:layout_constraintTop_toTopOf="@id/iconSkeleton"
+            app:layout_constraintBottom_toTopOf="@id/textSkeleton2" />
+
+        <View
+            android:id="@+id/textSkeleton2"
+            android:layout_width="80dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintStart_toEndOf="@id/iconSkeleton"
+            app:layout_constraintTop_toBottomOf="@id/textSkeleton1"
+            app:layout_constraintBottom_toBottomOf="@id/iconSkeleton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

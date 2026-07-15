@@ -105,6 +105,10 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Do not pad top here to allow Edge-to-Edge layouts to render behind the status bar.
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
+            
+            // Dispatch insets to the fragment container so it can handle IME/Keyboard insets
+            ViewCompat.dispatchApplyWindowInsets(binding.detailFragmentContainer, insets)
+            
             insets
         }
 
@@ -279,6 +283,34 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     }
 
     override fun navigateToDetail(cardView: View, item: DashboardItem) {
+        if (item == DashboardItem.Vehiculos) {
+            val fragment = com.mexadev.aura.ui.vehicles.VehiclesFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.detail_fragment_container, fragment, "VehiclesFragment")
+                .commit()
+
+            // Aseguramos que se configure la barra de estado
+            val wic = WindowInsetsControllerCompat(window, window.decorView)
+            wic.isAppearanceLightStatusBars = true
+
+            val transform = MaterialContainerTransform().apply {
+                startView = cardView
+                endView = binding.detailFragmentContainer
+                addTarget(binding.detailFragmentContainer)
+                duration = 450L
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(getColor(R.color.aura_white))
+            }
+            
+            TransitionManager.beginDelayedTransition(binding.main, transform)
+            binding.detailFragmentContainer.visibility = View.VISIBLE
+            
+            activeCardView = cardView
+            activeItem = item
+            backCallback.isEnabled = true
+            return
+        }
+
         activeCardView = cardView
         activeItem = item
 
@@ -351,42 +383,53 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     private fun closeDetail() {
         backCallback.isEnabled = false
         val card = activeCardView
+        
+        val isFragmentDetail = binding.detailFragmentContainer.visibility == View.VISIBLE
+        val targetViewToHide = if (isFragmentDetail) binding.detailFragmentContainer else binding.detailView.root
 
         if (card == null) {
-            // Animación de fade-out cuando no hay tarjeta de origen (ej: desde "Ver todo")
-            binding.detailView.root.animate()
+            targetViewToHide.animate()
                 .alpha(0f)
                 .setDuration(250L)
                 .withEndAction {
-                    binding.detailView.root.visibility = View.GONE
+                    targetViewToHide.visibility = View.GONE
                     restoreStatusBarTheme()
                 }
                 .start()
             return
         }
 
-        // 1. Iniciar la transformación inversa de inmediato para que sea súper reactiva y fluida
         val transform = MaterialContainerTransform().apply {
-            startView = binding.detailView.root
+            startView = targetViewToHide
             endView = card
             addTarget(card)
-            duration = 350L // Duración ágil para un retorno fluido
+            duration = 350L
             scrimColor = Color.TRANSPARENT
             setAllContainerColors(getColor(R.color.aura_white))
+            addListener(object : androidx.transition.Transition.TransitionListener {
+                override fun onTransitionEnd(transition: androidx.transition.Transition) {
+                    if (isFragmentDetail) {
+                        supportFragmentManager.popBackStack("VehiclesFragment", androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    }
+                }
+                override fun onTransitionStart(transition: androidx.transition.Transition) {}
+                override fun onTransitionCancel(transition: androidx.transition.Transition) {}
+                override fun onTransitionPause(transition: androidx.transition.Transition) {}
+                override fun onTransitionResume(transition: androidx.transition.Transition) {}
+            })
         }
 
         TransitionManager.beginDelayedTransition(binding.main, transform)
-        binding.detailView.root.visibility = View.GONE
+        targetViewToHide.visibility = View.GONE
 
-        // 2. Desvanecer el contenido interno en paralelo mientras se encoge la tarjeta
-        binding.detailView.detailContent.animate()
-            .alpha(0f)
-            .setDuration(180)
-            .start()
+        if (!isFragmentDetail) {
+            binding.detailView.detailContent.animate()
+                .alpha(0f)
+                .setDuration(180)
+                .start()
+        }
 
-        // 3. Restaurar el estilo de barra de estado correspondiente al Dashboard
         restoreStatusBarTheme()
-
         activeCardView = null
         activeItem = null
     }

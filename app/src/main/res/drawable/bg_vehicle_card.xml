@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer 1 (outermost, most diffuse) -->
+    <item
+        android:left="2dp"
+        android:right="2dp"
+        android:top="3dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <solid android:color="#0D1B4B8A" />
+        </shape>
+    </item>
+    <!-- Shadow layer 2 -->
+    <item
+        android:left="1dp"
+        android:right="1dp"
+        android:top="2dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="17dp" />
+            <solid android:color="#141B4B8A" />
+        </shape>
+    </item>
+    <!-- Shadow layer 3 (closest, sharpest) -->
+    <item
+        android:left="0dp"
+        android:right="0dp"
+        android:top="1dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#1A000000" />
+        </shape>
+    </item>
+    <!-- Card background -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="@color/aura_white" />
+        </shape>
+    </item>
+</layer-list>

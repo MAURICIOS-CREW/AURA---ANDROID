@@ -11,7 +11,7 @@ sealed class DashboardItem(
     @param:DrawableRes val iconRes: Int
 ) {
     object Accesos : DashboardItem(R.id.btnAccesos, R.string.dashboard_accesos, R.drawable.ic_lock)
-    object Avisos : DashboardItem(R.id.btnAvisos, R.string.dashboard_avisos, R.drawable.ic_megaphone)
+    object Vehiculos : DashboardItem(R.id.btnVehiculos, R.string.dashboard_vehiculos, R.drawable.ic_car)
     object Incidencias : DashboardItem(R.id.btnIncidencias, R.string.dashboard_incidencias, R.drawable.ic_warning)
     object Pagos : DashboardItem(R.id.btnPagos, R.string.dashboard_pagos, R.drawable.ic_wallet)
     object Reservas : DashboardItem(R.id.btnReservas, R.string.dashboard_reservas, R.drawable.ic_calendar)
@@ -23,7 +23,7 @@ sealed class DashboardItem(
         fun fromId(@IdRes id: Int): DashboardItem? {
             return when (id) {
                 R.id.btnAccesos -> Accesos
-                R.id.btnAvisos -> Avisos
+                R.id.btnVehiculos -> Vehiculos
                 R.id.btnIncidencias -> Incidencias
                 R.id.btnPagos -> Pagos
                 R.id.btnReservas -> Reservas

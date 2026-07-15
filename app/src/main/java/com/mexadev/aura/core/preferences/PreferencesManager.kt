@@ -14,4 +14,8 @@ class PreferencesManager(context: Context) {
     var lockOnExit: Boolean
         get() = prefs.getBoolean("lock_on_exit", false)
         set(value) = prefs.edit { putBoolean("lock_on_exit", value) }
+
+    var vehiclesCount: Int
+        get() = prefs.getInt("vehicles_count", 0)
+        set(value) = prefs.edit { putInt("vehicles_count", value) }
 }

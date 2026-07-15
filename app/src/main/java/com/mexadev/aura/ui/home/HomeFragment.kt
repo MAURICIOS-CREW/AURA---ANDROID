@@ -320,21 +320,17 @@ class HomeFragment : Fragment() {
                     isNavigating = false
                     return@postDelayed
                 }
-                if (item is DashboardItem.Avisos) {
-                    navigator?.navigateToTab(1)
-                } else {
-                    // Asignar transitionName dinámicamente si no está establecido
-                    val transitionName = "transition_${item.javaClass.simpleName.lowercase()}"
-                    view.transitionName = transitionName
-                    navigator?.navigateToDetail(view, item)
-                }
+                // Asignar transitionName dinámicamente si no está establecido
+                val transitionName = "transition_${item.javaClass.simpleName.lowercase()}"
+                view.transitionName = transitionName
+                navigator?.navigateToDetail(view, item)
                 // Liberar el flag de navegación después de que termine la transición de entrada
                 view.postDelayed({ isNavigating = false }, 500L)
             }, 100L)
         }
 
         binding.btnAccesos.setOnClickListener(clickListener)
-        binding.btnAvisos.setOnClickListener(clickListener)
+        binding.btnVehiculos.setOnClickListener(clickListener)
         binding.btnIncidencias.setOnClickListener(clickListener)
         binding.btnPagos.setOnClickListener(clickListener)
         binding.btnReservas.setOnClickListener(clickListener)

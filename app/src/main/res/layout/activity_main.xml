@@ -238,6 +238,15 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <!-- Fragment Container para los flujos completos como Vehículos -->
+    <FrameLayout
+        android:id="@+id/detail_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp"
+        android:translationZ="20dp"
+        android:visibility="gone" />
+
     <!-- Error Overlay Global -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutErrorOverlay"

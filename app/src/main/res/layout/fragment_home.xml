@@ -186,9 +186,9 @@
                         app:layout_constraintTop_toBottomOf="@id/ivIconAccesos" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Avisos -->
+                <!-- Vehiculos -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/btnAvisos"
+                    android:id="@+id/btnVehiculos"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="6dp"
@@ -199,29 +199,29 @@
                     android:focusable="true"
                     android:padding="12dp">
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivIconAvisos"
+                        android:id="@+id/ivIconVehiculos"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginTop="8dp"
-                        android:src="@drawable/ic_megaphone"
+                        android:src="@drawable/ic_car"
                         app:tint="@color/aura_primary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                     <TextView
-                        android:id="@+id/tvTitleAvisos"
+                        android:id="@+id/tvTitleVehiculos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="8dp"
-                        android:text="@string/dashboard_avisos"
+                        android:text="@string/dashboard_vehiculos"
                         android:textAlignment="center"
                         android:textColor="@color/aura_text_primary"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ivIconAvisos" />
+                        app:layout_constraintTop_toBottomOf="@id/ivIconVehiculos" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- Incidencias -->
