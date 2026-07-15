@@ -7,16 +7,23 @@ import okhttp3.Response
 class AuthInterceptor(private val sessionManager: SessionManager) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+        val requestBuilder = request.newBuilder()
+            .header("Accept", "application/json")
         
-        val token = sessionManager.getAccessToken()
-        val newRequest = if (token != null) {
-            request.newBuilder()
-                .addHeader("Authorization", "Bearer $token")
-                .build()
-        } else {
-            request
+        // Si es la ruta de refresh, enviamos el refresh_token
+        if (request.url.encodedPath.contains("auth/refresh")) {
+            val refreshToken = sessionManager.getRefreshToken()
+            if (refreshToken != null) {
+                requestBuilder.header("Authorization", "Bearer $refreshToken")
+            }
+            return chain.proceed(requestBuilder.build())
         }
         
-        return chain.proceed(newRequest)
+        val token = sessionManager.getAccessToken()
+        if (token != null) {
+            requestBuilder.header("Authorization", "Bearer $token")
+        }
+        
+        return chain.proceed(requestBuilder.build())
     }
 }

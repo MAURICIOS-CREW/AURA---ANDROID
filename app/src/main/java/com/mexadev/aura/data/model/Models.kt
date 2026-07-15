@@ -42,7 +42,8 @@ data class Permission(
 data class Role(
     val id: Long,
     val name: String,
-    @SerializedName("hierarchy_level") val hierarchyLevel: Int,
+    val description: String?,
+    @SerializedName("hierarchy_level") val hierarchyLevel: Int?,
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?
 )
@@ -65,7 +66,9 @@ data class User(
     @SerializedName("role_id") val roleId: Long?,
     @SerializedName("is_active") val isActive: Int,
     @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    @SerializedName("updated_at") val updatedAt: String?,
+    val role: Role? = null,
+    val residences: List<Residence>? = null
 )
 
 data class UserSession(
@@ -98,11 +101,13 @@ data class Address(
 data class Residence(
     val id: Long,
     @SerializedName("address_id") val addressId: Long?,
-    val block: Int,
-    val number: String,
+    val address: Address?,
+    val block: Int?,
+    val number: String?,
     @SerializedName("intercom_number") val intercomNumber: String?,
     @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    @SerializedName("updated_at") val updatedAt: String?,
+    val pivot: UserResidence? = null
 )
 
 data class UserResidence(

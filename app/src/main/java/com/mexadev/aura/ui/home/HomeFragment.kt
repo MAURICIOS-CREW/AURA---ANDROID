@@ -23,6 +23,10 @@ import com.mexadev.aura.R
 import com.mexadev.aura.databinding.FragmentHomeBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.content.Intent
+import com.mexadev.aura.LoginActivity
+import com.mexadev.aura.core.network.ApiClient
+import java.io.IOException
 
 class HomeFragment : Fragment() {
 
@@ -198,64 +202,107 @@ class HomeFragment : Fragment() {
                 startSkeletonAnimation()
             }
             
-            // Simulate network delay for API call
-            delay(2500)
-            
-            // Cancel animators
-            shimmerAnimator?.cancel()
-            
-            // Hide skeletons
-            binding.skeletonWelcomeName.visibility = View.GONE
-            binding.skeletonResidential.visibility = View.GONE
-            binding.skeletonSaldo.visibility = View.GONE
-            binding.skeletonProximoPago.visibility = View.GONE
-            
-            // Show and set real data
-            binding.tvWelcomeName.visibility = View.VISIBLE
-            binding.tvWelcomeName.text = getString(R.string.home_welcome_name, "Alex")
-            
-            binding.tvResidentialName.visibility = View.VISIBLE
-            binding.tvResidentialName.text = getString(R.string.home_residential_name)
-            
-            binding.tvSaldoValue.visibility = View.VISIBLE
-            binding.tvSaldoValue.text = "$1,250.00 MXN"
-            
-            binding.tvCuotaMantenimiento.visibility = View.VISIBLE
-            
-            binding.tvProximoPagoValue.visibility = View.VISIBLE
-            binding.tvProximoPagoValue.text = "15 de junio, 2024"
-            
-            // Set header user name
-            binding.tvHeaderUserName.text = "Alex"
-            
-            if (isPull) {
-                binding.swipeRefreshLayout.isRefreshing = false
-                isRefreshing = false
+            try {
+                val response = ApiClient.apiService.getProfile()
                 
-                // Cascade card reveal transition
-                val cards = listOf(
-                    binding.gridContainer,
-                    binding.cardSaldo,
-                    binding.cardProximoPago,
-                    binding.btnPagarAhora
-                )
-                cards.forEachIndexed { index, card ->
-                    card.alpha = 0f
-                    card.translationY = 60f
-                    card.animate()
-                        .alpha(1f)
-                        .translationY(0f)
-                        .setDuration(500)
-                        .setStartDelay(index * 90L)
-                        .setInterpolator(DecelerateInterpolator())
-                        .start()
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    val userName = user?.name ?: "Usuario"
+                    
+                    // Cancel animators
+                    shimmerAnimator?.cancel()
+                    
+                    // Hide skeletons
+                    binding.skeletonWelcomeName.visibility = View.GONE
+                    binding.skeletonResidential.visibility = View.GONE
+                    binding.skeletonSaldo.visibility = View.GONE
+                    binding.skeletonProximoPago.visibility = View.GONE
+                    
+                    // Show and set real data
+                    binding.tvWelcomeName.visibility = View.VISIBLE
+                    binding.tvWelcomeName.text = getString(R.string.home_welcome_name, userName)
+                    
+                    val residenceName = user?.residences?.firstOrNull()?.let { res ->
+                        val parts = listOfNotNull(
+                            res.address?.name?.takeIf { it.isNotBlank() },
+                            res.block?.let { "Mza $it" },
+                            res.number?.takeIf { it.isNotBlank() }?.let { "Lte $it" }
+                        )
+                        if (parts.isNotEmpty()) parts.joinToString(", ") else null
+                    } ?: getString(R.string.home_residential_name)
+
+                    binding.tvResidentialName.visibility = View.VISIBLE
+                    binding.tvResidentialName.text = residenceName
+                    
+                    binding.tvSaldoValue.visibility = View.VISIBLE
+                    binding.tvSaldoValue.text = "$1,250.00 MXN"
+                    
+                    binding.tvCuotaMantenimiento.visibility = View.VISIBLE
+                    
+                    binding.tvProximoPagoValue.visibility = View.VISIBLE
+                    binding.tvProximoPagoValue.text = "15 de junio, 2024"
+                    
+                    // Set header user name
+                    binding.tvHeaderUserName.text = userName
+                    
+                    if (isPull) {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        isRefreshing = false
+                        
+                        // Cascade card reveal transition
+                        val cards = listOf(
+                            binding.gridContainer,
+                            binding.cardSaldo,
+                            binding.cardProximoPago,
+                            binding.btnPagarAhora
+                        )
+                        cards.forEachIndexed { index, card ->
+                            card.alpha = 0f
+                            card.translationY = 60f
+                            card.animate()
+                                .alpha(1f)
+                                .translationY(0f)
+                                .setDuration(500)
+                                .setStartDelay(index * 90L)
+                                .setInterpolator(DecelerateInterpolator())
+                                .start()
+                        }
+                    } else {
+                        binding.gridContainer.visibility = View.VISIBLE
+                        binding.cardSaldo.visibility = View.VISIBLE
+                        binding.cardProximoPago.visibility = View.VISIBLE
+                        binding.btnPagarAhora.visibility = View.VISIBLE
+                    }
+                } else {
+                    val code = response.code()
+                    if (code == 401 || code == 403) {
+                        // Token expiró y refresh falló (TokenAuthenticator limpió la sesión)
+                        // Manda a login
+                        requireActivity().startActivity(Intent(requireContext(), LoginActivity::class.java))
+                        requireActivity().finishAffinity()
+                    } else if (code >= 500) {
+                        showErrorOverlay("Mantenimiento", "El servidor se encuentra en mantenimiento o presentó un problema.\nIntenta más tarde.")
+                    } else {
+                        showErrorOverlay("Error", "Ocurrió un error inesperado (Código: $code).")
+                    }
                 }
-            } else {
-                binding.gridContainer.visibility = View.VISIBLE
-                binding.cardSaldo.visibility = View.VISIBLE
-                binding.cardProximoPago.visibility = View.VISIBLE
-                binding.btnPagarAhora.visibility = View.VISIBLE
+            } catch (e: IOException) {
+                showErrorOverlay("Sin Conexión", "No hay conexión al servidor.\nVerifica tu red y vuelve a intentarlo.")
+            } catch (e: Exception) {
+                showErrorOverlay("Error", "Ha ocurrido un error en la aplicación.")
+            } finally {
+                if (isRefreshing) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    isRefreshing = false
+                }
             }
+        }
+    }
+
+    private fun showErrorOverlay(title: String, message: String) {
+        val mainActivity = requireActivity() as? com.mexadev.aura.MainActivity
+        mainActivity?.showGlobalError(title, message) {
+            fetchDashboardData()
         }
     }
 

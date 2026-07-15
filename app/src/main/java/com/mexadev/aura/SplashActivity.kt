@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,8 +13,17 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.annotation.SuppressLint
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.mexadev.aura.core.network.ApiClient
+import com.mexadev.aura.core.session.BiometricHelper
+import com.mexadev.aura.core.session.SessionManager
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.io.IOException
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -103,18 +113,94 @@ class SplashActivity : AppCompatActivity() {
             }
         }, 1000)
 
-        // Navigate to LoginActivity or MainActivity based on session
-        handler.postDelayed({
-            val sessionManager = com.mexadev.aura.core.session.SessionManager(this@SplashActivity)
-            if (sessionManager.getAccessToken() != null) {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            } else {
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+        // Biometría para renovación de sesión si ocurre durante el request
+        lifecycleScope.launch {
+            SessionManager.biometricRequestFlow.collect { callback ->
+                BiometricHelper.showBiometricPrompt(
+                    activity = this@SplashActivity,
+                    title = "Renovación de Sesión",
+                    subtitle = "Tu sesión expiró. Verifica tu identidad para renovarla automáticamente.",
+                    onSuccess = { callback(true) },
+                    onError = { callback(false) },
+                    onCancel = { callback(false) }
+                )
             }
-            @Suppress("DEPRECATION")
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            finish()
-        }, 3200)
+        }
+        
+        // Listener del botón de reintentar
+        val btnRetry = findViewById<View>(R.id.btnErrorRetry)
+        btnRetry?.setOnClickListener {
+            findViewById<View>(R.id.layoutErrorOverlay)?.visibility = View.GONE
+            verifySession()
+        }
+
+        // Iniciar la validación
+        verifySession(initialDelay = 3200L)
+    }
+
+    private fun verifySession(initialDelay: Long = 0L) {
+        val sessionManager = SessionManager(this@SplashActivity)
+        
+        lifecycleScope.launch {
+            val animJob = async { delay(initialDelay) }
+            val networkJob = async {
+                if (sessionManager.getAccessToken() == null) {
+                    return@async "LOGIN"
+                }
+                
+                try {
+                    val response = ApiClient.apiService.getProfile()
+                    if (response.isSuccessful) {
+                        return@async "MAIN"
+                    } else {
+                        val code = response.code()
+                        if (code == 401 || code == 403) {
+                            return@async "LOGIN"
+                        } else if (code >= 500) {
+                            return@async "ERROR_500"
+                        } else {
+                            return@async "ERROR_UNKNOWN"
+                        }
+                    }
+                } catch (e: IOException) {
+                    return@async "ERROR_NETWORK"
+                } catch (e: Exception) {
+                    return@async "ERROR_UNKNOWN"
+                }
+            }
+            
+            // Esperar a que pase la animación mínima y la respuesta de red
+            animJob.await()
+            val result = networkJob.await()
+            
+            when (result) {
+                "MAIN" -> {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    finish()
+                }
+                "LOGIN" -> {
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    finish()
+                }
+                "ERROR_500" -> {
+                    showErrorOverlay("Mantenimiento", "El servidor se encuentra en mantenimiento o presentó un problema.\nIntenta más tarde.")
+                }
+                "ERROR_NETWORK" -> {
+                    showErrorOverlay("Sin Conexión", "No hay conexión al servidor.\nVerifica tu red y vuelve a intentarlo.")
+                }
+                else -> {
+                    showErrorOverlay("Error", "Ocurrió un error inesperado al conectar con el servidor.")
+                }
+            }
+        }
+    }
+
+    private fun showErrorOverlay(title: String, message: String) {
+        findViewById<TextView>(R.id.tvErrorTitle)?.text = title
+        findViewById<TextView>(R.id.tvErrorMessage)?.text = message
+        findViewById<View>(R.id.layoutErrorOverlay)?.visibility = View.VISIBLE
     }
 
     private fun startDotPulse(dot: View, delay: Long) {

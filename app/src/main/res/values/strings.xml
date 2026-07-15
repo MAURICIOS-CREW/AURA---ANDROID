@@ -56,7 +56,7 @@
     
     <!-- Dashboard / Home -->
     <string name="home_welcome_name">¡Bienvenido, %1$s!</string>
-    <string name="home_residential_name">Residencial Los Encinos</string>
+    <string name="home_residential_name">Sin residencia asignada</string>
     <string name="dashboard_accesos">Accesos</string>
     <string name="dashboard_avisos">Avisos</string>
     <string name="dashboard_incidencias">Incidencias</string>

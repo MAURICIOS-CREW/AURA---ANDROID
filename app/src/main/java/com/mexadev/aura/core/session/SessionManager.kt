@@ -20,8 +20,10 @@ class SessionManager(val context: Context) {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    // Flow for requesting biometric authentication from background threads (like TokenAuthenticator)
-    val biometricRequestFlow = MutableSharedFlow<(Boolean) -> Unit>(extraBufferCapacity = 1)
+    companion object {
+        // Flow compartido entre todas las instancias para requerir biometría desde background threads
+        val biometricRequestFlow = MutableSharedFlow<(Boolean) -> Unit>(extraBufferCapacity = 1)
+    }
 
     fun requestBiometricAuth(callback: (Boolean) -> Unit) {
         biometricRequestFlow.tryEmit(callback)

@@ -175,18 +175,16 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
             }
         })
 
-        // Botón FAB central — vuelve a Home
+        // Botón FAB central — abre el BottomSheet con QR
         binding.fabCenter.setOnClickListener {
             animateFabPress()
-            if (binding.viewPager.currentItem != 0) {
-                binding.viewPager.currentItem = 0
-            }
+            val qrBottomSheet = com.mexadev.aura.ui.qr.QrBottomSheetFragment()
+            qrBottomSheet.show(supportFragmentManager, "QrBottomSheet")
         }
 
         // Biometría para renovación de sesión
-        val sessionManager = SessionManager(this)
         lifecycleScope.launch {
-            sessionManager.biometricRequestFlow.collect { callback ->
+            SessionManager.biometricRequestFlow.collect { callback ->
                 BiometricHelper.showBiometricPrompt(
                     activity = this@MainActivity,
                     title = "Renovación de Sesión",
@@ -424,5 +422,21 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
                 else -> HomeFragment()
             }
         }
+    }
+
+    /**
+     * Muestra una pantalla de error que cubre TODA la actividad (incluyendo la barra de navegación).
+     */
+    fun showGlobalError(title: String, message: String, onRetry: () -> Unit) {
+        binding.tvErrorTitle.text = title
+        binding.tvErrorMessage.text = message
+        
+        binding.btnErrorRetry.setOnClickListener {
+            binding.layoutErrorOverlay.visibility = View.GONE
+            onRetry()
+        }
+        
+        // Hacemos visible el overlay global
+        binding.layoutErrorOverlay.visibility = View.VISIBLE
     }
 }

@@ -50,7 +50,8 @@ class TokenAuthenticator(
                 }
             }
 
-            val newAccessToken = try {
+            var newAccessToken: String? = null
+            try {
                 runBlocking {
                     val refreshResponse = apiServiceLazy.value.refresh(RefreshRequest(refreshToken))
                     
@@ -58,16 +59,30 @@ class TokenAuthenticator(
                         val body = refreshResponse.body()
                         if (body != null) {
                             sessionManager.saveTokens(body.accessToken, refreshToken)
-                            body.accessToken
-                        } else {
-                            null
+                            newAccessToken = body.accessToken
                         }
                     } else {
-                        null
+                        val code = refreshResponse.code()
+                        if (code == 401 || code == 403) {
+                            // Token revocado o expirado
+                            sessionManager.clearSession()
+                            newAccessToken = null
+                        } else if (code >= 500) {
+                            // Error del servidor, lanzar IOException para que sea manejado por el UI sin desloguear
+                            throw java.io.IOException("ServerError:$code")
+                        } else {
+                            // Otro error
+                            sessionManager.clearSession()
+                            newAccessToken = null
+                        }
                     }
                 }
-            } catch (_: Exception) {
-                null
+            } catch (e: java.io.IOException) {
+                // Si hay error de red o lanzamos un error 500, no deslogueamos, lanzamos de nuevo
+                throw e
+            } catch (e: Exception) {
+                sessionManager.clearSession()
+                newAccessToken = null
             }
 
             return if (newAccessToken != null) {
@@ -75,7 +90,6 @@ class TokenAuthenticator(
                     .header("Authorization", "Bearer $newAccessToken")
                     .build()
             } else {
-                sessionManager.clearSession()
                 null
             }
         }
