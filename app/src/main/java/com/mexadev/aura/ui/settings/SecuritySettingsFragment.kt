@@ -39,8 +39,26 @@ class SecuritySettingsFragment : Fragment() {
             preferencesManager.lockOnExit = isChecked
         }
         
+        applySwitchPhysics(binding.switchFingerprint, binding.switchLockOnExit)
+        
         binding.btnChangePassword.setOnClickListener {
             Toast.makeText(requireContext(), "Solicitud de cambio de contraseña enviada (Dummy)", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun applySwitchPhysics(vararg switches: com.google.android.material.materialswitch.MaterialSwitch) {
+        switches.forEach { switchView ->
+            switchView.setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start()
+                    }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.animate().scaleX(1f).scaleY(1f).setDuration(300).setInterpolator(android.view.animation.OvershootInterpolator(2f)).start()
+                    }
+                }
+                false
+            }
         }
     }
 

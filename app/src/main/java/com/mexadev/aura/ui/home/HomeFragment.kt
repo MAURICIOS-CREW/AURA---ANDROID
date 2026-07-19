@@ -196,14 +196,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchDashboardData() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val isPull = isRefreshing
+            if (_binding == null) return@launch
             if (!isPull) {
                 startSkeletonAnimation()
             }
             
             try {
                 val response = ApiClient.apiService.getProfile()
+                if (_binding == null) return@launch
                 
                 if (response.isSuccessful) {
                     val user = response.body()
@@ -287,11 +289,13 @@ class HomeFragment : Fragment() {
                     }
                 }
             } catch (e: IOException) {
+                if (_binding == null) return@launch
                 showErrorOverlay("Sin Conexión", "No hay conexión al servidor.\nVerifica tu red y vuelve a intentarlo.")
             } catch (e: Exception) {
+                if (_binding == null) return@launch
                 showErrorOverlay("Error", "Ha ocurrido un error en la aplicación.")
             } finally {
-                if (isRefreshing) {
+                if (_binding != null && isRefreshing) {
                     binding.swipeRefreshLayout.isRefreshing = false
                     isRefreshing = false
                 }

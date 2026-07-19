@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.SharedElementCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -48,6 +49,12 @@ class IncidentsFragment : Fragment() {
     private var incidentsList = mutableListOf<Incident>()
     private var hasFormOpen = false
 
+    /** Tracks the transition name of the last clicked incident card for remapping on return */
+    private var lastClickedTransitionName: String? = null
+
+    private lateinit var errorBanner: com.mexadev.aura.ui.common.BannerManager
+    private lateinit var successBanner: com.mexadev.aura.ui.common.BannerManager
+
     // ─────────────────────────────────────────────────────────────────
     // Lifecycle
     // ─────────────────────────────────────────────────────────────────
@@ -74,6 +81,9 @@ class IncidentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        errorBanner = com.mexadev.aura.ui.common.BannerManager(binding.errorBanner, binding.tvErrorBannerMessage)
+        successBanner = com.mexadev.aura.ui.common.BannerManager(binding.successBanner, binding.tvSuccessBannerMessage)
 
         binding.root.transitionName = "shared_card_transition_incidents"
 
@@ -103,12 +113,49 @@ class IncidentsFragment : Fragment() {
                 basePadding,
                 basePadding
             )
+            binding.successBanner.setPadding(
+                basePadding,
+                systemBars.top + basePadding,
+                basePadding,
+                basePadding
+            )
 
             insets
         }
 
         binding.btnBack.setOnClickListener { handleBackPress() }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+
+        // Set up the exit shared element callback so that when we return from
+        // IncidentDetailActivity the framework can remap the shared element transition
+        // to the correct card in the RecyclerView (which may have been recycled/rebound).
+        // Without this, the framework falls back to a plain fade which appears as a flicker.
+        requireActivity().setExitSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(
+                names: MutableList<String>,
+                sharedElements: MutableMap<String, View>
+            ) {
+                if (names.isEmpty()) return
+                val name = names[0]
+                // Try to find the matching item view in the RecyclerView by its transitionName
+                val layoutManager = binding.rvIncidents.layoutManager as? LinearLayoutManager
+                    ?: return
+                val firstVisible = layoutManager.findFirstVisibleItemPosition()
+                val lastVisible  = layoutManager.findLastVisibleItemPosition()
+                for (i in firstVisible..lastVisible) {
+                    val holder = binding.rvIncidents.findViewHolderForAdapterPosition(i)
+                    val itemView = holder?.itemView ?: continue
+                    if (itemView.transitionName == name) {
+                        sharedElements[name] = itemView
+                        return
+                    }
+                }
+                // FAB fallback (if transition was from FAB)
+                if (binding.fabAdd.transitionName == name) {
+                    sharedElements[name] = binding.fabAdd
+                }
+            }
+        })
 
         setupRecyclerView()
         setupSwipeRefresh()
@@ -118,10 +165,7 @@ class IncidentsFragment : Fragment() {
         fetchIncidents()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
     // ─────────────────────────────────────────────────────────────────
     // Setup
@@ -163,6 +207,7 @@ class IncidentsFragment : Fragment() {
 
             animateFabOut {
                 hasFormOpen = true
+                binding.swipeRefreshLayout.isEnabled = false
                 adapter.addFormCard(fabCenterX, fabCenterY)
             }
         }
@@ -180,12 +225,14 @@ class IncidentsFragment : Fragment() {
                 confirmText = "Descartar",
                 onConfirm   = {
                     hasFormOpen = false
+                    binding.swipeRefreshLayout.isEnabled = true
                     adapter.removeFormCard()
                     showFab()
                 }
             ).show(childFragmentManager, "DiscardIncidentConfirm")
         } else {
             hasFormOpen = false
+            binding.swipeRefreshLayout.isEnabled = true
             adapter.removeFormCard()
             showFab()
         }
@@ -198,40 +245,54 @@ class IncidentsFragment : Fragment() {
     private val detailLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == android.app.Activity.RESULT_OK) {
-            val json = result.data?.getStringExtra(IncidentDetailActivity.EXTRA_INCIDENT_JSON)
-            if (json != null) {
-                try {
-                    val updatedIncident = com.google.gson.Gson().fromJson(json, Incident::class.java)
-                    val indexInList = incidentsList.indexOfFirst { it.id == updatedIncident.id }
-                    if (indexInList != -1) {
-                        incidentsList[indexInList] = updatedIncident
+        // Delay all data mutations until the return transition (350ms) has fully finished.
+        // Updating the adapter immediately would cause notifyDataSetChanged during the morph
+        // animation, which is the root cause of the flicker.
+        viewLifecycleOwner.lifecycleScope.launch {
+            kotlinx.coroutines.delay(450)
+            if (result.resultCode == android.app.Activity.RESULT_OK) {
+                val json = result.data?.getStringExtra(IncidentDetailActivity.EXTRA_INCIDENT_JSON)
+                if (json != null) {
+                    try {
+                        val updatedIncident = com.google.gson.Gson().fromJson(json, Incident::class.java)
+                        val indexInList = incidentsList.indexOfFirst { it.id == updatedIncident.id }
+                        if (indexInList != -1) {
+                            incidentsList[indexInList] = updatedIncident
+                        }
+                        adapter.updateIncident(updatedIncident)
+                    } catch (e: Exception) {
+                        // Ignorar error de parsing
                     }
-                    adapter.updateIncident(updatedIncident)
-                } catch (e: Exception) {
-                    // Ignorar error de parsing
                 }
             }
+            // Al regresar del detalle, actualizamos silenciosamente la lista
+            fetchIncidentsSilent()
         }
-        // Al regresar del detalle, actualizamos silenciosamente la lista
-        fetchIncidentsSilent()
     }
 
     private fun openIncidentDetail(incident: Incident, cardView: View) {
+        val tName = "transition_incident_${incident.id}"
+        // Confirm the transitionName on the card view right before launching
+        cardView.transitionName = tName
+        lastClickedTransitionName = tName
+
         val intent = Intent(requireContext(), IncidentDetailActivity::class.java).apply {
             putExtra(IncidentDetailActivity.EXTRA_INCIDENT_JSON, com.google.gson.Gson().toJson(incident))
+            putExtra(IncidentDetailActivity.EXTRA_TRANSITION_NAME, tName)
         }
-        detailLauncher.launch(intent)
-        requireActivity().overridePendingTransition(
-            R.anim.anim_slide_up_enter,
-            R.anim.anim_scale_fade_out
+        val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(),
+            cardView,
+            tName
         )
+        detailLauncher.launch(intent, options)
     }
 
     private fun fetchIncidentsSilent() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getIncidents()
+                if (_binding == null) return@launch
                 if (response.isSuccessful) {
                     val incidents = response.body() ?: emptyList()
                     updateList(incidents)
@@ -297,9 +358,21 @@ class IncidentsFragment : Fragment() {
 
         binding.swipeRefreshLayout.isRefreshing = false
         if (savedCount > 0) {
-            adapter.showSkeletons(savedCount)
-            binding.layoutCenterLoading.visibility = View.GONE
-            binding.rvIncidents.visibility = View.VISIBLE
+            binding.rvIncidents.visibility = View.GONE
+            binding.layoutCenterLoading.visibility = View.VISIBLE
+            binding.layoutCenterLoading.removeAllViews()
+            
+            val inflater = LayoutInflater.from(requireContext())
+            val count = savedCount.coerceIn(1, 10)
+            for (i in 0 until count) {
+                inflater.inflate(R.layout.item_incident_skeleton, binding.layoutCenterLoading, true)
+            }
+            
+            android.animation.ObjectAnimator.ofFloat(binding.layoutCenterLoading, "alpha", 1f, 0.4f, 1f).apply {
+                duration = 1200
+                repeatCount = android.animation.ValueAnimator.INFINITE
+                start()
+            }
         } else {
             binding.layoutCenterLoading.visibility = View.VISIBLE
             binding.rvIncidents.visibility = View.GONE
@@ -311,26 +384,36 @@ class IncidentsFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────
 
     private fun fetchIncidents() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getIncidents()
-                if (response.isSuccessful) {
-                    binding.layoutCenterLoading.visibility = View.GONE
-                    binding.rvIncidents.visibility = View.VISIBLE
-
-                    val incidents = response.body() ?: emptyList()
-                    val prefs = PreferencesManager(requireContext())
-                    prefs.incidentsCount = incidents.size
-
-                    updateList(incidents)
-                } else {
+                if (_binding == null) return@launch
+                
+                if (!response.isSuccessful) {
                     handleApiError(response.code(), response.errorBody()?.string())
+                    return@launch
+                }
+                
+                binding.layoutCenterLoading.visibility = View.GONE
+                binding.rvIncidents.visibility = View.VISIBLE
+
+                val incidents = response.body() ?: emptyList()
+                val prefs = PreferencesManager(requireContext())
+                prefs.incidentsCount = incidents.size
+
+                if (incidents.isNotEmpty()) {
+                    updateListWithAnimation(incidents)
+                } else {
+                    updateList(incidents)
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                if (_binding == null) return@launch
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
             } finally {
-                binding.swipeRefreshLayout.isRefreshing = false
-                if (!hasFormOpen) showFab()
+                if (_binding != null) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    if (!hasFormOpen) showFab()
+                }
             }
         }
     }
@@ -340,6 +423,22 @@ class IncidentsFragment : Fragment() {
         incidentsList.addAll(incidents)
         adapter.updateData(incidentsList)
         if (!hasFormOpen) showFab()
+    }
+
+    private fun updateListWithAnimation(incidents: List<Incident>) {
+        incidentsList.clear()
+        incidentsList.addAll(incidents)
+        adapter.updateData(incidentsList)
+        if (!hasFormOpen) showFab()
+
+        binding.rvIncidents.alpha = 0f
+        binding.rvIncidents.translationY = -30f
+        binding.rvIncidents.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .setInterpolator(OvershootInterpolator(1.0f))
+            .start()
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -352,16 +451,17 @@ class IncidentsFragment : Fragment() {
         setLoading: (Boolean) -> Unit
     ) {
         if (title.isEmpty()) {
-            showErrorBanner("El título del reporte es obligatorio.")
+            errorBanner.show("El título del reporte es obligatorio.")
             setLoading(false)
             return
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             setLoading(true)
             try {
                 val req = IncidentCreateRequest(title, description)
                 val res = ApiClient.apiService.createIncident(req)
+                if (_binding == null) return@launch
                 if (res.isSuccessful) {
                     val newIncident = res.body()
                     if (newIncident != null) {
@@ -371,6 +471,7 @@ class IncidentsFragment : Fragment() {
                         val prefs = PreferencesManager(requireContext())
                         prefs.incidentsCount = incidentsList.size
                         showFab()
+                        successBanner.show("Incidente reportado exitosamente")
                     } else {
                         fetchIncidents()
                     }
@@ -379,17 +480,16 @@ class IncidentsFragment : Fragment() {
                     setLoading(false)
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                if (_binding == null) return@launch
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
                 setLoading(false)
             }
         }
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // Error Handling & Banner (mismo patrón que VehiclesFragment)
+    // Error Handling & Banner
     // ─────────────────────────────────────────────────────────────────
-
-    private var errorBannerRunnable: Runnable? = null
 
     private fun handleApiError(code: Int, errorBody: String?) {
         var customMessage: String? = null
@@ -410,47 +510,17 @@ class IncidentsFragment : Fragment() {
             500  -> "Error interno en el servidor."
             else -> customMessage ?: "Ocurrió un error inesperado ($code)."
         }
-        showErrorBanner(message)
+        errorBanner.show(message)
     }
 
-    private fun showErrorBanner(message: String) {
-        binding.tvErrorBannerMessage.text = message
+    // ─────────────────────────────────────────────────────────────────
+    // Desestrucción
+    // ─────────────────────────────────────────────────────────────────
 
-        errorBannerRunnable?.let { binding.errorBanner.removeCallbacks(it) }
-
-        if (binding.errorBanner.visibility != View.VISIBLE) {
-            binding.errorBanner.alpha = 0f
-            binding.errorBanner.visibility = View.VISIBLE
-            binding.errorBanner.post {
-                val height = binding.errorBanner.height.toFloat()
-                binding.errorBanner.translationY = -height
-                binding.errorBanner.alpha = 1f
-                binding.errorBanner.animate()
-                    .translationY(0f)
-                    .setDuration(300)
-                    .setInterpolator(OvershootInterpolator(1.0f))
-                    .withEndAction { scheduleHideBanner() }
-                    .start()
-            }
-        } else {
-            binding.errorBanner.animate().cancel()
-            binding.errorBanner.translationY = 0f
-            scheduleHideBanner()
-        }
-    }
-
-    private fun scheduleHideBanner() {
-        errorBannerRunnable = Runnable { hideErrorBanner() }
-        binding.errorBanner.postDelayed(errorBannerRunnable, 4000)
-    }
-
-    private fun hideErrorBanner() {
-        val height = binding.errorBanner.height.toFloat()
-        binding.errorBanner.animate()
-            .translationY(-height)
-            .setDuration(300)
-            .setInterpolator(DecelerateInterpolator())
-            .withEndAction { binding.errorBanner.visibility = View.GONE }
-            .start()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        errorBanner.destroy()
+        successBanner.destroy()
+        _binding = null
     }
 }

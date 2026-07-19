@@ -15,9 +15,23 @@
         <item name="android:navigationBarColor">@color/aura_white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/aura_background</item>
+        <!-- Enable the Activity Transitions framework so shared element transitions work -->
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
     <style name="Theme.Aura" parent="Base.Theme.Aura" />
+
+    <!--
+        Theme for detail activities that participate in shared element transitions.
+        The window background starts transparent so there is no flash of the activity
+        background color before the MaterialContainerTransform morph begins.
+        The activity sets window.setBackgroundDrawable(ColorDrawable(TRANSPARENT)) in
+        onCreate() which has the same effect but we also declare it here as a safety net.
+    -->
+    <style name="Theme.Aura.Detail" parent="Base.Theme.Aura">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
     <style name="Theme.Aura.Splash" parent="Base.Theme.Aura">
         <item name="android:windowBackground">@color/aura_white</item>

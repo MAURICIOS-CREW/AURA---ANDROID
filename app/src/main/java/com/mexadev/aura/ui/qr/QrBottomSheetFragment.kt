@@ -34,6 +34,8 @@ class QrBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var tvErrorMessage: TextView
     private lateinit var ivErrorIcon: ImageView
 
+    private var isViewAlive = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +45,7 @@ class QrBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isViewAlive = true
 
         ivQrCode = view.findViewById(R.id.iv_qr_code)
         pbLoading = view.findViewById(R.id.pb_loading)
@@ -58,12 +61,18 @@ class QrBottomSheetFragment : BottomSheetDialogFragment() {
         loadQrData()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isViewAlive = false
+    }
+
     private fun loadQrData() {
         showLoading()
         
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getTempQrHash()
+                if (!isViewAlive) return@launch
                 if (response.isSuccessful && response.body() != null) {
                     val hash = response.body()?.getQrData()
                     if (!hash.isNullOrBlank()) {
@@ -93,13 +102,14 @@ class QrBottomSheetFragment : BottomSheetDialogFragment() {
                     showError(errorMessage, errorIconRes)
                 }
             } catch (e: Exception) {
+                if (!isViewAlive) return@launch
                 showError("Se requiere conexión a internet o hubo problemas con el servidor.", R.drawable.ic_wifi_off)
             }
         }
     }
 
     private fun generateAndShowQr(text: String) {
-        lifecycleScope.launch(Dispatchers.Default) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             try {
                 val writer = QRCodeWriter()
                 val bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 512, 512)
@@ -114,12 +124,14 @@ class QrBottomSheetFragment : BottomSheetDialogFragment() {
                 }
 
                 withContext(Dispatchers.Main) {
+                    if (!isViewAlive) return@withContext
                     ivQrCode.setImageBitmap(bitmap)
                     showQr()
                     animateQrAppearance()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    if (!isViewAlive) return@withContext
                     showError("Error al generar el QR", R.drawable.ic_warning)
                 }
             }

@@ -163,8 +163,45 @@ data class AccessCode(
     @SerializedName("valid_from") val validFrom: String?,
     @SerializedName("valid_until") val validUntil: String?,
     val uses: Int,
+    @SerializedName("max_uses") val maxUses: Int?,
+    @SerializedName("active_days") val activeDays: List<Int>?,
+    @SerializedName("start_time") val startTime: String?,
+    @SerializedName("end_time") val endTime: String?,
+    @SerializedName("is_active") val isActive: Boolean,
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?
+)
+
+data class AccessCodeListResponse(
+    val status: String,
+    val data: List<AccessCode>
+)
+
+data class SingleAccessCodeResponse(
+    val status: String,
+    val data: AccessCode
+)
+
+data class AccessCodeCreateRequest(
+    @SerializedName("residence_id") val residenceId: Long,
+    @SerializedName("guest_name") val guestName: String?,
+    @SerializedName("valid_from") val validFrom: String? = null,
+    @SerializedName("valid_until") val validUntil: String? = null,
+    @SerializedName("max_uses") val maxUses: Int? = null,
+    @SerializedName("active_days") val activeDays: List<Int>? = null,
+    @SerializedName("start_time") val startTime: String? = null,
+    @SerializedName("end_time") val endTime: String? = null
+)
+
+data class AccessCodeUpdateRequest(
+    @SerializedName("is_active") val isActive: Boolean?,
+    @SerializedName("guest_name") val guestName: String?,
+    @SerializedName("valid_from") val validFrom: String? = null,
+    @SerializedName("valid_until") val validUntil: String? = null,
+    @SerializedName("max_uses") val maxUses: Int? = null,
+    @SerializedName("active_days") val activeDays: List<Int>? = null,
+    @SerializedName("start_time") val startTime: String? = null,
+    @SerializedName("end_time") val endTime: String? = null
 )
 
 data class AccessLog(

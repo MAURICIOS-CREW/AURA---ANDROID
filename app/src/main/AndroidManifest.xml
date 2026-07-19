@@ -39,9 +39,23 @@
 
         <activity
             android:name=".ui.incidents.IncidentDetailActivity"
-            android:theme="@style/Theme.Aura"
+            android:theme="@style/Theme.Aura.Detail"
             android:windowSoftInputMode="adjustResize" />
 
-    </application>
+        <activity
+            android:name=".ui.accesses.AccessDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Aura.Detail" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+    </application>
 </manifest>

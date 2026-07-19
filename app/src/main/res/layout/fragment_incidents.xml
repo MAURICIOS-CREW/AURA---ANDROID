@@ -154,24 +154,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center"
                     android:visibility="gone"
-                    android:layout_marginTop="64dp"
-                    android:layout_marginBottom="64dp">
-
-                    <ProgressBar
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:indeterminateTint="@color/aura_primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Cargando..."
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/aura_text_secondary" />
+                    android:paddingTop="4dp"
+                    android:paddingBottom="64dp">
                 </LinearLayout>
 
             </LinearLayout>
@@ -195,6 +180,43 @@
         app:backgroundTint="@color/aura_primary"
         app:elevation="6dp"
         app:pressedTranslationZ="8dp" />
+
+    <!-- ═══════════════════════════════════════
+         SUCCESS BANNER
+         ═══════════════════════════════════════ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/successBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/aura_success"
+        android:elevation="30dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivSuccessBannerIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            app:tint="@color/aura_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSuccessBannerMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/aura_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivSuccessBannerIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Operación exitosa" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- ═══════════════════════════════════════
          ERROR BANNER (Tipo Spotify Offline)

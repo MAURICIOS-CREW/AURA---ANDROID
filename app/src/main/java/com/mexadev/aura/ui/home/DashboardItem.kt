@@ -10,9 +10,32 @@ sealed class DashboardItem(
     @param:StringRes val titleRes: Int,
     @param:DrawableRes val iconRes: Int
 ) {
-    object Accesos : DashboardItem(R.id.btnAccesos, R.string.dashboard_accesos, R.drawable.ic_lock)
-    object Vehiculos : DashboardItem(R.id.btnVehiculos, R.string.dashboard_vehiculos, R.drawable.ic_car)
-    object Incidencias : DashboardItem(R.id.btnIncidencias, R.string.dashboard_incidencias, R.drawable.ic_warning)
+    /**
+     * Devuelve la instancia del Fragmento que maneja el detalle de este módulo.
+     * Si el módulo aún no está implementado, devuelve null para mostrar "Próximamente".
+     */
+    open fun createFragment(): androidx.fragment.app.Fragment? = null
+
+    /**
+     * Etiqueta única para registrar el fragmento en el FragmentManager.
+     */
+    open val fragmentTag: String? = null
+
+    object Accesos : DashboardItem(R.id.btnAccesos, R.string.dashboard_accesos, R.drawable.ic_lock) {
+        override fun createFragment() = com.mexadev.aura.ui.accesses.AccessesFragment()
+        override val fragmentTag = "AccessesFragment"
+    }
+
+    object Vehiculos : DashboardItem(R.id.btnVehiculos, R.string.dashboard_vehiculos, R.drawable.ic_car) {
+        override fun createFragment() = com.mexadev.aura.ui.vehicles.VehiclesFragment()
+        override val fragmentTag = "VehiclesFragment"
+    }
+
+    object Incidencias : DashboardItem(R.id.btnIncidencias, R.string.dashboard_incidencias, R.drawable.ic_warning) {
+        override fun createFragment() = com.mexadev.aura.ui.incidents.IncidentsFragment()
+        override val fragmentTag = "IncidentsFragment"
+    }
+
     object Pagos : DashboardItem(R.id.btnPagos, R.string.dashboard_pagos, R.drawable.ic_wallet)
     object Reservas : DashboardItem(R.id.btnReservas, R.string.dashboard_reservas, R.drawable.ic_calendar)
     object Documentos : DashboardItem(R.id.btnDocumentos, R.string.dashboard_documentos, R.drawable.ic_document)

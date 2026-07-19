@@ -283,16 +283,10 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     }
 
     override fun navigateToDetail(cardView: View, item: DashboardItem) {
-        if (item == DashboardItem.Vehiculos || item == DashboardItem.Incidencias) {
-            val fragment = when (item) {
-                DashboardItem.Vehiculos   -> com.mexadev.aura.ui.vehicles.VehiclesFragment()
-                DashboardItem.Incidencias -> com.mexadev.aura.ui.incidents.IncidentsFragment()
-                else -> com.mexadev.aura.ui.vehicles.VehiclesFragment()
-            }
-            val tag = when (item) {
-                DashboardItem.Incidencias -> "IncidentsFragment"
-                else -> "VehiclesFragment"
-            }
+        val fragment = item.createFragment()
+        val tag = item.fragmentTag
+
+        if (fragment != null && tag != null) {
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.detail_fragment_container, fragment, tag)

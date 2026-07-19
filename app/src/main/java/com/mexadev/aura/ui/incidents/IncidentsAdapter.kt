@@ -303,6 +303,10 @@ class IncidentsAdapter(
 
             applyStatusStyle(incident.status)
 
+            // Assign a unique transition name so the shared element framework can
+            // locate this specific card when returning from IncidentDetailActivity
+            binding.cardIncident.transitionName = "transition_incident_${incident.id}"
+
             if (incident.comments != null && incident.comments.isNotEmpty()) {
                 binding.layoutCommentsBadge.visibility = View.VISIBLE
                 binding.tvCommentsCount.text = incident.comments.size.toString()

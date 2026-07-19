@@ -1,6 +1,7 @@
 package com.mexadev.aura.ui.incidents
 
 import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
@@ -48,9 +49,13 @@ import java.util.Locale
 class IncidentDetailActivity : AppCompatActivity() {
 
     companion object {
-        const val EXTRA_INCIDENT_ID   = "extra_incident_id"
+        const val EXTRA_INCIDENT_ID    = "extra_incident_id"
         const val EXTRA_INCIDENT_TITLE = "extra_incident_title"
-        const val EXTRA_INCIDENT_JSON = "extra_incident_json"
+        const val EXTRA_INCIDENT_JSON  = "extra_incident_json"
+        /** Extra key for the shared element transition name */
+        const val EXTRA_TRANSITION_NAME = "extra_transition_name"
+        /** Default transition name when no specific name is provided */
+        const val TRANSITION_NAME_DEFAULT = "shared_incident_container"
 
         /** Estados en los que el residente puede cancelar su reporte */
         private val CANCELLABLE_STATUSES = setOf("open", "viewed")
@@ -63,17 +68,66 @@ class IncidentDetailActivity : AppCompatActivity() {
     private var currentUserId: Long = -1L
     private var currentIncident: IncidentDetail? = null
 
-    private var errorBannerRunnable: Runnable? = null
+    private lateinit var errorBanner: com.mexadev.aura.ui.common.BannerManager
+    private lateinit var successBanner: com.mexadev.aura.ui.common.BannerManager
 
     // ─────────────────────────────────────────────────────────────────
     // Lifecycle
     // ─────────────────────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        // Request transition feature BEFORE super.onCreate / setContentView
+        window.requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS)
+        // Register callback so the framework can map the shared element correctly
+        setEnterSharedElementCallback(com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback())
+        // Transparent background eliminates the "white flash" before the morph begins
+        window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+
+        enableEdgeToEdge(
+            statusBarStyle = androidx.activity.SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            )
+        )
         super.onCreate(savedInstanceState)
         binding = ActivityIncidentDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // The shared element transition name must match what the caller provided.
+        // We use the incident id so each card has a unique name.
+        val tName = intent.getStringExtra(EXTRA_TRANSITION_NAME) ?: TRANSITION_NAME_DEFAULT
+        binding.detailRoot.transitionName = tName
+
+        window.sharedElementEnterTransition = com.google.android.material.transition.platform.MaterialContainerTransform().apply {
+            addTarget(tName)
+            duration = 400
+            isElevationShadowEnabled = false
+            interpolator = android.view.animation.AnimationUtils.loadInterpolator(
+                this@IncidentDetailActivity, android.R.interpolator.fast_out_slow_in
+            )
+            fadeMode = com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_CROSS
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
+        }
+        window.sharedElementReturnTransition = com.google.android.material.transition.platform.MaterialContainerTransform().apply {
+            addTarget(tName)
+            duration = 350
+            isElevationShadowEnabled = false
+            interpolator = android.view.animation.AnimationUtils.loadInterpolator(
+                this@IncidentDetailActivity, android.R.interpolator.fast_out_slow_in
+            )
+            fadeMode = com.google.android.material.transition.platform.MaterialContainerTransform.FADE_MODE_CROSS
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
+        }
+
+        // Postpone until the layout is fully measured so the shared element
+        // MaterialContainerTransform requiere esta pausa
+        postponeEnterTransition()
+        binding.detailRoot.post { startPostponedEnterTransition() }
+
+        errorBanner = com.mexadev.aura.ui.common.BannerManager(binding.errorBanner, binding.tvErrorBannerMessage)
+        successBanner = com.mexadev.aura.ui.common.BannerManager(binding.successBanner, binding.tvSuccessBannerMessage)
 
         // Forzar iconos oscuros en la barra de estado (porque nuestro fondo es claro)
         androidx.core.view.WindowCompat.getInsetsController(window, binding.root)
@@ -122,16 +176,19 @@ class IncidentDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun finish() {
+    /**
+     * Sets the result with the current incident data and finishes with the
+     * shared element return transition. Call this instead of finish() or
+     * finishAfterTransition() so the result is always propagated correctly.
+     */
+    private fun finishWithResult() {
         currentIncident?.let {
             val intent = android.content.Intent().apply {
                 putExtra(EXTRA_INCIDENT_JSON, com.google.gson.Gson().toJson(it))
             }
             setResult(android.app.Activity.RESULT_OK, intent)
         }
-        super.finish()
-        // Animación de salida: la pantalla baja y la pantalla de fondo recupera escala
-        overridePendingTransition(R.anim.anim_scale_fade_in, R.anim.anim_slide_down_exit)
+        finishAfterTransition()
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -166,6 +223,10 @@ class IncidentDetailActivity : AppCompatActivity() {
 
             // Error banner padding
             binding.errorBanner.setPadding(
+                16.dp, systemBars.top + 16.dp, 16.dp, 16.dp
+            )
+            // Success banner padding
+            binding.successBanner.setPadding(
                 16.dp, systemBars.top + 16.dp, 16.dp, 16.dp
             )
 
@@ -210,7 +271,7 @@ class IncidentDetailActivity : AppCompatActivity() {
     }
 
     private fun setupBackButton() {
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener { finishWithResult() }
     }
 
     private fun setupImeListener() {
@@ -247,7 +308,7 @@ class IncidentDetailActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 if (!silent) {
-                    showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                    errorBanner.show("Sin conexión a internet o servidor inaccesible.")
                 }
             } finally {
                 binding.swipeRefreshLayout.isRefreshing = false
@@ -371,7 +432,7 @@ class IncidentDetailActivity : AppCompatActivity() {
                     handleApiError(response.code(), response.errorBody()?.string())
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
             } finally {
                 setSendLoading(false)
             }
@@ -397,12 +458,13 @@ class IncidentDetailActivity : AppCompatActivity() {
                     currentIncident = currentIncident?.copy(status = "cancelled")
                     applyStatusChip("cancelled")
                     binding.btnCancelIncident.visibility = View.GONE
+                    successBanner.show("Incidente cancelado correctamente")
                 } else {
                     handleApiError(response.code(), response.errorBody()?.string())
                     resetCancelButton()
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
                 resetCancelButton()
             }
         }
@@ -463,47 +525,12 @@ class IncidentDetailActivity : AppCompatActivity() {
             500  -> "Error interno en el servidor."
             else -> customMessage ?: "Ocurrió un error inesperado ($code)."
         }
-        showErrorBanner(message)
+        errorBanner.show(message)
     }
 
-    private fun showErrorBanner(message: String) {
-        binding.tvErrorBannerMessage.text = message
-
-        errorBannerRunnable?.let { binding.errorBanner.removeCallbacks(it) }
-
-        if (binding.errorBanner.visibility != View.VISIBLE) {
-            binding.errorBanner.alpha = 0f
-            binding.errorBanner.visibility = View.VISIBLE
-            binding.errorBanner.post {
-                val height = binding.errorBanner.height.toFloat()
-                binding.errorBanner.translationY = -height
-                binding.errorBanner.alpha = 1f
-                binding.errorBanner.animate()
-                    .translationY(0f)
-                    .setDuration(300)
-                    .setInterpolator(OvershootInterpolator(1.0f))
-                    .withEndAction { scheduleHideBanner() }
-                    .start()
-            }
-        } else {
-            binding.errorBanner.animate().cancel()
-            binding.errorBanner.translationY = 0f
-            scheduleHideBanner()
-        }
-    }
-
-    private fun scheduleHideBanner() {
-        errorBannerRunnable = Runnable { hideErrorBanner() }
-        binding.errorBanner.postDelayed(errorBannerRunnable, 4000)
-    }
-
-    private fun hideErrorBanner() {
-        val height = binding.errorBanner.height.toFloat()
-        binding.errorBanner.animate()
-            .translationY(-height)
-            .setDuration(300)
-            .setInterpolator(DecelerateInterpolator())
-            .withEndAction { binding.errorBanner.visibility = View.GONE }
-            .start()
+    override fun onDestroy() {
+        super.onDestroy()
+        errorBanner.destroy()
+        successBanner.destroy()
     }
 }

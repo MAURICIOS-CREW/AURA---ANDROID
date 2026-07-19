@@ -61,5 +61,21 @@ interface ApiService {
         @retrofit2.http.Path("id") incidentId: Long,
         @Body request: CommentCreateRequest
     ): Response<IncidentComment>
+
+    // ── Access Codes ──────────────────────────────────────────────────
+    @retrofit2.http.GET("api/mobile/access-codes")
+    suspend fun getAccessCodes(): Response<com.mexadev.aura.data.model.AccessCodeListResponse>
+
+    @retrofit2.http.POST("api/mobile/access-codes")
+    suspend fun createAccessCode(@Body request: com.mexadev.aura.data.model.AccessCodeCreateRequest): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
+
+    @retrofit2.http.GET("api/mobile/access-codes/{id}")
+    suspend fun getAccessCode(@retrofit2.http.Path("id") id: Long): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
+
+    @retrofit2.http.PUT("api/mobile/access-codes/{id}")
+    suspend fun updateAccessCode(@retrofit2.http.Path("id") id: Long, @Body request: com.mexadev.aura.data.model.AccessCodeUpdateRequest): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
+
+    @retrofit2.http.DELETE("api/mobile/access-codes/{id}")
+    suspend fun deleteAccessCode(@retrofit2.http.Path("id") id: Long): Response<Unit>
 }
 

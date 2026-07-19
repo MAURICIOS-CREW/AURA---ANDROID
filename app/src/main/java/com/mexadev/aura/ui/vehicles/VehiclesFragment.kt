@@ -47,6 +47,8 @@ class VehiclesFragment : Fragment() {
 
     private lateinit var adapter: VehiclesAdapter
     private var vehiclesList = mutableListOf<Vehicle>()
+    
+    private lateinit var errorBanner: com.mexadev.aura.ui.common.BannerManager
 
     // ─────────────────────────────────────────────────────────────────
     // Lifecycle
@@ -75,6 +77,8 @@ class VehiclesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        errorBanner = com.mexadev.aura.ui.common.BannerManager(binding.errorBanner, binding.tvErrorBannerMessage)
 
         binding.root.transitionName = "shared_card_transition"
 
@@ -119,10 +123,7 @@ class VehiclesFragment : Fragment() {
         fetchVehicles()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
     // ─────────────────────────────────────────────────────────────────
     // Setup
@@ -242,9 +243,21 @@ class VehiclesFragment : Fragment() {
 
         binding.swipeRefreshLayout.isRefreshing = false
         if (savedCount > 0) {
-            adapter.showSkeletons(savedCount)
-            binding.layoutCenterLoading.visibility = View.GONE
-            binding.rvVehicles.visibility = View.VISIBLE
+            binding.rvVehicles.visibility = View.GONE
+            binding.layoutCenterLoading.visibility = View.VISIBLE
+            binding.layoutCenterLoading.removeAllViews()
+            
+            val inflater = LayoutInflater.from(requireContext())
+            val count = savedCount.coerceIn(1, 10)
+            for (i in 0 until count) {
+                inflater.inflate(R.layout.item_vehicle_skeleton, binding.layoutCenterLoading, true)
+            }
+            
+            android.animation.ObjectAnimator.ofFloat(binding.layoutCenterLoading, "alpha", 1f, 0.4f, 1f).apply {
+                duration = 1200
+                repeatCount = android.animation.ValueAnimator.INFINITE
+                start()
+            }
         } else {
             binding.layoutCenterLoading.visibility = View.VISIBLE
             binding.rvVehicles.visibility = View.GONE
@@ -256,31 +269,36 @@ class VehiclesFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────
 
     private fun fetchVehicles() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getVehicles()
-                if (response.isSuccessful) {
-                    binding.layoutCenterLoading.visibility = View.GONE
-                    binding.rvVehicles.visibility = View.VISIBLE
-
-                    val vehicles = response.body() ?: emptyList()
-                    val prefs    = PreferencesManager(requireContext())
-                    val oldCount = prefs.vehiclesCount
-                    prefs.vehiclesCount = vehicles.size
-
-                    if (vehicles.size > oldCount && oldCount > 0) {
-                        updateListWithAnimation(vehicles)
-                    } else {
-                        updateList(vehicles)
-                    }
-                } else {
+                if (_binding == null) return@launch
+                
+                if (!response.isSuccessful) {
                     handleApiError(response.code(), response.errorBody()?.string())
+                    return@launch
+                }
+                
+                binding.layoutCenterLoading.visibility = View.GONE
+                binding.rvVehicles.visibility = View.VISIBLE
+
+                val vehicles = response.body() ?: emptyList()
+                val prefs    = PreferencesManager(requireContext())
+                prefs.vehiclesCount = vehicles.size
+
+                if (vehicles.isNotEmpty()) {
+                    updateListWithAnimation(vehicles)
+                } else {
+                    updateList(vehicles)
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                if (_binding == null) return@launch
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
             } finally {
-                binding.swipeRefreshLayout.isRefreshing = false
-                showFab()
+                if (_binding != null) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    showFab()
+                }
             }
         }
     }
@@ -319,7 +337,7 @@ class VehiclesFragment : Fragment() {
             return
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             setLoading(true)
             try {
                 if (vehicle.id == -1L) {
@@ -329,6 +347,7 @@ class VehiclesFragment : Fragment() {
 
                     val req = VehicleCreateRequest(residenceId, plate, brand, color)
                     val res = ApiClient.apiService.createVehicle(req)
+                    if (_binding == null) return@launch
                     if (res.isSuccessful) {
                         Toast.makeText(requireContext(), "Vehículo registrado", Toast.LENGTH_SHORT).show()
                         val newVehicle = res.body()
@@ -346,6 +365,7 @@ class VehiclesFragment : Fragment() {
                     // ── Actualizar vehículo existente ──
                     val req = VehicleUpdateRequest(plate, brand, color)
                     val res = ApiClient.apiService.updateVehicle(vehicle.id, req)
+                    if (_binding == null) return@launch
                     if (res.isSuccessful) {
                         Toast.makeText(requireContext(), "Vehículo actualizado", Toast.LENGTH_SHORT).show()
                         val updatedVehicle = res.body()
@@ -361,7 +381,8 @@ class VehiclesFragment : Fragment() {
                     }
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                if (_binding == null) return@launch
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
                 setLoading(false)
             }
         }
@@ -378,10 +399,11 @@ class VehiclesFragment : Fragment() {
     }
 
     private fun deleteVehicle(vehicle: Vehicle, setLoading: (Boolean) -> Unit) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             setLoading(true)
             try {
                 val res = ApiClient.apiService.deleteVehicle(vehicle.id)
+                if (_binding == null) return@launch
                 if (res.isSuccessful) {
                     Toast.makeText(requireContext(), "Vehículo eliminado", Toast.LENGTH_SHORT).show()
                     adapter.vehicleDeleted(vehicle)
@@ -391,7 +413,8 @@ class VehiclesFragment : Fragment() {
                     setLoading(false)
                 }
             } catch (e: Exception) {
-                showErrorBanner("Sin conexión a internet o servidor inaccesible.")
+                if (_binding == null) return@launch
+                errorBanner.show("Sin conexión a internet o servidor inaccesible.")
                 setLoading(false)
             }
         }
@@ -401,7 +424,6 @@ class VehiclesFragment : Fragment() {
     // Error Handling & Banner
     // ─────────────────────────────────────────────────────────────────
 
-    private var errorBannerRunnable: Runnable? = null
 
     private fun handleApiError(code: Int, errorBody: String?) {
         var customMessage: String? = null
@@ -427,52 +449,12 @@ class VehiclesFragment : Fragment() {
             422 -> customMessage ?: "Datos inválidos. Es posible que las placas ya estén registradas."
             else -> customMessage ?: "Ocurrió un error inesperado ($code)."
         }
-        showErrorBanner(message)
+        errorBanner.show(message)
     }
 
-    private fun showErrorBanner(message: String) {
-        binding.tvErrorBannerMessage.text = message
-        
-        errorBannerRunnable?.let { binding.errorBanner.removeCallbacks(it) }
-        
-        if (binding.errorBanner.visibility != View.VISIBLE) {
-            binding.errorBanner.alpha = 0f
-            binding.errorBanner.visibility = View.VISIBLE
-            binding.errorBanner.post {
-                val height = binding.errorBanner.height.toFloat()
-                binding.errorBanner.translationY = -height
-                binding.errorBanner.alpha = 1f
-                
-                binding.errorBanner.animate()
-                    .translationY(0f)
-                    .setDuration(300)
-                    .setInterpolator(OvershootInterpolator(1.0f))
-                    .withEndAction {
-                        scheduleHideBanner()
-                    }
-                    .start()
-            }
-        } else {
-            binding.errorBanner.animate().cancel()
-            binding.errorBanner.translationY = 0f
-            scheduleHideBanner()
-        }
-    }
-
-    private fun scheduleHideBanner() {
-        errorBannerRunnable = Runnable { hideErrorBanner() }
-        binding.errorBanner.postDelayed(errorBannerRunnable, 4000)
-    }
-
-    private fun hideErrorBanner() {
-        val height = binding.errorBanner.height.toFloat()
-        binding.errorBanner.animate()
-            .translationY(-height)
-            .setDuration(300)
-            .setInterpolator(DecelerateInterpolator())
-            .withEndAction {
-                binding.errorBanner.visibility = View.GONE
-            }
-            .start()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        errorBanner.destroy()
+        _binding = null
     }
 }
