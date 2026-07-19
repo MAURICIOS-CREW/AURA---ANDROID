@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_incident.xml
+
+    Card de incidente en la lista. Muestra:
+      - Ícono de estado con color semántico
+      - Título del incidente
+      - Chips de status y fecha
+    Al tocar navega a IncidentDetailActivity con transición compartida.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardIncident"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    android:background="@drawable/bg_vehicle_card"
+    android:elevation="3dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Ícono de status con fondo de color semántico -->
+        <FrameLayout
+            android:id="@+id/iconContainer"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_icon_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivStatusIcon"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_warning"
+                app:tint="@color/aura_warning"
+                tools:ignore="ContentDescription" />
+        </FrameLayout>
+
+        <!-- Título del incidente -->
+        <TextView
+            android:id="@+id/tvIncidentTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/aura_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/iconContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iconContainer"
+            app:layout_constraintBottom_toTopOf="@id/layoutMeta"
+            tools:text="Fuga de agua en pasillo" />
+
+        <!-- Fila de meta: chip de status + fecha -->
+        <LinearLayout
+            android:id="@+id/layoutMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@id/iconContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvIncidentTitle"
+            app:layout_constraintBottom_toBottomOf="@id/iconContainer">
+
+            <!-- Chip de estado -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                tools:text="Abierto"
+                tools:textColor="@color/aura_warning"
+                tools:background="@color/aura_warning_light" />
+
+            <!-- Separador punto -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:text="·"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="14sp" />
+
+            <!-- Fecha de creación -->
+            <TextView
+                android:id="@+id/tvCreatedAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="11sp"
+                tools:text="18 jul 2026" />
+        </LinearLayout>
+
+        <!-- Indicador de comentarios (badge) -->
+        <LinearLayout
+            android:id="@+id/layoutCommentsBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_bell"
+                app:tint="@color/aura_text_tertiary"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvCommentsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="11sp"
+                tools:text="3" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

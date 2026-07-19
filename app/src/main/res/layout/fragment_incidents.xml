@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    fragment_incidents.xml
+
+    Pantalla de Incidencias del residente.
+    Estructura idéntica a fragment_vehicles.xml:
+      - CoordinatorLayout con AppBar + FAB
+      - SwipeRefreshLayout > NestedScrollView > Banner informativo + RecyclerView
+      - FAB (fabAdd) para crear nuevos incidentes
+      - ErrorBanner estilo Spotify
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/incidentsRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_background"
+    android:elevation="20dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- ═══════════════════════════════════════
+         APP BAR: Header con título y back button
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_white"
+        app:elevation="0dp"
+        app:liftOnScroll="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detailHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_back_button"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/aura_text_secondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDetailIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_warning"
+                app:tint="@color/aura_primary"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDetailTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Incidencias"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/ivDetailIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/aura_divider" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ═══════════════════════════════════════
+         CONTENIDO PRINCIPAL CON SWIPE REFRESH
+         ═══════════════════════════════════════ -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="96dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp">
+
+                <!-- ── Banner informativo ── -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/ivInfoIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_warning"
+                        app:tint="@color/aura_warning"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Reporta cualquier problema en el residencial. El equipo de administración atenderá tu reporte a la brevedad."
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="13sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ivInfoIcon"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- ── Lista de incidentes ── -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIncidents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:clipToPadding="false"
+                    android:paddingTop="4dp"
+                    tools:listitem="@layout/item_incident" />
+
+                <!-- ── Estado vacío / cargando ── -->
+                <LinearLayout
+                    android:id="@+id/layoutCenterLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginTop="64dp"
+                    android:layout_marginBottom="64dp">
+
+                    <ProgressBar
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="@color/aura_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Cargando..."
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_text_secondary" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- ═══════════════════════════════════════
+         FAB: Añadir incidente
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Reportar incidente"
+        app:tint="@color/aura_white"
+        app:backgroundTint="@color/aura_primary"
+        app:elevation="6dp"
+        app:pressedTranslationZ="8dp" />
+
+    <!-- ═══════════════════════════════════════
+         ERROR BANNER (Tipo Spotify Offline)
+         ═══════════════════════════════════════ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/errorBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#E53935"
+        android:elevation="30dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivErrorBannerIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_warning"
+            app:tint="@color/aura_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvErrorBannerMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/aura_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivErrorBannerIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Ocurrió un error" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

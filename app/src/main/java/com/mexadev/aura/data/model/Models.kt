@@ -212,6 +212,48 @@ data class Incident(
     val title: String,
     val description: String?,
     val status: String,
+    val comments: List<IncidentComment>? = null,
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?
+)
+
+data class IncidentCommentUser(
+    val id: Long,
+    val name: String
+)
+
+data class IncidentComment(
+    val id: Long,
+    val content: String,
+    val user: IncidentCommentUser?,
+    @SerializedName("created_at") val createdAt: String?,
+    @SerializedName("updated_at") val updatedAt: String?
+)
+
+/**
+ * Respuesta del endpoint GET /api/mobile/incidents/{id}
+ * Incluye el incidente con sus comentarios embebidos.
+ */
+data class IncidentDetail(
+    val id: Long,
+    @SerializedName("reporter_user_id") val reporterUserId: Long,
+    val title: String,
+    val description: String?,
+    val status: String,
+    val comments: List<IncidentComment> = emptyList(),
+    @SerializedName("created_at") val createdAt: String?,
+    @SerializedName("updated_at") val updatedAt: String?
+)
+
+data class IncidentCreateRequest(
+    val title: String,
+    val description: String? = null
+)
+
+data class IncidentUpdateRequest(
+    val status: String
+)
+
+data class CommentCreateRequest(
+    val content: String
 )

@@ -1,6 +1,12 @@
 package com.mexadev.aura.core.network
 
 import com.mexadev.aura.data.model.auth.*
+import com.mexadev.aura.data.model.CommentCreateRequest
+import com.mexadev.aura.data.model.Incident
+import com.mexadev.aura.data.model.IncidentComment
+import com.mexadev.aura.data.model.IncidentCreateRequest
+import com.mexadev.aura.data.model.IncidentDetail
+import com.mexadev.aura.data.model.IncidentUpdateRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -32,4 +38,28 @@ interface ApiService {
 
     @retrofit2.http.DELETE("api/mobile/vehicles/{id}")
     suspend fun deleteVehicle(@retrofit2.http.Path("id") id: Long): Response<Unit>
+
+    // ── Incidents ─────────────────────────────────────────────────────
+    @retrofit2.http.GET("api/mobile/incidents")
+    suspend fun getIncidents(): Response<List<Incident>>
+
+    @retrofit2.http.POST("api/mobile/incidents")
+    suspend fun createIncident(@Body request: IncidentCreateRequest): Response<Incident>
+
+    @retrofit2.http.GET("api/mobile/incidents/{id}")
+    suspend fun getIncidentDetail(@retrofit2.http.Path("id") id: Long): Response<IncidentDetail>
+
+    @retrofit2.http.PATCH("api/mobile/incidents/{id}")
+    suspend fun updateIncident(@retrofit2.http.Path("id") id: Long, @Body request: IncidentUpdateRequest): Response<Incident>
+
+    // ── Incident Comments ─────────────────────────────────────────────
+    @retrofit2.http.GET("api/mobile/incidents/{id}/comments")
+    suspend fun getIncidentComments(@retrofit2.http.Path("id") incidentId: Long): Response<List<IncidentComment>>
+
+    @retrofit2.http.POST("api/mobile/incidents/{id}/comments")
+    suspend fun addIncidentComment(
+        @retrofit2.http.Path("id") incidentId: Long,
+        @Body request: CommentCreateRequest
+    ): Response<IncidentComment>
 }
+

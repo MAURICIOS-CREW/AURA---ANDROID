@@ -51,7 +51,7 @@ class VehiclesAdapter(
         const val VIEW_TYPE_NORMAL   = 1
         const val VIEW_TYPE_SKELETON = 2
 
-        private const val TRANSITION_DURATION_MS     = 320L
+        private const val TRANSITION_DURATION_MS     = 300L
         private const val CARD_ENTRANCE_DURATION_MS  = 380L
 
         val STANDARD_COLORS = listOf(
@@ -169,10 +169,10 @@ class VehiclesAdapter(
         val vehicle = items[prev]
         if (vehicle.id == -1L) {
             items.removeAt(prev)
-            beginExpansionTransition()
+            beginExpansionTransition(expandingPos = prev, expanding = false)
             notifyItemRemoved(prev)
         } else {
-            beginExpansionTransition()
+            beginExpansionTransition(expandingPos = prev, expanding = false)
             notifyItemChanged(prev)
         }
     }
@@ -181,8 +181,8 @@ class VehiclesAdapter(
         if (expandedPosition != -1 && items[expandedPosition].id == -1L) {
             items[expandedPosition] = newVehicle
             val pos = expandedPosition
-            expandedPosition = -1 // collapse it
-            beginExpansionTransition()
+            expandedPosition = -1
+            beginExpansionTransition(expandingPos = pos, expanding = false)
             notifyItemChanged(pos)
         }
     }
@@ -192,7 +192,7 @@ class VehiclesAdapter(
             items[expandedPosition] = updatedVehicle
             val pos = expandedPosition
             expandedPosition = -1
-            beginExpansionTransition()
+            beginExpansionTransition(expandingPos = pos, expanding = false)
             notifyItemChanged(pos)
         } else {
             val idx = items.indexOfFirst { it.id == updatedVehicle.id }
@@ -309,10 +309,14 @@ class VehiclesAdapter(
 
     /**
      * Inicia una transición de expansión/colapso suave.
-     * ChangeBounds mueve/redimensiona las cards vecinas;
-     * Fade muestra/oculta las secciones internas.
+     * ChangeBounds + Fade para las secciones internas.
+     * Adicionalmente animamos translationY de las cards vecinas
+     * para que se vea que realmente se desplazan con suavidad.
+     *
+     * @param expandingPos  posición que se expande (+) o colapsa (-1)
+     * @param expanding     true si se está expandiendo, false si colapsando
      */
-    private fun beginExpansionTransition() {
+    private fun beginExpansionTransition(expandingPos: Int = -1, expanding: Boolean = false) {
         val set = TransitionSet().apply {
             ordering = TransitionSet.ORDERING_TOGETHER
             addTransition(ChangeBounds().apply {
@@ -320,10 +324,29 @@ class VehiclesAdapter(
                 duration = TRANSITION_DURATION_MS
             })
             addTransition(Fade().apply {
-                duration = (TRANSITION_DURATION_MS * 0.75).toLong()
+                duration = (TRANSITION_DURATION_MS * 0.7).toLong()
             })
         }
         TransitionManager.beginDelayedTransition(recyclerView, set)
+
+        // Animar desplazamiento de cards vecinas para reforzar percepción de movimiento
+        if (expandingPos >= 0) {
+            val shift = if (expanding) 24f else -24f
+            val itemCount = recyclerView.childCount
+            for (i in 0 until itemCount) {
+                val child = recyclerView.getChildAt(i) ?: continue
+                val childPos = recyclerView.getChildAdapterPosition(child)
+                if (childPos == RecyclerView.NO_ID.toInt()) continue
+                if (childPos <= expandingPos) continue
+                // Cards debajo de la expandida se desplazan hacia abajo/arriba
+                child.animate()
+                    .translationY(child.translationY + shift)
+                    .setDuration(TRANSITION_DURATION_MS)
+                    .setInterpolator(FastOutSlowInInterpolator())
+                    .withEndAction { child.translationY = 0f }
+                    .start()
+            }
+        }
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -543,7 +566,7 @@ class VehiclesAdapter(
         private fun onCardClick(position: Int) {
             val prev = expandedPosition
             expandedPosition = position
-            beginExpansionTransition()
+            beginExpansionTransition(expandingPos = position, expanding = true)
             if (prev != -1 && prev != position) notifyItemChanged(prev)
             notifyItemChanged(position)
             recyclerView.post { recyclerView.smoothScrollToPosition(position) }

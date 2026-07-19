@@ -18,4 +18,18 @@ class PreferencesManager(context: Context) {
     var vehiclesCount: Int
         get() = prefs.getInt("vehicles_count", 0)
         set(value) = prefs.edit { putInt("vehicles_count", value) }
+
+    /** Número de incidentes del usuario para mostrar skeletons en la próxima apertura */
+    var incidentsCount: Int
+        get() = prefs.getInt("incidents_count", 0)
+        set(value) = prefs.edit { putInt("incidents_count", value) }
+
+    /**
+     * ID del usuario autenticado, guardado al hacer login.
+     * Se usa para distinguir burbujas propias en el chat de comentarios.
+     */
+    var userId: Long
+        get() = prefs.getLong("user_id", -1L)
+        set(value) = prefs.edit { putLong("user_id", value) }
 }
+

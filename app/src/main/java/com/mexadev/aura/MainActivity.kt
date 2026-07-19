@@ -283,13 +283,21 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     }
 
     override fun navigateToDetail(cardView: View, item: DashboardItem) {
-        if (item == DashboardItem.Vehiculos) {
-            val fragment = com.mexadev.aura.ui.vehicles.VehiclesFragment()
+        if (item == DashboardItem.Vehiculos || item == DashboardItem.Incidencias) {
+            val fragment = when (item) {
+                DashboardItem.Vehiculos   -> com.mexadev.aura.ui.vehicles.VehiclesFragment()
+                DashboardItem.Incidencias -> com.mexadev.aura.ui.incidents.IncidentsFragment()
+                else -> com.mexadev.aura.ui.vehicles.VehiclesFragment()
+            }
+            val tag = when (item) {
+                DashboardItem.Incidencias -> "IncidentsFragment"
+                else -> "VehiclesFragment"
+            }
+
             supportFragmentManager.beginTransaction()
-                .replace(R.id.detail_fragment_container, fragment, "VehiclesFragment")
+                .replace(R.id.detail_fragment_container, fragment, tag)
                 .commit()
 
-            // Aseguramos que se configure la barra de estado
             val wic = WindowInsetsControllerCompat(window, window.decorView)
             wic.isAppearanceLightStatusBars = true
 
@@ -301,10 +309,10 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
                 scrimColor = Color.TRANSPARENT
                 setAllContainerColors(getColor(R.color.aura_white))
             }
-            
+
             TransitionManager.beginDelayedTransition(binding.main, transform)
             binding.detailFragmentContainer.visibility = View.VISIBLE
-            
+
             activeCardView = cardView
             activeItem = item
             backCallback.isEnabled = true
@@ -409,7 +417,13 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
             addListener(object : androidx.transition.Transition.TransitionListener {
                 override fun onTransitionEnd(transition: androidx.transition.Transition) {
                     if (isFragmentDetail) {
-                        supportFragmentManager.popBackStack("VehiclesFragment", androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        // Limpiar el fragment container genéricamente
+                        val fragment = supportFragmentManager.findFragmentById(R.id.detail_fragment_container)
+                        if (fragment != null) {
+                            supportFragmentManager.beginTransaction()
+                                .remove(fragment)
+                                .commitAllowingStateLoss()
+                        }
                     }
                 }
                 override fun onTransitionStart(transition: androidx.transition.Transition) {}
@@ -418,6 +432,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
                 override fun onTransitionResume(transition: androidx.transition.Transition) {}
             })
         }
+
 
         TransitionManager.beginDelayedTransition(binding.main, transform)
         targetViewToHide.visibility = View.GONE

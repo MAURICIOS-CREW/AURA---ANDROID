@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    anim_slide_down_exit.xml
+    La activity de detalle baja al salir (regreso).
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:fromYDelta="0%p"
+        android:toYDelta="100%p"
+        android:duration="320"
+        android:interpolator="@android:anim/accelerate_interpolator" />
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0"
+        android:startOffset="100"
+        android:duration="220" />
+</set>

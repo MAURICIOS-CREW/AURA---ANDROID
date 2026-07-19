@@ -37,6 +37,11 @@
             android:theme="@style/Theme.Aura"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".ui.incidents.IncidentDetailActivity"
+            android:theme="@style/Theme.Aura"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

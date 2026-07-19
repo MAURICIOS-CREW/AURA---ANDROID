@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_comment.xml
+
+    Burbuja de comentario en el hilo del incidente.
+    Diseño de "chat" donde:
+      - Comentarios del usuario autenticado aparecen alineados a la DERECHA (azul primario)
+      - Comentarios del admin aparecen alineados a la IZQUIERDA (fondo neutro)
+    La alineación y color se aplican programáticamente desde CommentsAdapter.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/commentRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="4dp">
+
+    <!-- Nombre del autor (visible solo para comentarios de admin/otros) -->
+    <TextView
+        android:id="@+id/tvAuthorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/aura_text_tertiary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Administrador" />
+
+    <!-- Burbuja de mensaje -->
+    <LinearLayout
+        android:id="@+id/bubbleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="@drawable/bg_dashboard_card"
+        tools:background="@color/aura_primary_surface">
+
+        <TextView
+            android:id="@+id/tvCommentContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="260dp"
+            android:textColor="@color/aura_text_primary"
+            android:textSize="14sp"
+            android:lineSpacingMultiplier="1.3"
+            tools:text="Lo revisaremos hoy mismo y enviaremos al equipo de mantenimiento." />
+
+        <TextView
+            android:id="@+id/tvCommentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="end"
+            android:textColor="@color/aura_text_tertiary"
+            android:textSize="10sp"
+            tools:text="10:30 am" />
+
+    </LinearLayout>
+
+</LinearLayout>

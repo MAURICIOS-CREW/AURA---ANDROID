@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    layout_incident_form.xml
+
+    Formulario de creación de incidente que aparece como card en la lista,
+    igual que el formulario de vehículos (layout_vehicle_form.xml).
+    La card crece desde el FAB con la misma animación de escala.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardIncidentForm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    android:background="@drawable/bg_vehicle_card"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header del formulario -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvFormTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nuevo Reporte"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+
+            <ImageView
+                android:id="@+id/btnFormMinimize"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/aura_text_secondary"
+                android:rotation="270"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/aura_border_light" />
+
+        <!-- Campo: Título (obligatorio) -->
+        <EditText
+            android:id="@+id/etTitle"
+            style="@style/Aura.Input"
+            android:layout_marginTop="16dp"
+            android:hint="Título del reporte *"
+            android:inputType="textCapSentences"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
+
+        <!-- Campo: Descripción (opcional) -->
+        <EditText
+            android:id="@+id/etDescription"
+            style="@style/Aura.Input"
+            android:layout_marginTop="12dp"
+            android:hint="Descripción detallada (opcional)"
+            android:inputType="textCapSentences|textMultiLine"
+            android:imeOptions="actionDone"
+            android:gravity="top|start"
+            android:minLines="3"
+            android:maxLines="6" />
+
+        <!-- Botón Enviar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Enviar Reporte"
+                android:textColor="@color/aura_white"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:backgroundTint="@color/aura_primary"
+                app:cornerRadius="12dp"
+                app:rippleColor="@color/aura_ripple" />
+
+            <ProgressBar
+                android:id="@+id/pbSubmit"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:elevation="4dp"
+                android:indeterminateTint="@color/aura_white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>

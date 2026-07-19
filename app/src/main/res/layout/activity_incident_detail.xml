@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_incident_detail.xml
+
+    Pantalla de detalle de un incidente con su hilo de comentarios.
+    Diseño:
+      - Header fijo con info del incidente (título, status en color, descripción)
+      - Lista de comentarios con separación visual usuario/admin
+      - Campo sticky de input al fondo para añadir comentario nuevo
+      - Error banner tipo Spotify
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_background">
+
+    <!-- ══════════════════════════════════════
+         APP BAR + CABECERA DEL INCIDENTE
+         ══════════════════════════════════════ -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_white"
+        app:elevation="2dp"
+        app:liftOnScroll="true">
+
+        <!-- Toolbar -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_back_button"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/aura_text_secondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                tools:text="Reporte #1024"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintEnd_toStartOf="@id/tvToolbarStatus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Status chip en toolbar -->
+            <TextView
+                android:id="@+id/tvToolbarStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                tools:text="Abierto"
+                tools:textColor="@color/aura_warning"
+                tools:background="@color/aura_warning_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Tarjeta de información del incidente bajo la toolbar -->
+        <LinearLayout
+            android:id="@+id/layoutIncidentInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="4dp">
+
+            <!-- Título grande del incidente -->
+            <TextView
+                android:id="@+id/tvIncidentTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:lineSpacingMultiplier="1.2"
+                tools:text="Fuga de agua en pasillo principal" />
+
+            <!-- Descripción (si existe) -->
+            <TextView
+                android:id="@+id/tvIncidentDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="14sp"
+                android:lineSpacingMultiplier="1.4"
+                android:visibility="gone"
+                tools:text="Hay un tubo roto cerca del elevador que lleva varios días causando daños."
+                tools:visibility="visible" />
+
+            <!-- Fila: fecha + acción cancelar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_bell"
+                    app:tint="@color/aura_text_tertiary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvCreatedAt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/aura_text_tertiary"
+                    android:textSize="12sp"
+                    tools:text="Reportado el 18 de julio, 2026" />
+
+                <!-- Botón cancelar incidente con loader -->
+                <LinearLayout
+                    android:id="@+id/btnCancelIncident"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ProgressBar
+                        android:id="@+id/pbCancel"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="6dp"
+                        android:indeterminateTint="@color/aura_error"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvCancelText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cancelar reporte"
+                        android:textColor="@color/aura_error"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/aura_divider" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ══════════════════════════════════════
+         LISTA DE COMENTARIOS CON SWIPE TO REFRESH
+         ══════════════════════════════════════ -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvComments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="12dp"
+                android:paddingBottom="88dp"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_comment" />
+
+            <!-- Estado vacío: sin comentarios -->
+            <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone"
+                android:padding="32dp"
+                android:layout_gravity="center"
+                tools:visibility="gone">
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/ic_bell"
+                    app:tint="@color/aura_text_tertiary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Sin comentarios aún"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/aura_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="El equipo de administración responderá pronto"
+                    android:textSize="13sp"
+                    android:textColor="@color/aura_text_tertiary"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Cargador no intrusivo al fondo -->
+    <LinearLayout
+        android:id="@+id/layoutUpdating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="88dp"
+        android:background="@drawable/bg_dashboard_card"
+        android:elevation="4dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:indeterminateTint="@color/aura_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Buscando nuevos comentarios..."
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_text_secondary" />
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════
+         BARRA DE COMENTARIO STICKY (bottom)
+         ══════════════════════════════════════ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/commentInputBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/aura_white"
+        android:elevation="8dp"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Escribe un comentario..."
+            android:background="@drawable/bg_dashboard_card"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/aura_text_primary"
+            android:textColorHint="@color/aura_text_tertiary"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="4"
+            android:imeOptions="actionSend"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSendComment"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Botón enviar con estado de carga -->
+        <FrameLayout
+            android:id="@+id/btnSendComment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_btn_primary"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSendIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_right"
+                app:tint="@color/aura_white"
+                tools:ignore="ContentDescription" />
+
+            <ProgressBar
+                android:id="@+id/pbSend"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/aura_white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ══════════════════════════════════════
+         ERROR BANNER (Tipo Spotify Offline)
+         ══════════════════════════════════════ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/errorBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#E53935"
+        android:elevation="30dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivErrorBannerIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_warning"
+            app:tint="@color/aura_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvErrorBannerMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/aura_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingVertical="14dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivErrorBannerIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Ocurrió un error" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
