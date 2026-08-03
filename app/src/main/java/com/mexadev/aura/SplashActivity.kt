@@ -151,6 +151,21 @@ class SplashActivity : AppCompatActivity() {
                 try {
                     val response = ApiClient.apiService.getProfile()
                     if (response.isSuccessful) {
+                        
+                        val user = response.body()
+                        val localFcmToken = sessionManager.getFcmToken()
+                        
+                        if (user != null && localFcmToken != null) {
+                            if (user.fcmToken != localFcmToken || !sessionManager.isFcmTokenSynced()) {
+                                android.util.Log.w("AuraFCM", "Mismatch/Unsynced FCM Token detected!\nLocal: $localFcmToken\nBackend: ${user.fcmToken}")
+                                com.mexadev.aura.fcm.FcmHelper.syncToken(
+                                    localFcmToken,
+                                    sessionManager,
+                                    ApiClient.apiService
+                                )
+                            }
+                        }
+
                         return@async "MAIN"
                     } else {
                         val code = response.code()
@@ -176,12 +191,12 @@ class SplashActivity : AppCompatActivity() {
             when (result) {
                 "MAIN" -> {
                     startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.fade_in, R.anim.fade_out)
                     finish()
                 }
                 "LOGIN" -> {
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.fade_in, R.anim.fade_out)
                     finish()
                 }
                 "ERROR_500" -> {

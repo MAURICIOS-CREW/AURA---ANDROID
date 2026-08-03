@@ -31,6 +31,9 @@ class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     sessionManager.saveTokens(body.accessToken, body.refreshToken)
+
+                    com.mexadev.aura.fcm.FcmHelper.fetchAndSyncToken(sessionManager, apiService)
+
                     _loginState.value = LoginState.Success
                 } else {
                     _loginState.value = LoginState.Error("Credenciales incorrectas o error en el servidor.")

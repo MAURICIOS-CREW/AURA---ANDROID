@@ -18,12 +18,12 @@ class TokenAuthenticator(
     override fun authenticate(route: Route?, response: Response): Request? {
         // Prevent infinite loops if refresh returns 401
         if (response.request.url.encodedPath.contains("auth/refresh")) {
-            sessionManager.clearSession()
+            sessionManager.clearSessionSync()
             return null
         }
 
         synchronized(this) {
-            val refreshToken = sessionManager.getRefreshToken() ?: return null
+            val refreshToken = sessionManager.getRefreshTokenSync() ?: return null
 
             // Check if biometric is required for session renewal
             val prefs = PreferencesManager(sessionManager.context)
@@ -45,7 +45,7 @@ class TokenAuthenticator(
                 }
                 
                 if (!biometricSuccess) {
-                    sessionManager.clearSession()
+                    sessionManager.clearSessionSync()
                     return null
                 }
             }
@@ -81,7 +81,7 @@ class TokenAuthenticator(
                 // Si hay error de red o lanzamos un error 500, no deslogueamos, lanzamos de nuevo
                 throw e
             } catch (e: Exception) {
-                sessionManager.clearSession()
+                sessionManager.clearSessionSync()
                 newAccessToken = null
             }
 

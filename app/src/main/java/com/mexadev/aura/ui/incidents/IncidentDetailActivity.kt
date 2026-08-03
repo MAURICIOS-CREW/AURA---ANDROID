@@ -496,7 +496,7 @@ class IncidentDetailActivity : AppCompatActivity() {
         if (isoDate == null) return ""
         return try {
             val inputFormat  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("d 'de' MMMM, yyyy", Locale("es", "MX"))
+            val outputFormat = SimpleDateFormat("d 'de' MMMM, yyyy", java.util.Locale.Builder().setLanguage("es").setRegion("MX").build())
             val date = inputFormat.parse(isoDate) ?: return ""
             "Reportado el ${outputFormat.format(date)}"
         } catch (e: Exception) { "" }

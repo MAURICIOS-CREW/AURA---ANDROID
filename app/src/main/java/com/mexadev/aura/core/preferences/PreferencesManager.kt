@@ -31,5 +31,9 @@ class PreferencesManager(context: Context) {
     var userId: Long
         get() = prefs.getLong("user_id", -1L)
         set(value) = prefs.edit { putLong("user_id", value) }
+
+    var notificationImportance: String
+        get() = prefs.getString("notification_importance", "high") ?: "high"
+        set(value) = prefs.edit { putString("notification_importance", value) }
 }
 

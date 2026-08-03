@@ -12,14 +12,14 @@ class AuthInterceptor(private val sessionManager: SessionManager) : Interceptor 
         
         // Si es la ruta de refresh, enviamos el refresh_token
         if (request.url.encodedPath.contains("auth/refresh")) {
-            val refreshToken = sessionManager.getRefreshToken()
+            val refreshToken = sessionManager.getRefreshTokenSync()
             if (refreshToken != null) {
                 requestBuilder.header("Authorization", "Bearer $refreshToken")
             }
             return chain.proceed(requestBuilder.build())
         }
         
-        val token = sessionManager.getAccessToken()
+        val token = sessionManager.getAccessTokenSync()
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer $token")
         }

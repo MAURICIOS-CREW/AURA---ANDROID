@@ -18,6 +18,9 @@ interface ApiService {
     @POST("api/mobile/auth/refresh")
     suspend fun refresh(@Body request: RefreshRequest): Response<RefreshResponse>
 
+    @POST("api/mobile/auth/fcm")
+    suspend fun updateFcmToken(@Body request: FcmRequest): Response<Unit>
+
     @retrofit2.http.GET("api/mobile/qr/temp")
     suspend fun getTempQrHash(): Response<com.mexadev.aura.data.model.qr.QrTempResponse>
 

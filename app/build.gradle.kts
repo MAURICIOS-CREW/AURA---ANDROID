@@ -2,6 +2,7 @@ import java.util.Properties
 
  plugins {
     alias(libs.plugins.android.application)
+     id("com.google.gms.google-services")
 }
 
 val localProperties = Properties()
@@ -29,8 +30,8 @@ android {
         applicationId = "com.mexadev.aura"
         minSdk = 34
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1.0-beta"
         buildConfigField("String", "BASE_URL", apiBaseUrl)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -84,4 +85,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     implementation(libs.zxing)
     implementation(libs.colorpickerview)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+    implementation(libs.datastore.preferences)
+    implementation(libs.tink.android)
+    
+    // Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }

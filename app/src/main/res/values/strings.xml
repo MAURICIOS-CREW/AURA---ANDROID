@@ -74,4 +74,36 @@
     <string name="dashboard_maintenance_fee">Cuota de mantenimiento</string>
     <string name="dashboard_next_payment">Próximo pago</string>
     <string name="dashboard_pay_now">Pagar ahora</string>
+
+    <!-- Quick Action / FCM -->
+    <string name="quick_action_title_default">Alerta de Acceso</string>
+    <string name="quick_action_body_default">Detalle del acceso</string>
+    <string name="quick_action_start_app">Abrir Aplicación</string>
+    <string name="quick_action_exit">Cerrar y descartar</string>
+    <string name="quick_action_unlock_prompt">Desbloquea para ver los detalles</string>
+    <string name="quick_action_retry_biometric">Reintentar huella</string>
+    <string name="quick_action_guest">Visitante</string>
+    <string name="quick_action_access_type">Tipo de Acceso</string>
+    <string name="quick_action_method">Método</string>
+    <string name="quick_action_status">Estado</string>
+    <string name="quick_action_date">Fecha y Hora</string>
+    <string name="quick_action_days">Días Usables</string>
+    <string name="quick_action_daily">Diario</string>
+    <string name="quick_action_weekdays">Lunes a Viernes</string>
+    
+    <string name="access_type_pedestrian">Peatonal</string>
+    <string name="access_type_vehicle">Vehicular</string>
+    
+    <string name="method_qr">Código QR</string>
+    <string name="method_pin">PIN de Seguridad</string>
+    <string name="method_tag">TAG Vehicular</string>
+    <string name="method_face">Reconocimiento Facial</string>
+    
+    <string name="status_granted">Permitido</string>
+    <string name="status_denied">Denegado</string>
+    <string name="status_pending">Pendiente</string>
+    <string name="biometric_prompt_title">Autenticación Requerida</string>
+    <string name="biometric_prompt_subtitle">Verifica tu identidad para ver el detalle</string>
+    <string name="quick_action_title_fallback">Alerta</string>
+    <string name="quick_action_body_fallback">Nueva notificación</string>
 </resources>

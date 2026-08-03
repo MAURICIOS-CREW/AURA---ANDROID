@@ -181,10 +181,12 @@ class HomeFragment : Fragment() {
         binding.skeletonSaldo.visibility = View.VISIBLE
         binding.skeletonProximoPago.visibility = View.VISIBLE
 
+        shimmerAnimator?.cancel()
         shimmerAnimator = ValueAnimator.ofFloat(0.4f, 1.0f, 0.4f).apply {
             duration = 1000
             repeatCount = ValueAnimator.INFINITE
             addUpdateListener { animator ->
+                if (_binding == null) return@addUpdateListener
                 val alphaVal = animator.animatedValue as Float
                 binding.skeletonWelcomeName.alpha = alphaVal
                 binding.skeletonResidential.alpha = alphaVal

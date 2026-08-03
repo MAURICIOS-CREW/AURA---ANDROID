@@ -46,7 +46,7 @@ class AuraApplication : Application(), DefaultLifecycleObserver {
         
         // Si la app viene al primer plano y "Bloquear al salir" está activo, y hay sesión
         // No bloquear si estamos en el SplashActivity (el splash ya valida la sesión y pide biometría)
-        if (prefs.lockOnExit && session.getAccessToken() != null && currentActivity !is SplashActivity) {
+        if (prefs.lockOnExit && session.getAccessTokenSync() != null && currentActivity !is SplashActivity) {
             val intent = Intent(this, LockActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)

@@ -199,6 +199,27 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
                 )
             }
         }
+
+        // Solicitar permisos de notificación en Android 13+
+        checkNotificationPermission()
+    }
+
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        // Si el usuario acepta, ya podrá recibir FCM. Si no, queda denegado.
+    }
+
+    private fun checkNotificationPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     private fun updateIconFill(tabIndex: Int, fillPercentage: Float) {

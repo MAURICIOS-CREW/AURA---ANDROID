@@ -63,6 +63,7 @@ data class User(
     val email: String,
     val password: String?,
     val phone: String?,
+    @SerializedName("fcm_token") val fcmToken: String?,
     @SerializedName("role_id") val roleId: Long?,
     @SerializedName("is_active") val isActive: Int,
     @SerializedName("created_at") val createdAt: String?,
