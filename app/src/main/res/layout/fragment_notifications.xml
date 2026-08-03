@@ -2,50 +2,61 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aura_background">
 
-    <ImageView
-        android:id="@+id/icon_placeholder"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/ic_nav_notifications_filled"
-        android:contentDescription="@string/cd_notifications"
-        android:alpha="0.3"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNotifications"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="48dp"
+        android:paddingBottom="100dp"
+        android:scrollbars="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/text_coming_soon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0.45"/>
-
-    <TextView
-        android:id="@+id/text_coming_soon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/nav_notifications"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/aura_text_primary"
-        android:fontFamily="sans-serif-medium"
-        app:layout_constraintTop_toBottomOf="@id/icon_placeholder"
-        app:layout_constraintBottom_toTopOf="@id/text_subtitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/text_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/coming_soon"
-        android:textSize="14sp"
-        android:textColor="@color/aura_text_secondary"
-        app:layout_constraintTop_toBottomOf="@id/text_coming_soon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_notification" />
+
+    <LinearLayout
+        android:id="@+id/llEmptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_nav_notifications_filled"
+            android:alpha="0.2"
+            app:tint="@color/aura_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/nav_notifications"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_text_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="No tienes notificaciones recientes"
+            android:textSize="14sp"
+            android:textColor="@color/aura_text_secondary" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,6 +76,7 @@
     <string name="dashboard_pay_now">Pagar ahora</string>
 
     <!-- Quick Action / FCM -->
+    <string name="quick_action_header_title">Notificación</string>
     <string name="quick_action_title_default">Alerta de Acceso</string>
     <string name="quick_action_body_default">Detalle del acceso</string>
     <string name="quick_action_start_app">Abrir Aplicación</string>
@@ -106,4 +107,18 @@
     <string name="biometric_prompt_subtitle">Verifica tu identidad para ver el detalle</string>
     <string name="quick_action_title_fallback">Alerta</string>
     <string name="quick_action_body_fallback">Nueva notificación</string>
+    <string name="quick_action_details_header">DETALLES DE LA NOTIFICACIÓN</string>
+    <string name="quick_action_badge_general">AVISO GENERAL</string>
+    <string name="quick_action_badge_granted">ACCESO PERMITIDO</string>
+    <string name="quick_action_badge_denied">ACCESO DENEGADO</string>
+    <string name="quick_action_badge_incident">INCIDENCIA</string>
+    <string name="quick_action_uses">Usos</string>
+    <string name="quick_action_day_mon">Lun</string>
+    <string name="quick_action_day_tue">Mar</string>
+    <string name="quick_action_day_wed">Mié</string>
+    <string name="quick_action_day_thu">Jue</string>
+    <string name="quick_action_day_fri">Vie</string>
+    <string name="quick_action_day_sat">Sáb</string>
+    <string name="quick_action_day_sun">Dom</string>
+    <string name="iconnotificationsview">iconNotifications</string>
 </resources>

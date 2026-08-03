@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/aura_white"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/aura_border_light">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <View
+            android:id="@+id/vIconSkeleton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_skeleton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/vTitleSkeleton"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_skeleton"
+            app:layout_constraintStart_toEndOf="@id/vIconSkeleton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/vBodySkeleton1"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_skeleton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/vTitleSkeleton"
+            app:layout_constraintTop_toBottomOf="@id/vTitleSkeleton" />
+            
+        <View
+            android:id="@+id/vBodySkeleton2"
+            android:layout_width="200dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_skeleton"
+            app:layout_constraintStart_toStartOf="@id/vTitleSkeleton"
+            app:layout_constraintTop_toBottomOf="@id/vBodySkeleton1" />
+
+        <View
+            android:id="@+id/vTimeSkeleton"
+            android:layout_width="80dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_skeleton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vBodySkeleton2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

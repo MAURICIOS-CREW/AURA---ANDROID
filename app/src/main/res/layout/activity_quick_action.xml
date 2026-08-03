@@ -2,135 +2,267 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_quick_action"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/aura_background">
+    android:background="@color/aura_background"
+    android:fitsSystemWindows="true">
 
-    <!-- Header background shape -->
-    <View
-        android:id="@+id/vHeaderBg"
+    <!-- Top Navigation & Header Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTopBar"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:background="@drawable/bg_quick_action_header"
-        android:elevation="8dp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextClock
-        android:id="@+id/tcHeaderTime"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="24dp"
-        android:format12Hour="hh:mm a"
-        android:format24Hour="HH:mm"
-        android:textColor="@color/aura_white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.05"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/ivHeaderIcon"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/bg_circle_white"
-        android:padding="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_aura_logo"
-        android:elevation="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_back_button"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/aura_text_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/tvNotificationTitle"
-        android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvHeaderTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/quick_action_header_title"
+            android:textColor="@color/aura_text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tcHeaderTime"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextClock
+            android:id="@+id/tcHeaderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_time_pill"
+            android:format12Hour="hh:mm a"
+            android:format24Hour="HH:mm"
+            android:letterSpacing="0.02"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:textColor="@color/aura_text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Main Hero Card (Shared Element Target - White Card) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvHeroCard"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/quick_action_title_default"
-        android:textAlignment="center"
-        android:textColor="@color/aura_white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:elevation="8dp"
-        android:letterSpacing="0.02"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivHeaderIcon" />
-
-    <TextView
-        android:id="@+id/tvNotificationBody"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
-        android:text="@string/quick_action_body_default"
-        android:textAlignment="center"
-        android:textColor="#EAF0F6"
-        android:textSize="15sp"
-        android:elevation="8dp"
-        android:lineSpacingExtra="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNotificationTitle" />
+        android:transitionName="notification_card_transition"
+        app:cardBackgroundColor="@color/aura_white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/clTopBar"
+        app:strokeColor="@color/aura_border_light"
+        app:strokeWidth="1dp">
 
-    <!-- Details Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/aura_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <!-- Category / Status Badge Pill -->
+            <TextView
+                android:id="@+id/tvCategoryBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_info"
+                android:letterSpacing="0.05"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp"
+                android:text="@string/quick_action_badge_general"
+                android:textColor="@color/aura_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvNotificationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvCategoryBadge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvCategoryBadge"
+                tools:text="Hace un momento" />
+
+            <!-- Icon & Title Section -->
+            <FrameLayout
+                android:id="@+id/flIconContainer"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_circle_primary_light"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCategoryBadge">
+
+                <ImageView
+                    android:id="@+id/ivHeaderIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/iconnotificationsview"
+                    android:src="@drawable/ic_nav_notifications_filled"
+                    app:tint="@color/aura_primary" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvNotificationTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:letterSpacing="-0.01"
+                android:text="@string/quick_action_title_default"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/flIconContainer"
+                app:layout_constraintTop_toTopOf="@id/flIconContainer" />
+
+            <TextView
+                android:id="@+id/tvNotificationBody"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/quick_action_body_default"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/flIconContainer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Details Card Container (White Card on Grey Background) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="12dp"
-        app:cardBackgroundColor="@color/aura_background"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/aura_border_light"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/aura_white"
+        app:cardBackgroundColor="@color/aura_white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="2dp"
         app:layout_constraintBottom_toTopOf="@id/btnStartApp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNotificationBody">
+        app:layout_constraintTop_toBottomOf="@id/cvHeroCard"
+        app:strokeColor="@color/aura_border_light"
+        app:strokeWidth="1dp">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="16dp"
-            android:scrollbarStyle="outsideOverlay">
+            android:orientation="vertical">
 
-            <GridLayout
-                android:id="@+id/glDetailsContainer"
+            <!-- Details Header -->
+            <LinearLayout
+                android:background="@color/aura_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:useDefaultMargins="true"
-                android:alignmentMode="alignMargins"
-                android:columnOrderPreserved="false">
-                <!-- Dynamic fields will be added here -->
-            </GridLayout>
-        </ScrollView>
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_info"
+                    app:tint="@color/aura_primary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:letterSpacing="0.05"
+                    android:text="@string/quick_action_details_header"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/aura_divider" />
+
+            <ScrollView
+                android:background="@color/aura_white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:scrollbarStyle="outsideOverlay">
+
+                <GridLayout
+                    android:id="@+id/glDetailsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alignmentMode="alignMargins"
+                    android:columnCount="2"
+                    android:columnOrderPreserved="false"
+                    android:useDefaultMargins="true">
+                    <!-- Dynamic white item cards added programmatically -->
+                </GridLayout>
+            </ScrollView>
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Buttons -->
+    <!-- Bottom Action Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnStartApp"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="12dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/quick_action_start_app"
         android:textAllCaps="false"
         android:textColor="@color/aura_white"
-        android:textSize="17sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:cornerRadius="16dp"
         app:backgroundTint="@color/aura_primary"
-        app:elevation="8dp"
+        app:cornerRadius="16dp"
+        app:elevation="4dp"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:iconTint="@color/aura_white"
         app:layout_constraintBottom_toTopOf="@id/btnExit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -139,68 +271,91 @@
         android:id="@+id/btnExit"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/quick_action_exit"
         android:textAllCaps="false"
         android:textColor="@color/aura_text_secondary"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        app:cornerRadius="16dp"
         app:backgroundTint="@color/aura_surface_variant"
+        app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Biometric Overlay (Glassmorphism look) -->
+    <!-- Biometric Auth Overlay (Glassmorphism design with crisp white container) -->
     <FrameLayout
         android:id="@+id/flBiometricOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E6F5F7FA"
-        android:elevation="20dp"
-        android:translationZ="20dp"
         android:clickable="true"
-        android:focusable="true">
+        android:elevation="20dp"
+        android:focusable="true"
+        android:translationZ="20dp"
+        android:visibility="gone"
+        tools:visibility="gone">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_marginHorizontal="32dp"
+            app:cardBackgroundColor="@color/aura_white"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="12dp"
+            app:strokeColor="@color/aura_border_light"
+            app:strokeWidth="1dp">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ic_lock"
-                android:background="@drawable/bg_circle_primary_light"
-                android:padding="24dp"
-                android:elevation="8dp"
-                app:tint="@color/aura_primary"
-                tools:ignore="ContentDescription" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/quick_action_unlock_prompt"
-                android:textColor="@color/aura_text_primary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-                
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/tvRetryBiometric"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/quick_action_retry_biometric"
-                android:textColor="@color/aura_primary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="gone"/>
-        </LinearLayout>
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="32dp"
+                android:paddingVertical="36dp">
+
+                <ImageView
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:background="@drawable/bg_circle_primary_light"
+                    android:elevation="4dp"
+                    android:padding="20dp"
+                    android:src="@drawable/ic_lock"
+                    app:tint="@color/aura_primary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/quick_action_unlock_prompt"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/biometric_prompt_subtitle"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tvRetryBiometric"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/quick_action_retry_biometric"
+                    android:textColor="@color/aura_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
