@@ -84,4 +84,10 @@
         android:label="Seguridad"
         tools:layout="@layout/fragment_security_settings"/>
 
+    <fragment
+        android:id="@+id/nav_notification_settings"
+        android:name="com.mexadev.aura.ui.settings.NotificationSettingsFragment"
+        android:label="Configuración de Avisos"
+        tools:layout="@layout/fragment_notification_settings"/>
+
 </navigation>

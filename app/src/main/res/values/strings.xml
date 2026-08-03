@@ -132,4 +132,24 @@
     <string name="quick_action_day_sat">Sáb</string>
     <string name="quick_action_day_sun">Dom</string>
     <string name="iconnotificationsview">iconNotifications</string>
+
+    <!-- Notification Settings -->
+    <string name="settings_notifications_title">Configuración de Avisos</string>
+    <string name="settings_notifications_master">Permitir notificaciones</string>
+    <string name="settings_notifications_master_desc">Recibe alertas de accesos e incidencias en tu dispositivo</string>
+    <string name="settings_notifications_access_title">Avisos de Accesos</string>
+    <string name="settings_notifications_access_desc">Configura la importancia según el método de ingreso</string>
+    <string name="settings_notifications_method_qr">Código QR</string>
+    <string name="settings_notifications_method_placa">Placas</string>
+    <string name="settings_notifications_incident_title">Avisos de Incidencias</string>
+    <string name="settings_notifications_incident_desc">Configura la importancia para reportes y alertas de seguridad</string>
+    <string name="settings_notifications_importance_label">Nivel de Importancia</string>
+    <string name="settings_notifications_importance_high">Alto</string>
+    <string name="settings_notifications_importance_medium">Medio</string>
+    <string name="settings_notifications_importance_low">Bajo</string>
+    <string name="settings_notifications_importance_off">Desactivado</string>
+    <string name="settings_notifications_desc_high">Emite sonido, vibración fuerte y despierta la pantalla al recibir un aviso.</string>
+    <string name="settings_notifications_desc_medium">Respeta la configuración del sistema con sonido y vibración, sin despertar la pantalla.</string>
+    <string name="settings_notifications_desc_low">Silencioso. Solo muestra la notificación en la barra de estado sin sonido ni vibración.</string>
+    <string name="settings_notifications_desc_off">No se recibirán notificaciones para esta categoría en el dispositivo.</string>
 </resources>

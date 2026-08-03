@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,15 @@ class ProfileFragment : Fragment() {
 
     private var isEditMode = false
 
+    private val onBackStackChangedListener = FragmentManager.OnBackStackChangedListener {
+        if (_binding == null) return@OnBackStackChangedListener
+        val detailContainer = activity?.findViewById<View>(R.id.detail_fragment_container)
+        val fragment = parentFragmentManager.findFragmentById(R.id.detail_fragment_container)
+        if (fragment == null) {
+            detailContainer?.visibility = View.GONE
+        }
+    }
+
     private val backCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (isEditMode) {
@@ -57,6 +67,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        parentFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
 
         errorBanner = BannerManager(binding.errorBanner, binding.tvErrorBannerMessage)
 
@@ -91,16 +103,12 @@ class ProfileFragment : Fragment() {
     private fun setupListeners() {
         binding.cardSecurity.setOnClickListener {
             if (isEditMode) return@setOnClickListener
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.nav_slide_in_right,
-                    R.anim.nav_slide_out_left,
-                    R.anim.nav_slide_in_left,
-                    R.anim.nav_slide_out_right
-                )
-                .add(R.id.main, com.mexadev.aura.ui.settings.SecuritySettingsFragment())
-                .addToBackStack(null)
-                .commit()
+            openSettingsFragment(com.mexadev.aura.ui.settings.SecuritySettingsFragment())
+        }
+
+        binding.cardNotifications.setOnClickListener {
+            if (isEditMode) return@setOnClickListener
+            openSettingsFragment(com.mexadev.aura.ui.settings.NotificationSettingsFragment())
         }
 
         binding.btnEditProfile.setOnClickListener { toggleEditMode(true) }
@@ -177,6 +185,9 @@ class ProfileFragment : Fragment() {
         if (isEditMode == enable) return
         isEditMode = enable
 
+        if (_binding == null) return
+
+        TransitionManager.endTransitions(binding.mainContainer)
         TransitionManager.beginDelayedTransition(
             binding.mainContainer,
             AutoTransition().setDuration(350).setInterpolator(DecelerateInterpolator())
@@ -238,8 +249,25 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun openSettingsFragment(fragment: Fragment) {
+        if (_binding == null) return
+        val detailContainer = activity?.findViewById<View>(R.id.detail_fragment_container)
+        detailContainer?.visibility = View.VISIBLE
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.nav_slide_in_right,
+                R.anim.nav_slide_out_left,
+                R.anim.nav_slide_in_left,
+                R.anim.nav_slide_out_right
+            )
+            .replace(R.id.detail_fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        parentFragmentManager.removeOnBackStackChangedListener(onBackStackChangedListener)
         shimmerAnimator?.cancel()
         errorBanner.destroy()
         _binding = null

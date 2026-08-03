@@ -65,49 +65,8 @@ class AccessesFragment : Fragment() {
     private fun setupViewPager() {
         val adapter = AccessesPagerAdapter(this)
         binding.viewPager.adapter = adapter
-
-        // Post para calcular ancho del indicador igual al ancho del tab y configurarlo
-        binding.tabList.post {
-            val params = binding.activeIndicator.layoutParams
-            params.width = binding.tabList.width
-            binding.activeIndicator.layoutParams = params
-        }
-
-        val evaluator = ArgbEvaluator()
-        val activeColor = ContextCompat.getColor(requireContext(), R.color.aura_text_on_primary)
-        val inactiveColor = ContextCompat.getColor(requireContext(), R.color.aura_text_primary)
-
-        fun updateTabState(progress: Float) {
-            // Animación física de la píldora azul
-            val maxDistance = binding.tabHistory.x - binding.tabList.x
-            if (maxDistance > 0) {
-                binding.activeIndicator.translationX = maxDistance * progress
-            }
-
-            // Interpolación de colores
-            val colorList = evaluator.evaluate(progress, activeColor, inactiveColor) as Int
-            val colorHistory = evaluator.evaluate(progress, inactiveColor, activeColor) as Int
-            
-            binding.tabList.setTextColor(colorList)
-            binding.tabHistory.setTextColor(colorHistory)
-
-            binding.tabList.typeface = if (progress < 0.5f) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-            binding.tabHistory.typeface = if (progress >= 0.5f) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-        }
-
-        // Setup manual tab clicks
-        binding.tabList.setOnClickListener { binding.viewPager.currentItem = 0 }
-        binding.tabHistory.setOnClickListener { binding.viewPager.currentItem = 1 }
-
-        // Update tabs physics smoothly on page change
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                val progress = position + positionOffset
-                if (progress in 0f..1f) {
-                    updateTabState(progress)
-                }
-            }
-        })
+        binding.segmentedControl.setTabs(listOf("Códigos QR", "Historial"))
+        binding.segmentedControl.setupWithViewPager2(binding.viewPager)
     }
 
     override fun onDestroyView() {

@@ -15,6 +15,13 @@ class SecuritySettingsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var preferencesManager: PreferencesManager
 
+    private val backCallback = object : androidx.activity.OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            isEnabled = false
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,6 +34,13 @@ class SecuritySettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         preferencesManager = PreferencesManager(requireContext())
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+
+        setupWindowInsets()
+
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
         
         binding.switchFingerprint.isChecked = preferencesManager.biometricSessionRenewal
         binding.switchLockOnExit.isChecked = preferencesManager.lockOnExit
@@ -43,6 +57,18 @@ class SecuritySettingsFragment : Fragment() {
         
         binding.btnChangePassword.setOnClickListener {
             Toast.makeText(requireContext(), "Solicitud de cambio de contraseña enviada (Dummy)", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupWindowInsets() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.securitySettingsRoot) { _, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime())
+
+            val topPadding = systemBars.top
+            val bottomPadding = kotlin.math.max(systemBars.bottom, ime.bottom) + (16 * resources.displayMetrics.density).toInt()
+            binding.securitySettingsRoot.setPadding(0, topPadding, 0, bottomPadding)
+            insets
         }
     }
 

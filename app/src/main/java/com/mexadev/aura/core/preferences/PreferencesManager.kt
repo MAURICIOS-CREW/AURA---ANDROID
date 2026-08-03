@@ -35,5 +35,21 @@ class PreferencesManager(context: Context) {
     var notificationImportance: String
         get() = prefs.getString("notification_importance", "high") ?: "high"
         set(value) = prefs.edit { putString("notification_importance", value) }
+
+    var notificationsEnabled: Boolean
+        get() = prefs.getBoolean("notifications_enabled", true)
+        set(value) = prefs.edit { putBoolean("notifications_enabled", value) }
+
+    var importanceAccessQr: String
+        get() = prefs.getString("importance_access_qr", "high") ?: "high"
+        set(value) = prefs.edit { putString("importance_access_qr", value) }
+
+    var importanceAccessPlaca: String
+        get() = prefs.getString("importance_access_placa", "high") ?: "high"
+        set(value) = prefs.edit { putString("importance_access_placa", value) }
+
+    var importanceIncident: String
+        get() = prefs.getString("importance_incident", "high") ?: "high"
+        set(value) = prefs.edit { putString("importance_incident", value) }
 }
 
