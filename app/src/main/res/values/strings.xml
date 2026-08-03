@@ -157,4 +157,21 @@
     <string name="logout_title">Cerrar sesión</string>
     <string name="logout_confirm_message">¿Estás seguro de que deseas cerrar sesión en el dispositivo?</string>
     <string name="logout_btn">Cerrar sesión</string>
+
+    <!-- Misc / Error / Badges -->
+    <string name="cd_error_icon">Icono de advertencia</string>
+    <string name="bullet_separator">·</string>
+    <string name="error_connection_title">Problema de conexión</string>
+    <string name="error_connection_msg">No se ha podido conectar al servidor.</string>
+    <string name="error_retry">Reintentar</string>
+
+    <!-- Vehicle -->
+    <string name="vehicle_title">Vehículo</string>
+    <string name="vehicle_hint_plate">Placas *</string>
+    <string name="vehicle_hint_brand">Marca (Opcional)</string>
+    <string name="vehicle_label_color">Color</string>
+    <string name="vehicle_btn_save">Guardar</string>
+    <string name="vehicle_btn_delete">Eliminar vehículo</string>
+    <string name="cd_vehicle">Icono de vehículo</string>
+    <string name="cd_edit">Editar</string>
 </resources>

@@ -16,19 +16,15 @@
         android:textColor="?attr/colorOnSurface"
         android:layout_marginBottom="32dp"/>
 
-    <com.google.android.material.card.MaterialCardView
+    <com.mexadev.aura.ui.common.AuraCardBtn
         android:id="@+id/cardSecurity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/aura_white"
             android:orientation="horizontal"
             android:padding="20dp"
             android:gravity="center_vertical">
@@ -47,17 +43,17 @@
                 android:text="@string/settings_security_access"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textColor="@color/aura_text_primary"
                 android:layout_marginStart="16dp"/>
                 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_media_next"
-                app:tint="?attr/colorOnSurfaceVariant"
+                app:tint="@color/aura_text_secondary"
                 android:contentDescription="@string/cd_next" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </com.mexadev.aura.ui.common.AuraCardBtn>
 
 </LinearLayout>

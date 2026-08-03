@@ -308,10 +308,10 @@ class IncidentsAdapter(
             binding.cardIncident.transitionName = "transition_incident_${incident.id}"
 
             if (incident.comments != null && incident.comments.isNotEmpty()) {
-                binding.layoutCommentsBadge.visibility = View.VISIBLE
+                binding.tvCommentsCount.visibility = View.VISIBLE
                 binding.tvCommentsCount.text = incident.comments.size.toString()
             } else {
-                binding.layoutCommentsBadge.visibility = View.GONE
+                binding.tvCommentsCount.visibility = View.GONE
             }
 
             binding.cardIncident.setOnClickListener {

@@ -5,7 +5,7 @@
     La transición entre estados se maneja vía VehiclesAdapter con ChangeBounds + Fade.
     El formulario usa LinearLayout vertical para evitar superposición de vistas.
 -->
-<FrameLayout
+<com.mexadev.aura.ui.common.AuraCardBtn
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,15 +13,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    android:background="@drawable/bg_dashboard_card"
-    android:elevation="4dp"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_marginVertical="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/aura_white"
         android:orientation="vertical">
 
         <!-- ═══════════════════════════════════════════════
@@ -31,6 +28,7 @@
             android:id="@+id/layoutCollapsed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/aura_white"
             android:padding="16dp">
 
             <FrameLayout
@@ -47,6 +45,7 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_car"
+                    android:contentDescription="@string/cd_vehicle"
                     app:tint="@color/aura_primary" />
             </FrameLayout>
 
@@ -63,10 +62,11 @@
                 app:layout_constraintStart_toEndOf="@id/iconContainer"
                 app:layout_constraintEnd_toStartOf="@id/ivEditIcon"
                 app:layout_constraintTop_toTopOf="@id/iconContainer"
-                app:layout_constraintBottom_toTopOf="@id/tvBrandColor"
+                app:layout_constraintBottom_toTopOf="@id/llBrandColorContainer"
                 tools:text="ABC-1234" />
 
             <LinearLayout
+                android:id="@+id/llBrandColorContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
@@ -103,6 +103,7 @@
                 android:padding="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_edit"
+                android:contentDescription="@string/cd_edit"
                 app:tint="@color/aura_text_tertiary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -129,14 +130,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:id="@+id/tvFormTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Vehículo"
+                    android:text="@string/vehicle_title"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/aura_text_primary" />
@@ -147,6 +149,7 @@
                     android:layout_height="36dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_arrow_back"
+                    android:contentDescription="@string/cd_back"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:tint="@color/aura_text_secondary"
                     android:rotation="270" />
@@ -166,8 +169,9 @@
                 android:id="@+id/etPlate"
                 style="@style/Aura.Input"
                 android:layout_marginTop="16dp"
-                android:hint="Placas *"
+                android:hint="@string/vehicle_hint_plate"
                 android:inputType="textCapCharacters"
+                android:autofillHints="none"
                 android:imeOptions="actionNext"
                 android:maxLines="1" />
 
@@ -176,8 +180,9 @@
                 android:id="@+id/etBrand"
                 style="@style/Aura.Input"
                 android:layout_marginTop="12dp"
-                android:hint="Marca (Opcional)"
+                android:hint="@string/vehicle_hint_brand"
                 android:inputType="textCapWords"
+                android:autofillHints="none"
                 android:imeOptions="actionNext"
                 android:maxLines="1" />
 
@@ -186,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Color"
+                android:text="@string/vehicle_label_color"
                 android:textColor="@color/aura_text_secondary"
                 android:textSize="14sp" />
 
@@ -216,7 +221,7 @@
                     android:id="@+id/btnSave"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Guardar"
+                    android:text="@string/vehicle_btn_save"
                     android:textColor="@color/aura_white"
                     android:textStyle="bold"
                     android:textAllCaps="false"
@@ -248,7 +253,7 @@
                     android:id="@+id/btnDelete"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Eliminar vehículo"
+                    android:text="@string/vehicle_btn_delete"
                     android:textColor="@color/aura_error"
                     android:textStyle="bold"
                     android:textAllCaps="false"
@@ -273,4 +278,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

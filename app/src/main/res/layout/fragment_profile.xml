@@ -23,6 +23,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_warning"
+            android:contentDescription="@string/cd_error_icon"
             app:tint="@color/aura_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,13 +70,15 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.card.MaterialCardView
+            <com.mexadev.aura.ui.common.AuraCardBtn
                 android:id="@+id/cardProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="32dp"
+                app:isPureWhite="false"
+                app:cardClickAnimationEnabled="false"
                 app:cardBackgroundColor="@color/aura_primary"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="8dp"
@@ -197,6 +200,7 @@
                             android:layout_marginTop="6dp"
                             android:hint="@string/profile_hint_full_name"
                             android:inputType="textPersonName|textCapWords"
+                            android:autofillHints="name"
                             android:imeOptions="actionNext" />
 
                         <TextView
@@ -214,6 +218,7 @@
                             android:layout_marginTop="6dp"
                             android:hint="@string/profile_hint_username"
                             android:inputType="textNoSuggestions"
+                            android:autofillHints="username"
                             android:imeOptions="actionNext" />
 
                         <TextView
@@ -231,6 +236,7 @@
                             android:layout_marginTop="6dp"
                             android:hint="@string/profile_hint_email"
                             android:inputType="textEmailAddress"
+                            android:autofillHints="emailAddress"
                             android:imeOptions="actionNext" />
 
                         <TextView
@@ -248,6 +254,7 @@
                             android:layout_marginTop="6dp"
                             android:hint="@string/profile_hint_phone"
                             android:inputType="phone"
+                            android:autofillHints="phoneNumber"
                             android:imeOptions="actionDone" />
 
                         <FrameLayout
@@ -292,7 +299,7 @@
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </com.mexadev.aura.ui.common.AuraCardBtn>
 
             <TextView
                 android:id="@+id/tvSettingsTitle"
@@ -304,19 +311,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.card.MaterialCardView
+            <com.mexadev.aura.ui.common.AuraCardBtn
                 android:id="@+id/cardSecurity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/aura_white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:strokeWidth="0dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -358,21 +359,15 @@
                         app:tint="@color/aura_text_tertiary" />
 
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </com.mexadev.aura.ui.common.AuraCardBtn>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.mexadev.aura.ui.common.AuraCardBtn
                 android:id="@+id/cardNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/aura_white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:strokeWidth="0dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -414,51 +409,36 @@
                         app:tint="@color/aura_text_tertiary" />
 
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </com.mexadev.aura.ui.common.AuraCardBtn>
 
-            <!-- BOTÓN CERRAR SESIÓN DESTRUCTIVO AURA -->
-            <com.google.android.material.card.MaterialCardView
+            <com.mexadev.aura.ui.common.AuraCardBtn
                 android:id="@+id/cardLogout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="36dp"
-                android:clickable="true"
-                android:focusable="true"
+                app:isPureWhite="false"
                 app:cardBackgroundColor="@color/aura_error_light"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
                 app:strokeColor="@color/aura_error"
                 app:strokeWidth="1.5dp"
                 app:rippleColor="#33E53E3E">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvLogout"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:text="@string/logout_title"
+                    android:textColor="@color/aura_error"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:drawablePadding="10dp"
+                    app:drawableStartCompat="@drawable/ic_logout"
+                    app:drawableTint="@color/aura_error" />
 
-                    <ImageView
-                        android:id="@+id/ivLogoutIcon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:contentDescription="@string/logout_title"
-                        android:src="@drawable/ic_logout"
-                        app:tint="@color/aura_error" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/logout_title"
-                        android:textColor="@color/aura_error"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </com.mexadev.aura.ui.common.AuraCardBtn>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

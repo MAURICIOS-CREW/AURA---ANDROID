@@ -206,16 +206,16 @@
         Elevado por encima del bottom nav para el efecto visual de la maqueta
         Posicionado en el centro con layout_gravity
     -->
-    <com.google.android.material.card.MaterialCardView
+    <com.mexadev.aura.ui.common.AuraCardBtn
         android:id="@+id/fab_center"
         android:layout_width="68dp"
         android:layout_height="68dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="28dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="34dp"
+        android:elevation="16dp"
+        app:isPureWhite="false"
         app:cardBackgroundColor="@color/aura_primary"
+        app:cardCornerRadius="34dp"
         app:cardElevation="16dp"
         app:strokeWidth="0dp">
 
@@ -228,7 +228,7 @@
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
             tools:ignore="ContentDescription"/>
-    </com.google.android.material.card.MaterialCardView>
+    </com.mexadev.aura.ui.common.AuraCardBtn>
 
     <!-- Incluir la vista de detalles superpuesta (para animación fluida de contenedor) -->
     <include
@@ -264,6 +264,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/ic_warning"
+            android:contentDescription="@string/cd_error_icon"
             app:tint="@color/aura_primary"
             app:layout_constraintBottom_toTopOf="@id/tvErrorTitle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -276,7 +277,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Problema de conexión"
+            android:text="@string/error_connection_title"
             android:textColor="@color/aura_text_primary"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -292,7 +293,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="32dp"
-            android:text="No se ha podido conectar al servidor."
+            android:text="@string/error_connection_msg"
             android:textColor="@color/aura_text_secondary"
             android:textSize="14sp"
             android:textAlignment="center"
@@ -307,7 +308,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/bg_btn_primary"
-            android:text="Reintentar"
+            android:text="@string/error_retry"
             android:textColor="@color/aura_white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

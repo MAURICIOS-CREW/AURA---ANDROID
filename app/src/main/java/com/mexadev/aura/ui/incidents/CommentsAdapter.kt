@@ -1,11 +1,11 @@
 package com.mexadev.aura.ui.incidents
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mexadev.aura.R
 import com.mexadev.aura.data.model.IncidentComment
@@ -30,14 +30,20 @@ class CommentsAdapter(
 ) : RecyclerView.Adapter<CommentsAdapter.CommentViewHolder>() {
 
     fun updateData(newItems: List<IncidentComment>) {
-        val oldSize = items.size
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = items.size
+            override fun getNewListSize(): Int = newItems.size
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition].id == newItems[newItemPosition].id
+            }
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return items[oldItemPosition] == newItems[newItemPosition]
+            }
+        }
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         items.clear()
         items.addAll(newItems)
-        if (oldSize == 0) {
-            notifyDataSetChanged()
-        } else {
-            notifyItemRangeInserted(oldSize, newItems.size - oldSize)
-        }
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun addComment(comment: IncidentComment) {
@@ -90,13 +96,13 @@ class CommentsAdapter(
             } else {
                 // Burbuja de admin/otros: color institucional
                 binding.bubbleContainer.backgroundTintList = ColorStateList.valueOf(
-                    context.getColor(R.color.aura_info_light)
+                    context.getColor(R.color.aura_info)
                 )
                 binding.tvCommentContent.setTextColor(
-                    context.getColor(R.color.aura_text_primary)
+                    context.getColor(R.color.aura_text_on_primary)
                 )
                 binding.tvCommentTime.setTextColor(
-                    context.getColor(R.color.aura_text_tertiary)
+                    context.getColor(R.color.aura_text_on_primary)
                 )
             }
         }
@@ -124,7 +130,7 @@ class CommentsAdapter(
                     SimpleDateFormat("d MMM", Locale.getDefault())
                 }
                 outputFormat.format(date)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 ""
             }
         }

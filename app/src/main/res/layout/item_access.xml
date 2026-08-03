@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<com.mexadev.aura.ui.common.AuraCardBtn
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,14 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="6dp"
-    android:background="@drawable/bg_vehicle_card"
-    android:elevation="3dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:layout_marginVertical="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/aura_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -83,31 +79,19 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutUsesBadge"
+        <TextView
+            android:id="@+id/tvUsesCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:textColor="@color/aura_text_tertiary"
+            android:textSize="11sp"
             android:gravity="center_vertical"
+            android:drawablePadding="3dp"
+            app:drawableStartCompat="@drawable/ic_people"
+            app:drawableTint="@color/aura_text_tertiary"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/ic_people"
-                app:tint="@color/aura_text_tertiary"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/tvUsesCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:textColor="@color/aura_text_tertiary"
-                android:textSize="11sp"
-                tools:text="2 usos" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2 usos" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

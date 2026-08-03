@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AuraCardBtn">
+        <attr name="cardClickAnimationEnabled" format="boolean" />
+        <attr name="cardClickScale" format="float" />
+        <attr name="isPureWhite" format="boolean" />
+    </declare-styleable>
+</resources>
