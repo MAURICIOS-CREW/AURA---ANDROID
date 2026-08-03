@@ -72,6 +72,18 @@ data class User(
     val residences: List<Residence>? = null
 )
 
+data class ProfileUpdateRequest(
+    val name: String? = null,
+    val username: String? = null,
+    val email: String? = null,
+    val phone: String? = null
+)
+
+data class ProfileUpdateResponse(
+    val message: String,
+    val user: User
+)
+
 data class UserSession(
     val id: Long,
     @SerializedName("user_id") val userId: Long,

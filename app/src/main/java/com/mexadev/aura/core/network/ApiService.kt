@@ -27,6 +27,9 @@ interface ApiService {
     @retrofit2.http.GET("api/mobile/profile")
     suspend fun getProfile(): Response<com.mexadev.aura.data.model.User>
 
+    @retrofit2.http.PUT("api/mobile/profile")
+    suspend fun updateProfile(@Body request: com.mexadev.aura.data.model.ProfileUpdateRequest): Response<com.mexadev.aura.data.model.ProfileUpdateResponse>
+
     @retrofit2.http.GET("api/mobile/vehicles")
     suspend fun getVehicles(): Response<List<com.mexadev.aura.data.model.Vehicle>>
 

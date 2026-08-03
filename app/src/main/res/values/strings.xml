@@ -53,6 +53,17 @@
     <string name="profile_default_name">Alex</string>
     <string name="profile_default_email">alex@aura.com</string>
     <string name="profile_edit">Editar Perfil</string>
+    <string name="profile_edit_title">Editar perfil</string>
+    <string name="profile_label_full_name">Nombre completo</string>
+    <string name="profile_hint_full_name">Nombre completo</string>
+    <string name="profile_label_username">Nombre de usuario</string>
+    <string name="profile_hint_username">Nombre de usuario</string>
+    <string name="profile_label_email">Correo electrónico</string>
+    <string name="profile_hint_email">Correo electrónico</string>
+    <string name="profile_label_phone">Teléfono</string>
+    <string name="profile_hint_phone">Número de teléfono</string>
+    <string name="profile_btn_save">Guardar cambios</string>
+    <string name="profile_btn_cancel">Cancelar</string>
     
     <!-- Dashboard / Home -->
     <string name="home_welcome_name">¡Bienvenido, %1$s!</string>
