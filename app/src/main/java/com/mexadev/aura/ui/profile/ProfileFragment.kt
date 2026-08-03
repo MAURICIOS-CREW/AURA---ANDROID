@@ -1,16 +1,24 @@
 package com.mexadev.aura.ui.profile
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -19,9 +27,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
+import com.mexadev.aura.LoginActivity
 import com.mexadev.aura.R
 import com.mexadev.aura.databinding.FragmentProfileBinding
 import com.mexadev.aura.ui.common.BannerManager
+import com.mexadev.aura.ui.common.ConfirmBottomSheetFragment
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
@@ -75,6 +85,7 @@ class ProfileFragment : Fragment() {
         setupWindowInsets()
         setupListeners()
         setupObservers()
+        runEntranceAnimations()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
 
@@ -100,6 +111,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupListeners() {
         binding.cardSecurity.setOnClickListener {
             if (isEditMode) return@setOnClickListener
@@ -109,6 +121,54 @@ class ProfileFragment : Fragment() {
         binding.cardNotifications.setOnClickListener {
             if (isEditMode) return@setOnClickListener
             openSettingsFragment(com.mexadev.aura.ui.settings.NotificationSettingsFragment())
+        }
+
+        // Physics spring touch response for cardLogout
+        val springXCompress = SpringAnimation(binding.cardLogout, DynamicAnimation.SCALE_X, 0.95f).apply {
+            spring.stiffness = SpringForce.STIFFNESS_HIGH
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+        }
+        val springYCompress = SpringAnimation(binding.cardLogout, DynamicAnimation.SCALE_Y, 0.95f).apply {
+            spring.stiffness = SpringForce.STIFFNESS_HIGH
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+        }
+        val springXRelease = SpringAnimation(binding.cardLogout, DynamicAnimation.SCALE_X, 1.0f).apply {
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+        }
+        val springYRelease = SpringAnimation(binding.cardLogout, DynamicAnimation.SCALE_Y, 1.0f).apply {
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+        }
+
+        binding.cardLogout.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    springXRelease.cancel()
+                    springYRelease.cancel()
+                    springXCompress.start()
+                    springYCompress.start()
+                }
+                MotionEvent.ACTION_UP -> {
+                    springXCompress.cancel()
+                    springYCompress.cancel()
+                    springXRelease.start()
+                    springYRelease.start()
+                    v.performClick()
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    springXCompress.cancel()
+                    springYCompress.cancel()
+                    springXRelease.start()
+                    springYRelease.start()
+                }
+            }
+            true
+        }
+
+        binding.cardLogout.setOnClickListener {
+            if (isEditMode) return@setOnClickListener
+            showLogoutConfirmation()
         }
 
         binding.btnEditProfile.setOnClickListener { toggleEditMode(true) }
@@ -124,11 +184,37 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun runEntranceAnimations() {
+        binding.cardLogout.alpha = 0f
+        binding.cardLogout.translationY = 40f
+        binding.cardLogout.animate().alpha(1f).setDuration(250).start()
+        
+        val springY = SpringAnimation(binding.cardLogout, DynamicAnimation.TRANSLATION_Y, 0f).apply {
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+        }
+        binding.cardLogout.postDelayed({ springY.start() }, 150)
+    }
+
+    private fun showLogoutConfirmation() {
+        ConfirmBottomSheetFragment.newInstance(
+            title = getString(R.string.logout_title),
+            message = getString(R.string.logout_confirm_message),
+            confirmText = getString(R.string.logout_btn),
+            cancelText = getString(R.string.profile_btn_cancel),
+            iconRes = R.drawable.ic_logout,
+            iconColorRes = R.color.aura_error,
+            confirmBgRes = R.drawable.bg_btn_error,
+            onConfirm = { viewModel.logout() }
+        ).show(childFragmentManager, "ConfirmLogoutDialog")
+    }
+
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.uiState.collect { handleUiState(it) } }
                 launch { viewModel.updateState.collect { handleUpdateState(it) } }
+                launch { viewModel.logoutState.collect { handleLogoutState(it) } }
             }
         }
     }
@@ -174,6 +260,25 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun handleLogoutState(state: LogoutState) {
+        when (state) {
+            is LogoutState.Idle -> {}
+            is LogoutState.Loading -> {}
+            is LogoutState.Success -> {
+                val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
+                requireActivity().overrideActivityTransition(
+                    AppCompatActivity.OVERRIDE_TRANSITION_OPEN,
+                    R.anim.fade_in,
+                    R.anim.fade_out
+                )
+                requireActivity().finishAffinity()
+            }
+        }
+    }
+
     private fun setLoadingSave(isLoading: Boolean) {
         binding.btnSaveProfile.isEnabled = !isLoading
         binding.btnCancelEdit.isEnabled = !isLoading
@@ -206,6 +311,7 @@ class ProfileFragment : Fragment() {
         binding.tvEmail.visibility = viewVisibility
         binding.btnEditProfile.visibility = viewVisibility
         binding.layoutEditForm.visibility = editVisibility
+        binding.cardLogout.visibility = viewVisibility
 
         if (enable) {
             binding.etName.requestFocus()
@@ -246,6 +352,7 @@ class ProfileFragment : Fragment() {
             binding.tvName.visibility = View.VISIBLE
             binding.tvEmail.visibility = View.VISIBLE
             binding.btnEditProfile.visibility = View.VISIBLE
+            binding.cardLogout.visibility = View.VISIBLE
         }
     }
 

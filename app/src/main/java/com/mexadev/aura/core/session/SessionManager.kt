@@ -54,6 +54,14 @@ class SessionManager(val context: Context) {
 
     suspend fun clearSession() {
         dataStore.edit { it.clear() }
+        try {
+            context.getSharedPreferences("aura_cache", Context.MODE_PRIVATE).edit().clear().apply()
+            com.mexadev.aura.core.preferences.PreferencesManager(context).apply {
+                userId = -1L
+                vehiclesCount = 0
+                incidentsCount = 0
+            }
+        } catch (_: Exception) {}
     }
 
     suspend fun saveFcmToken(token: String) {

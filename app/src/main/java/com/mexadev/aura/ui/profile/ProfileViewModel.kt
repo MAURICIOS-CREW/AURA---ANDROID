@@ -1,8 +1,10 @@
 package com.mexadev.aura.ui.profile
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mexadev.aura.core.network.ApiClient
+import com.mexadev.aura.core.session.SessionManager
 import com.mexadev.aura.data.model.ProfileUpdateRequest
 import com.mexadev.aura.data.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,13 +26,24 @@ sealed class ProfileUpdateState {
     data class Error(val message: String) : ProfileUpdateState()
 }
 
-class ProfileViewModel : ViewModel() {
+sealed class LogoutState {
+    object Idle : LogoutState()
+    object Loading : LogoutState()
+    object Success : LogoutState()
+}
+
+class ProfileViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val sessionManager = SessionManager(application)
 
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     private val _updateState = MutableStateFlow<ProfileUpdateState>(ProfileUpdateState.Idle)
     val updateState: StateFlow<ProfileUpdateState> = _updateState.asStateFlow()
+
+    private val _logoutState = MutableStateFlow<LogoutState>(LogoutState.Idle)
+    val logoutState: StateFlow<LogoutState> = _logoutState.asStateFlow()
 
     private val apiService = ApiClient.apiService
 
@@ -73,6 +86,14 @@ class ProfileViewModel : ViewModel() {
             } catch (e: Exception) {
                 _updateState.value = ProfileUpdateState.Error("Sin conexión a internet o servidor inaccesible.")
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            _logoutState.value = LogoutState.Loading
+            sessionManager.clearSession()
+            _logoutState.value = LogoutState.Success
         }
     }
 

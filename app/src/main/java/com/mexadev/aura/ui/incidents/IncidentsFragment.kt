@@ -135,15 +135,16 @@ class IncidentsFragment : Fragment() {
                 names: MutableList<String>,
                 sharedElements: MutableMap<String, View>
             ) {
+                val currentBinding = _binding ?: return
                 if (names.isEmpty()) return
                 val name = names[0]
                 // Try to find the matching item view in the RecyclerView by its transitionName
-                val layoutManager = binding.rvIncidents.layoutManager as? LinearLayoutManager
+                val layoutManager = currentBinding.rvIncidents.layoutManager as? LinearLayoutManager
                     ?: return
                 val firstVisible = layoutManager.findFirstVisibleItemPosition()
                 val lastVisible  = layoutManager.findLastVisibleItemPosition()
                 for (i in firstVisible..lastVisible) {
-                    val holder = binding.rvIncidents.findViewHolderForAdapterPosition(i)
+                    val holder = currentBinding.rvIncidents.findViewHolderForAdapterPosition(i)
                     val itemView = holder?.itemView ?: continue
                     if (itemView.transitionName == name) {
                         sharedElements[name] = itemView
@@ -151,8 +152,8 @@ class IncidentsFragment : Fragment() {
                     }
                 }
                 // FAB fallback (if transition was from FAB)
-                if (binding.fabAdd.transitionName == name) {
-                    sharedElements[name] = binding.fabAdd
+                if (currentBinding.fabAdd.transitionName == name) {
+                    sharedElements[name] = currentBinding.fabAdd
                 }
             }
         })
@@ -519,6 +520,7 @@ class IncidentsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.setExitSharedElementCallback(null as SharedElementCallback?)
         errorBanner.destroy()
         successBanner.destroy()
         _binding = null

@@ -107,15 +107,16 @@ class AccessListFragment : Fragment() {
                 names: MutableList<String>,
                 sharedElements: MutableMap<String, View>
             ) {
+                val currentBinding = _binding ?: return
                 if (names.isEmpty()) return
                 val name = names[0]
                 // Try to find the matching item view in the RecyclerView by its transitionName
-                val layoutManager = binding.rvAccesses.layoutManager as? LinearLayoutManager
+                val layoutManager = currentBinding.rvAccesses.layoutManager as? LinearLayoutManager
                     ?: return
                 val firstVisible = layoutManager.findFirstVisibleItemPosition()
                 val lastVisible  = layoutManager.findLastVisibleItemPosition()
                 for (i in firstVisible..lastVisible) {
-                    val holder = binding.rvAccesses.findViewHolderForAdapterPosition(i)
+                    val holder = currentBinding.rvAccesses.findViewHolderForAdapterPosition(i)
                     val itemView = holder?.itemView ?: continue
                     if (itemView.transitionName == name) {
                         sharedElements[name] = itemView
@@ -123,8 +124,8 @@ class AccessListFragment : Fragment() {
                     }
                 }
                 // If not found in list (e.g. FAB was the source), try the FAB
-                if (binding.fabAdd.transitionName == name) {
-                    sharedElements[name] = binding.fabAdd
+                if (currentBinding.fabAdd.transitionName == name) {
+                    sharedElements[name] = currentBinding.fabAdd
                 }
             }
         })
@@ -275,6 +276,7 @@ class AccessListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.setExitSharedElementCallback(null as SharedElementCallback?)
         successBanner.destroy()
         _binding = null
     }

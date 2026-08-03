@@ -152,4 +152,9 @@
     <string name="settings_notifications_desc_medium">Respeta la configuración del sistema con sonido y vibración, sin despertar la pantalla.</string>
     <string name="settings_notifications_desc_low">Silencioso. Solo muestra la notificación en la barra de estado sin sonido ni vibración.</string>
     <string name="settings_notifications_desc_off">No se recibirán notificaciones para esta categoría en el dispositivo.</string>
+
+    <!-- Logout -->
+    <string name="logout_title">Cerrar sesión</string>
+    <string name="logout_confirm_message">¿Estás seguro de que deseas cerrar sesión en el dispositivo?</string>
+    <string name="logout_btn">Cerrar sesión</string>
 </resources>
