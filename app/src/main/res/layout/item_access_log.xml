@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_access_log.xml
+    Tarjeta de resumen de un registro de acceso en el historial.
+    Muestra: icono de estado, nombre del invitado/tipo, residencia, badge de status y timestamp.
+-->
 <com.mexadev.aura.ui.common.AuraCardBtn
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardAccess"
+    android:id="@+id/cardAccessLog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -15,6 +20,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Ícono de status con fondo de color semántico -->
         <FrameLayout
             android:id="@+id/iconContainer"
             android:layout_width="52dp"
@@ -25,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
-                android:id="@+id/ivAccessIcon"
+                android:id="@+id/ivAccessLogIcon"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center"
@@ -34,21 +40,19 @@
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
+        <!-- Timestamp en esquina superior derecha -->
         <TextView
-            android:id="@+id/tvUsesCount"
+            android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/aura_text_tertiary"
             android:textSize="11sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="3dp"
-            app:drawableStartCompat="@drawable/ic_people"
-            app:drawableTint="@color/aura_text_tertiary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvGuestName"
             app:layout_constraintBottom_toBottomOf="@id/tvGuestName"
-            tools:text="2 usos" />
+            tools:text="Hoy, 03:45" />
 
+        <!-- Nombre del invitado / tipo de acceso -->
         <TextView
             android:id="@+id/tvGuestName"
             android:layout_width="0dp"
@@ -61,11 +65,12 @@
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintStart_toEndOf="@id/iconContainer"
-            app:layout_constraintEnd_toStartOf="@id/tvUsesCount"
+            app:layout_constraintEnd_toStartOf="@id/tvTimestamp"
             app:layout_constraintTop_toTopOf="@id/iconContainer"
             app:layout_constraintBottom_toTopOf="@id/layoutMeta"
-            tools:text="Carlos López" />
+            tools:text="Juan Pérez (Invitado)" />
 
+        <!-- Fila de meta: badge de status + residencia -->
         <LinearLayout
             android:id="@+id/layoutMeta"
             android:layout_width="0dp"
@@ -79,6 +84,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvGuestName"
             app:layout_constraintBottom_toBottomOf="@id/iconContainer">
 
+            <!-- Chip de status (granted / denied) -->
             <TextView
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
@@ -88,26 +94,30 @@
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                tools:text="Activo"
+                tools:text="Permitido"
                 tools:textColor="@color/aura_success"
                 tools:background="@color/aura_success_light" />
 
+            <!-- Separador punto -->
             <TextView
-                android:id="@+id/tvReasonBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="3dp"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Fuera de horario"
-                tools:textColor="@color/aura_warning"
-                tools:background="@color/aura_warning_light" />
+                android:layout_marginHorizontal="6dp"
+                android:text="@string/bullet_separator"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="14sp" />
 
+            <!-- Nombre de la residencia -->
+            <TextView
+                android:id="@+id/tvResidence"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/aura_text_tertiary"
+                android:textSize="11sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Casa 102 - Manzana A" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

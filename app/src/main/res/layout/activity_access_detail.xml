@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Generar Código QR"
+                android:text="@string/access_detail_toolbar_title"
                 android:textColor="@color/aura_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -113,6 +113,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_security"
+                    android:contentDescription="@string/cd_access_create_icon"
                     app:tint="@color/aura_white"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -122,7 +123,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Nuevo Acceso Seguro"
+                    android:text="@string/access_detail_banner_title"
                     android:textColor="@color/aura_white"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -136,7 +137,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Configura las reglas de entrada. El código QR se generará automáticamente al guardar."
+                    android:text="@string/access_detail_banner_desc"
                     android:textColor="@color/aura_overlay_white"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp"
@@ -161,6 +162,7 @@
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/cd_qr_code"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -197,6 +199,38 @@
                     tools:textColor="@color/aura_success"
                     tools:background="@color/aura_success_light" />
 
+                <LinearLayout
+                    android:id="@+id/layoutQrNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/tvQrStatus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivNoticeIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_check"
+                        android:contentDescription="@string/cd_notice_icon"
+                        app:tint="@color/aura_success" />
+
+                    <TextView
+                        android:id="@+id/tvNoticeText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_text_primary"
+                        tools:text="Listo para funcionar y ser escaneado en caseta." />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- ── ACTION BUTTONS ── -->
@@ -215,7 +249,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Compartir"
+                    android:text="@string/access_detail_btn_share"
                     app:drawableStartCompat="@drawable/ic_people"
                     app:drawableTint="@color/aura_primary" />
 
@@ -225,14 +259,14 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:text="Editar" />
+                    android:text="@string/access_detail_btn_edit" />
             </LinearLayout>
 
             <!-- ── FORM SECTION ── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre del Invitado"
+                android:text="@string/access_detail_label_guest_name"
                 android:textColor="@color/aura_text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -241,8 +275,9 @@
             <EditText
                 android:id="@+id/etGuestName"
                 style="@style/Aura.Input"
-                android:hint="Ej. Juan Pérez"
+                android:hint="@string/access_detail_hint_guest_name"
                 android:inputType="textPersonName"
+                android:autofillHints="name"
                 android:layout_marginBottom="24dp" />
 
             <!-- Active Switch -->
@@ -265,7 +300,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Habilitar Acceso"
+                        android:text="@string/access_detail_switch_enable"
                         android:textColor="@color/aura_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -273,7 +308,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Puedes pausar el acceso temporalmente."
+                        android:text="@string/access_detail_switch_enable_desc"
                         android:textColor="@color/aura_text_secondary"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
@@ -289,7 +324,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Restricciones Opcionales"
+                android:text="@string/access_detail_section_restrictions"
                 android:textColor="@color/aura_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -307,7 +342,7 @@
                     android:id="@+id/tvUsesTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Límite de usos"
+                    android:text="@string/access_detail_uses_title"
                     android:textColor="@color/aura_text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -320,6 +355,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/ic_info"
+                    android:contentDescription="@string/cd_uses_info"
                     app:tint="@color/aura_text_tertiary"
                     app:layout_constraintStart_toEndOf="@id/tvUsesTitle"
                     app:layout_constraintTop_toTopOf="@id/tvUsesTitle"
@@ -344,8 +380,9 @@
                     <EditText
                         android:id="@+id/etMaxUses"
                         style="@style/Aura.Input"
-                        android:hint="Ej. 1"
-                        android:inputType="number" />
+                        android:hint="@string/access_detail_hint_max_uses"
+                        android:inputType="number"
+                        android:autofillHints="" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -361,7 +398,7 @@
                     android:id="@+id/tvDatesTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rango de Fechas"
+                    android:text="@string/access_detail_dates_title"
                     android:textColor="@color/aura_text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -374,6 +411,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/ic_info"
+                    android:contentDescription="@string/cd_dates_info"
                     app:tint="@color/aura_text_tertiary"
                     app:layout_constraintStart_toEndOf="@id/tvDatesTitle"
                     app:layout_constraintTop_toTopOf="@id/tvDatesTitle"
@@ -402,7 +440,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
-                        android:text="Fecha Inicio"
+                        android:text="@string/access_detail_date_from"
                         android:textColor="@color/aura_text_secondary" />
 
                     <TextView
@@ -411,7 +449,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Fecha Fin"
+                        android:text="@string/access_detail_date_until"
                         android:textColor="@color/aura_text_secondary" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -430,7 +468,7 @@
                     android:id="@+id/tvDaysTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Días Específicos"
+                    android:text="@string/access_detail_days_title"
                     android:textColor="@color/aura_text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -443,6 +481,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/ic_info"
+                    android:contentDescription="@string/cd_days_info"
                     app:tint="@color/aura_text_tertiary"
                     app:layout_constraintStart_toEndOf="@id/tvDaysTitle"
                     app:layout_constraintTop_toTopOf="@id/tvDaysTitle"
@@ -466,13 +505,13 @@
                     android:clipToPadding="false"
                     app:layout_constraintTop_toBottomOf="@id/switchDays">
                     
-                    <CheckBox android:id="@+id/btnDay1" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="L" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay2" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="M" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay3" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="X" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay4" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="J" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay5" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="V" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay6" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="S" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
-                    <CheckBox android:id="@+id/btnDay7" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="D" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay1" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_mon" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay2" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_tue" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay3" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_wed" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay4" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_thu" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay5" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_fri" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay6" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_sat" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
+                    <CheckBox android:id="@+id/btnDay7" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginHorizontal="2dp" android:background="@drawable/bg_day_toggle" android:button="@null" android:gravity="center" android:text="@string/access_detail_day_sun" android:textColor="@color/aura_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -488,7 +527,7 @@
                     android:id="@+id/tvHoursTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Horario de Acceso"
+                    android:text="@string/access_detail_hours_title"
                     android:textColor="@color/aura_text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -501,6 +540,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/ic_info"
+                    android:contentDescription="@string/cd_hours_info"
                     app:tint="@color/aura_text_tertiary"
                     app:layout_constraintStart_toEndOf="@id/tvHoursTitle"
                     app:layout_constraintTop_toTopOf="@id/tvHoursTitle"
@@ -529,7 +569,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
-                        android:text="Hora de Entrada"
+                        android:text="@string/access_detail_time_start"
                         android:textColor="@color/aura_text_secondary" />
 
                     <TextView
@@ -538,7 +578,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Hora de Salida"
+                        android:text="@string/access_detail_time_end"
                         android:textColor="@color/aura_text_secondary" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -574,7 +614,7 @@
             android:id="@+id/fabSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guardar"
+            android:text="@string/access_detail_btn_save"
             android:textColor="@color/aura_white"
             app:icon="@drawable/ic_check"
             app:iconTint="@color/aura_white"
@@ -606,6 +646,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_warning"
+            android:contentDescription="@string/cd_error_banner_icon"
             app:tint="@color/aura_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -641,6 +682,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_check"
+            android:contentDescription="@string/cd_success_banner_icon"
             app:tint="@color/aura_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

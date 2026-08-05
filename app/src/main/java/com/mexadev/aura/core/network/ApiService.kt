@@ -9,7 +9,13 @@ import com.mexadev.aura.data.model.IncidentDetail
 import com.mexadev.aura.data.model.IncidentUpdateRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("api/mobile/auth/login")
@@ -21,67 +27,75 @@ interface ApiService {
     @POST("api/mobile/auth/fcm")
     suspend fun updateFcmToken(@Body request: FcmRequest): Response<Unit>
 
-    @retrofit2.http.GET("api/mobile/qr/temp")
+    @GET("api/mobile/qr/temp")
     suspend fun getTempQrHash(): Response<com.mexadev.aura.data.model.qr.QrTempResponse>
 
-    @retrofit2.http.GET("api/mobile/profile")
+    @GET("api/mobile/profile")
     suspend fun getProfile(): Response<com.mexadev.aura.data.model.User>
 
-    @retrofit2.http.PUT("api/mobile/profile")
+    @PUT("api/mobile/profile")
     suspend fun updateProfile(@Body request: com.mexadev.aura.data.model.ProfileUpdateRequest): Response<com.mexadev.aura.data.model.ProfileUpdateResponse>
 
-    @retrofit2.http.GET("api/mobile/vehicles")
+    @GET("api/mobile/vehicles")
     suspend fun getVehicles(): Response<List<com.mexadev.aura.data.model.Vehicle>>
 
-    @retrofit2.http.POST("api/mobile/vehicles")
+    @POST("api/mobile/vehicles")
     suspend fun createVehicle(@Body request: com.mexadev.aura.data.model.VehicleCreateRequest): Response<com.mexadev.aura.data.model.Vehicle>
 
-    @retrofit2.http.GET("api/mobile/vehicles/{id}")
-    suspend fun getVehicle(@retrofit2.http.Path("id") id: Long): Response<com.mexadev.aura.data.model.Vehicle>
+    @Suppress("unused")
+    @GET("api/mobile/vehicles/{id}")
+    suspend fun getVehicle(@Path("id") id: Long): Response<com.mexadev.aura.data.model.Vehicle>
 
-    @retrofit2.http.PUT("api/mobile/vehicles/{id}")
-    suspend fun updateVehicle(@retrofit2.http.Path("id") id: Long, @Body request: com.mexadev.aura.data.model.VehicleUpdateRequest): Response<com.mexadev.aura.data.model.Vehicle>
+    @PUT("api/mobile/vehicles/{id}")
+    suspend fun updateVehicle(@Path("id") id: Long, @Body request: com.mexadev.aura.data.model.VehicleUpdateRequest): Response<com.mexadev.aura.data.model.Vehicle>
 
-    @retrofit2.http.DELETE("api/mobile/vehicles/{id}")
-    suspend fun deleteVehicle(@retrofit2.http.Path("id") id: Long): Response<Unit>
+    @DELETE("api/mobile/vehicles/{id}")
+    suspend fun deleteVehicle(@Path("id") id: Long): Response<Unit>
 
     // ── Incidents ─────────────────────────────────────────────────────
-    @retrofit2.http.GET("api/mobile/incidents")
+    @GET("api/mobile/incidents")
     suspend fun getIncidents(): Response<List<Incident>>
 
-    @retrofit2.http.POST("api/mobile/incidents")
+    @POST("api/mobile/incidents")
     suspend fun createIncident(@Body request: IncidentCreateRequest): Response<Incident>
 
-    @retrofit2.http.GET("api/mobile/incidents/{id}")
-    suspend fun getIncidentDetail(@retrofit2.http.Path("id") id: Long): Response<IncidentDetail>
+    @GET("api/mobile/incidents/{id}")
+    suspend fun getIncidentDetail(@Path("id") id: Long): Response<IncidentDetail>
 
-    @retrofit2.http.PATCH("api/mobile/incidents/{id}")
-    suspend fun updateIncident(@retrofit2.http.Path("id") id: Long, @Body request: IncidentUpdateRequest): Response<Incident>
+    @PATCH("api/mobile/incidents/{id}")
+    suspend fun updateIncident(@Path("id") id: Long, @Body request: IncidentUpdateRequest): Response<Incident>
 
     // ── Incident Comments ─────────────────────────────────────────────
-    @retrofit2.http.GET("api/mobile/incidents/{id}/comments")
-    suspend fun getIncidentComments(@retrofit2.http.Path("id") incidentId: Long): Response<List<IncidentComment>>
+    @Suppress("unused")
+    @GET("api/mobile/incidents/{id}/comments")
+    suspend fun getIncidentComments(@Path("id") incidentId: Long): Response<List<IncidentComment>>
 
-    @retrofit2.http.POST("api/mobile/incidents/{id}/comments")
+    @POST("api/mobile/incidents/{id}/comments")
     suspend fun addIncidentComment(
-        @retrofit2.http.Path("id") incidentId: Long,
+        @Path("id") incidentId: Long,
         @Body request: CommentCreateRequest
     ): Response<IncidentComment>
 
     // ── Access Codes ──────────────────────────────────────────────────
-    @retrofit2.http.GET("api/mobile/access-codes")
+    @GET("api/mobile/access-codes")
     suspend fun getAccessCodes(): Response<com.mexadev.aura.data.model.AccessCodeListResponse>
 
-    @retrofit2.http.POST("api/mobile/access-codes")
+    @POST("api/mobile/access-codes")
     suspend fun createAccessCode(@Body request: com.mexadev.aura.data.model.AccessCodeCreateRequest): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
 
-    @retrofit2.http.GET("api/mobile/access-codes/{id}")
-    suspend fun getAccessCode(@retrofit2.http.Path("id") id: Long): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
+    @GET("api/mobile/access-codes/{id}")
+    suspend fun getAccessCode(@Path("id") id: Long): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
 
-    @retrofit2.http.PUT("api/mobile/access-codes/{id}")
-    suspend fun updateAccessCode(@retrofit2.http.Path("id") id: Long, @Body request: com.mexadev.aura.data.model.AccessCodeUpdateRequest): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
+    @PUT("api/mobile/access-codes/{id}")
+    suspend fun updateAccessCode(@Path("id") id: Long, @Body request: com.mexadev.aura.data.model.AccessCodeUpdateRequest): Response<com.mexadev.aura.data.model.SingleAccessCodeResponse>
 
-    @retrofit2.http.DELETE("api/mobile/access-codes/{id}")
-    suspend fun deleteAccessCode(@retrofit2.http.Path("id") id: Long): Response<Unit>
+    @DELETE("api/mobile/access-codes/{id}")
+    suspend fun deleteAccessCode(@Path("id") id: Long): Response<Unit>
+
+    // ── Access Logs (Historial) ───────────────────────────────────────
+    @GET("api/mobile/access-logs")
+    suspend fun getAccessLogs(
+        @Query("page") page: Int = 1,
+        @Query("per_page") perPage: Int = 20
+    ): Response<com.mexadev.aura.data.model.AccessLogPagedResponse>
 }
-

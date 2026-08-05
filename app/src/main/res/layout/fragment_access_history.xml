@@ -1,41 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    fragment_access_history.xml
+
+    Pestaña "Historial" dentro de AccessesFragment.
+    Características:
+      - SwipeRefreshLayout para pull-to-refresh manual
+      - RecyclerView para la lista (skeletons y datos reales)
+      - Paginación: footer de carga / indicador de "todo cargado"
+      - Estado vacío cuando no hay registros
+      - Indicador sutil de actualización en background (no intrusivo)
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aura_background">
 
+    <!-- ══════════════════════════════════════
+         CONTENIDO PRINCIPAL (lista + vacío)
+         ══════════════════════════════════════ -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAccessLogs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="12dp"
+            android:paddingBottom="96dp"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_access_log" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- ══════════════════════════════════════
+         ESTADO VACÍO
+         ══════════════════════════════════════ -->
     <LinearLayout
+        android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="32dp">
+        android:padding="32dp"
+        android:visibility="gone"
+        tools:visibility="gone">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:src="@drawable/ic_calendar"
-            app:tint="@color/aura_text_tertiary" />
+            app:tint="@color/aura_text_tertiary"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Historial"
-            android:textSize="20sp"
+            android:text="@string/access_history_empty_title"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/aura_text_secondary" />
-            
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="El registro de usos de los códigos QR aparecerá aquí próximamente."
+            android:text="@string/access_history_empty_desc"
             android:textSize="14sp"
             android:textAlignment="center"
             android:textColor="@color/aura_text_tertiary" />
+
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════
+         INDICADOR DE ACTUALIZACIÓN EN BACKGROUND
+         Aparece brevemente cuando hay nuevos datos
+         ══════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/layoutUpdating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="104dp"
+        android:background="@drawable/bg_dashboard_card"
+        android:elevation="6dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:indeterminateTint="@color/aura_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/access_history_updating"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_text_secondary" />
+
     </LinearLayout>
 
 </FrameLayout>

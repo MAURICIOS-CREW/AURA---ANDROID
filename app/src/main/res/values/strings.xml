@@ -174,4 +174,80 @@
     <string name="vehicle_btn_delete">Eliminar vehículo</string>
     <string name="cd_vehicle">Icono de vehículo</string>
     <string name="cd_edit">Editar</string>
+
+    <!-- Access Log History -->
+    <string name="access_log_status_granted">Permitido</string>
+    <string name="access_log_status_denied">Denegado</string>
+
+    <!-- Access Detail Activity / Adapter -->
+    <string name="access_status_active">Activo</string>
+    <string name="access_status_inactive">Inactivo</string>
+    <string name="access_detail_title_new">Nuevo Código QR</string>
+    <string name="access_detail_title_edit">Editar Código QR</string>
+    <string name="access_detail_title_view">Detalle de Código QR</string>
+    <string name="access_detail_btn_save">Guardar</string>
+    <string name="access_created_success">Código creado con éxito</string>
+
+    <!-- activity_access_detail.xml -->
+    <string name="access_detail_toolbar_title">Generar Código QR</string>
+    <string name="access_detail_banner_title">Nuevo Acceso Seguro</string>
+    <string name="access_detail_banner_desc">Configura las reglas de entrada. El código QR se generará automáticamente al guardar.</string>
+    <string name="access_detail_btn_share">Compartir</string>
+    <string name="access_detail_btn_edit">Editar</string>
+    <string name="access_detail_label_guest_name">Nombre del Invitado</string>
+    <string name="access_detail_hint_guest_name">Ej. Juan Pérez</string>
+    <string name="access_detail_switch_enable">Habilitar Acceso</string>
+    <string name="access_detail_switch_enable_desc">Puedes pausar el acceso temporalmente.</string>
+    <string name="access_detail_section_restrictions">Restricciones Opcionales</string>
+    <string name="access_detail_uses_title">Límite de usos</string>
+    <string name="access_detail_hint_max_uses">Ej. 1</string>
+    <string name="access_detail_dates_title">Rango de Fechas</string>
+    <string name="access_detail_date_from">Fecha Inicio</string>
+    <string name="access_detail_date_until">Fecha Fin</string>
+    <string name="access_detail_days_title">Días Específicos</string>
+    <string name="access_detail_day_mon">L</string>
+    <string name="access_detail_day_tue">M</string>
+    <string name="access_detail_day_wed">X</string>
+    <string name="access_detail_day_thu">J</string>
+    <string name="access_detail_day_fri">V</string>
+    <string name="access_detail_day_sat">S</string>
+    <string name="access_detail_day_sun">D</string>
+    <string name="access_detail_hours_title">Horario de Acceso</string>
+    <string name="access_detail_time_start">Hora de Entrada</string>
+    <string name="access_detail_time_end">Hora de Salida</string>
+
+    <!-- activity_access_log_detail.xml -->
+    <string name="access_log_detail_toolbar_title">Detalle de acceso</string>
+    <string name="access_log_detail_section_event">Información del evento</string>
+    <string name="access_log_detail_label_timestamp">Fecha y hora</string>
+    <string name="access_log_detail_label_access_type">Tipo de acceso</string>
+    <string name="access_log_detail_label_device">Dispositivo / Puerta</string>
+    <string name="access_log_detail_label_message">Mensaje del sistema</string>
+    <string name="access_log_detail_section_code">Código de acceso</string>
+    <string name="access_log_detail_label_guest">Invitado</string>
+    <string name="access_log_detail_label_code_type">Tipo de código</string>
+
+    <!-- fragment_access_history.xml -->
+    <string name="access_history_empty_title">Sin registros de acceso</string>
+    <string name="access_history_empty_desc">Los accesos usando tus códigos QR aparecerán aquí.</string>
+    <string name="access_history_updating">Buscando nuevos registros\u2026</string>
+
+    <!-- Content descriptions for images -->
+    <string name="cd_access_create_icon">Icono de creación de acceso</string>
+    <string name="cd_qr_code">Código QR de acceso</string>
+    <string name="cd_notice_icon">Icono de estado del código</string>
+    <string name="cd_uses_info">Información sobre límite de usos</string>
+    <string name="cd_dates_info">Información sobre rango de fechas</string>
+    <string name="cd_days_info">Información sobre días específicos</string>
+    <string name="cd_hours_info">Información sobre horario de acceso</string>
+    <string name="cd_error_banner_icon">Icono de error</string>
+    <string name="cd_success_banner_icon">Icono de éxito</string>
+    <string name="cd_hero_icon">Icono del tipo de acceso</string>
+    <string name="cd_timestamp_icon">Icono de fecha</string>
+    <string name="cd_access_type_icon">Icono de tipo de acceso</string>
+    <string name="cd_device_icon">Icono de dispositivo</string>
+    <string name="cd_message_icon">Icono de mensaje</string>
+    <string name="cd_code_guest_icon">Icono de invitado del código</string>
+    <string name="cd_code_type_icon">Icono de tipo de código</string>
+    <string name="cd_access_history_empty_icon">Sin registros</string>
 </resources>

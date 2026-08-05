@@ -3,35 +3,36 @@ package com.mexadev.aura.ui.accesses
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.mexadev.aura.R
 import com.mexadev.aura.core.network.ApiClient
-import com.mexadev.aura.core.preferences.PreferencesManager
 import com.mexadev.aura.data.model.AccessCode
 import com.mexadev.aura.data.model.AccessCodeCreateRequest
 import com.mexadev.aura.data.model.AccessCodeUpdateRequest
+import com.mexadev.aura.data.model.evaluateValidity
 import com.mexadev.aura.databinding.ActivityAccessDetailBinding
 import com.mexadev.aura.ui.common.ConfirmBottomSheetFragment
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
+import java.util.Locale
 
 class AccessDetailActivity : AppCompatActivity() {
 
@@ -122,7 +123,7 @@ class AccessDetailActivity : AppCompatActivity() {
             fetchAccessCode()
         } else {
             // New Code
-            binding.tvToolbarTitle.text = "Nuevo Código QR"
+            binding.tvToolbarTitle.setText(R.string.access_detail_title_new)
             binding.tvQrStatus.visibility = View.GONE
             binding.ivQrCode.setImageResource(R.drawable.ic_lock)
             binding.ivQrCode.setColorFilter(getColor(R.color.aura_text_tertiary))
@@ -256,6 +257,7 @@ class AccessDetailActivity : AppCompatActivity() {
                     }
                     android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
                         v.animate().scaleX(1f).scaleY(1f).setDuration(300).setInterpolator(android.view.animation.OvershootInterpolator(2f)).start()
+                        v.performClick()
                     }
                 }
                 false
@@ -317,18 +319,18 @@ class AccessDetailActivity : AppCompatActivity() {
             binding.fabSave.show()
             binding.layoutActionButtons.visibility = View.GONE
             if (accessId != -1L) {
-                binding.tvToolbarTitle.text = "Editar Código QR"
+                binding.tvToolbarTitle.setText(R.string.access_detail_title_edit)
                 binding.cardQrPreview.visibility = View.VISIBLE
                 binding.layoutCreateBanner.visibility = View.GONE
             } else {
-                binding.tvToolbarTitle.text = "Nuevo Código QR"
+                binding.tvToolbarTitle.setText(R.string.access_detail_title_new)
                 binding.cardQrPreview.visibility = View.GONE
                 binding.layoutCreateBanner.visibility = View.VISIBLE
             }
         } else {
             binding.fabSave.hide()
             binding.layoutActionButtons.visibility = View.VISIBLE
-            binding.tvToolbarTitle.text = "Detalle de Código QR"
+            binding.tvToolbarTitle.setText(R.string.access_detail_title_view)
             binding.cardQrPreview.visibility = View.VISIBLE
             binding.layoutCreateBanner.visibility = View.GONE
         }
@@ -337,14 +339,14 @@ class AccessDetailActivity : AppCompatActivity() {
     private fun showTimePicker(onTimeSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
         TimePickerDialog(this, { _, hour, minute ->
-            onTimeSelected(String.format("%02d:%02d", hour, minute))
+            onTimeSelected(String.format(Locale.ROOT, "%02d:%02d", hour, minute))
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
     }
 
     private fun showDatePicker(onDateSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
         android.app.DatePickerDialog(this, { _, year, month, dayOfMonth ->
-            onDateSelected(String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth))
+            onDateSelected(String.format(Locale.ROOT, "%04d-%02d-%02d", year, month + 1, dayOfMonth))
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
@@ -378,28 +380,45 @@ class AccessDetailActivity : AppCompatActivity() {
         binding.cardQrPreview.alpha = 1f
         binding.btnDelete.visibility = View.VISIBLE
 
+        val validity = access.evaluateValidity()
+
         binding.etGuestName.setText(access.guestName)
         binding.switchIsActive.isChecked = access.isActive
         
         if (access.isActive) {
-            binding.tvQrStatus.text = "Activo"
-            binding.tvQrStatus.setTextColor(getColor(R.color.aura_success))
+            binding.tvQrStatus.setText(R.string.access_status_active)
+            binding.tvQrStatus.setTextColor(ContextCompat.getColor(this, R.color.aura_success))
             val bg = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
                 cornerRadius = 24 * resources.displayMetrics.density
-                setColor(getColor(R.color.aura_success_light))
+                setColor(ContextCompat.getColor(this@AccessDetailActivity, R.color.aura_success_light))
             }
             binding.tvQrStatus.background = bg
         } else {
-            binding.tvQrStatus.text = "Inactivo"
-            binding.tvQrStatus.setTextColor(getColor(R.color.aura_text_tertiary))
+            binding.tvQrStatus.setText(R.string.access_status_inactive)
+            binding.tvQrStatus.setTextColor(ContextCompat.getColor(this, R.color.aura_text_tertiary))
             val bg = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
                 cornerRadius = 24 * resources.displayMetrics.density
-                setColor(getColor(R.color.aura_surface_variant))
+                setColor(ContextCompat.getColor(this@AccessDetailActivity, R.color.aura_surface_variant))
             }
             binding.tvQrStatus.background = bg
         }
+
+        // Render QR validity notice banner
+        binding.tvNoticeText.text = validity.detailMessage
+        binding.ivNoticeIcon.setImageResource(validity.iconRes)
+        binding.ivNoticeIcon.setColorFilter(ContextCompat.getColor(this, validity.badgeTextColorRes))
+
+        val noticeBg = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 12 * resources.displayMetrics.density
+            setColor(ContextCompat.getColor(this@AccessDetailActivity, validity.badgeBgColorRes))
+        }
+        binding.layoutQrNotice.background = noticeBg
+
+        // Dim QR image if not valid right now
+        binding.ivQrCode.alpha = if (validity.isValidNow) 1.0f else 0.4f
 
         if (access.maxUses != null) {
             binding.switchUses.isChecked = true
@@ -417,7 +436,7 @@ class AccessDetailActivity : AppCompatActivity() {
             binding.switchDates.isChecked = false
         }
 
-        if (access.activeDays != null && access.activeDays.isNotEmpty()) {
+        if (!access.activeDays.isNullOrEmpty()) {
             binding.switchDays.isChecked = true
             binding.btnDay1.isChecked = access.activeDays.contains(1)
             binding.btnDay2.isChecked = access.activeDays.contains(2)
@@ -446,17 +465,16 @@ class AccessDetailActivity : AppCompatActivity() {
             val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
             val width = bitMatrix.width
             val height = bitMatrix.height
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            val bitmap = createBitmap(width, height, Bitmap.Config.RGB_565)
             for (x in 0 until width) {
                 for (y in 0 until height) {
-                    bitmap.setPixel(x, y, if (bitMatrix.get(x, y)) android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+                    bitmap[x, y] = if (bitMatrix.get(x, y)) android.graphics.Color.BLACK else android.graphics.Color.WHITE
                 }
             }
             binding.ivQrCode.clearColorFilter()
             binding.ivQrCode.setImageBitmap(bitmap)
             binding.ivQrCode.tag = bitmap // save for sharing
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (_: Exception) {
         }
     }
 
@@ -538,10 +556,10 @@ class AccessDetailActivity : AppCompatActivity() {
                     )
                     val res = ApiClient.apiService.createAccessCode(req)
                     if (res.isSuccessful) {
-                        Toast.makeText(this@AccessDetailActivity, "Código creado con éxito", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AccessDetailActivity, getString(R.string.access_created_success), Toast.LENGTH_SHORT).show()
                         val access = res.body()?.data
                         val intent = Intent().apply {
-                            putExtra("access_data", com.google.gson.Gson().toJson(access))
+                            putExtra("access_data", Gson().toJson(access))
                         }
                         setResult(android.app.Activity.RESULT_OK, intent)
                         finishAfterTransition()
@@ -564,7 +582,7 @@ class AccessDetailActivity : AppCompatActivity() {
                         successBanner.show("Código actualizado")
                         val access = res.body()?.data
                         val intent = Intent().apply {
-                            putExtra("access_data", com.google.gson.Gson().toJson(access))
+                            putExtra("access_data", Gson().toJson(access))
                         }
                         setResult(android.app.Activity.RESULT_OK, intent)
                         if (access != null) {
@@ -577,7 +595,7 @@ class AccessDetailActivity : AppCompatActivity() {
                         handleApiError(res.code(), res.errorBody()?.string())
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 errorBanner.show("Sin conexión a internet o servidor inaccesible.")
             } finally {
                 setLoading(false)
@@ -596,7 +614,7 @@ class AccessDetailActivity : AppCompatActivity() {
                 } else {
                     handleApiError(res.code(), res.errorBody()?.string())
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 errorBanner.show("Sin conexión a internet o servidor inaccesible.")
             } finally {
                 setLoading(false)
@@ -612,8 +630,8 @@ class AccessDetailActivity : AppCompatActivity() {
             binding.fabSave.isEnabled = false
             binding.progressFab.visibility = View.VISIBLE
         } else {
-            binding.fabSave.text = "Guardar"
-            binding.fabSave.setIconResource(com.mexadev.aura.R.drawable.ic_check)
+            binding.fabSave.setText(R.string.access_detail_btn_save)
+            binding.fabSave.setIconResource(R.drawable.ic_check)
             binding.fabSave.isEnabled = true
             binding.progressFab.visibility = View.GONE
         }
@@ -634,7 +652,7 @@ class AccessDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleApiError(code: Int, errorBody: String?) {
+    private fun handleApiError(code: Int, @Suppress("UNUSED_PARAMETER") errorBody: String?) {
         val message = when (code) {
             401 -> "Sesión expirada"
             403 -> "Sin permiso"

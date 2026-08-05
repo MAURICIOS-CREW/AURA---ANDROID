@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class AuraFirebaseMessagingService : FirebaseMessagingService() {
 
-    @Deprecated("Deprecated by Firebase, but still required for background token updates")
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         val sessionManager = SessionManager(applicationContext)
@@ -145,7 +145,7 @@ class AuraFirebaseMessagingService : FirebaseMessagingService() {
             wakeUpScreen()
         }
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val channel = NotificationChannel(importance.channelId, importance.channelName, importance.osImportance).apply {
             description = "Notificaciones de nivel: ${importance.key}"
@@ -166,7 +166,7 @@ class AuraFirebaseMessagingService : FirebaseMessagingService() {
     @Suppress("DEPRECATION")
     private fun wakeUpScreen() {
         try {
-            val powerManager = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            val powerManager = getSystemService(POWER_SERVICE) as android.os.PowerManager
             val wakeLock = powerManager.newWakeLock(
                 android.os.PowerManager.SCREEN_DIM_WAKE_LOCK or android.os.PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "Aura::SecurityAlertWakeLock"

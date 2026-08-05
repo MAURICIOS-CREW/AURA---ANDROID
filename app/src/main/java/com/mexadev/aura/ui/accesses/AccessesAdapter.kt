@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mexadev.aura.R
 import com.mexadev.aura.data.model.AccessCode
+import com.mexadev.aura.data.model.evaluateValidity
 import com.mexadev.aura.databinding.ItemAccessBinding
 
 class AccessesAdapter(
@@ -23,10 +24,13 @@ class AccessesAdapter(
     private var skeletonCount = 0
 
     fun updateData(newItems: List<AccessCode>) {
+        val oldCount = itemCount
         this.skeletonCount = 0
         this.items.clear()
         this.items.addAll(newItems)
-        notifyDataSetChanged()
+        val newCount = itemCount
+        if (oldCount > 0) notifyItemRangeRemoved(0, oldCount)
+        if (newCount > 0) notifyItemRangeInserted(0, newCount)
     }
 
     fun updateItem(index: Int, item: AccessCode) {
@@ -42,9 +46,21 @@ class AccessesAdapter(
     }
 
     fun showSkeletons(count: Int) {
+        val oldCount = itemCount
         this.items.clear()
         this.skeletonCount = count
-        notifyDataSetChanged()
+        val newCount = itemCount
+        when {
+            newCount > oldCount -> {
+                notifyItemRangeChanged(0, oldCount)
+                notifyItemRangeInserted(oldCount, newCount - oldCount)
+            }
+            newCount < oldCount -> {
+                notifyItemRangeChanged(0, newCount)
+                notifyItemRangeRemoved(newCount, oldCount - newCount)
+            }
+            else -> notifyItemRangeChanged(0, newCount)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -87,28 +103,32 @@ class AccessesAdapter(
             binding.tvUsesCount.text = usesText
 
             val context = binding.root.context
-            
-            if (accessCode.isActive) {
-                binding.tvStatus.text = "Activo"
-                binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_success))
-                val bg = GradientDrawable().apply {
+            val validity = accessCode.evaluateValidity()
+
+            fun createBadgeBg(colorRes: Int): GradientDrawable {
+                return GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 24 * context.resources.displayMetrics.density
-                    setColor(ContextCompat.getColor(context, R.color.aura_success_light))
+                    setColor(ContextCompat.getColor(context, colorRes))
                 }
-                binding.tvStatus.background = bg
+            }
+
+            if (accessCode.isActive) {
+                binding.tvStatus.setText(R.string.access_status_active)
+                binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_success))
+                binding.tvStatus.background = createBadgeBg(R.color.aura_success_light)
                 binding.ivAccessIcon.setColorFilter(ContextCompat.getColor(context, R.color.aura_primary))
             } else {
-                binding.tvStatus.text = "Inactivo"
+                binding.tvStatus.setText(R.string.access_status_inactive)
                 binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_text_tertiary))
-                val bg = GradientDrawable().apply {
-                    shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 24 * context.resources.displayMetrics.density
-                    setColor(ContextCompat.getColor(context, R.color.aura_surface_variant))
-                }
-                binding.tvStatus.background = bg
+                binding.tvStatus.background = createBadgeBg(R.color.aura_surface_variant)
                 binding.ivAccessIcon.setColorFilter(ContextCompat.getColor(context, R.color.aura_text_tertiary))
             }
+
+            binding.tvReasonBadge.text = validity.shortBadgeText
+            binding.tvReasonBadge.setTextColor(ContextCompat.getColor(context, validity.badgeTextColorRes))
+            binding.tvReasonBadge.background = createBadgeBg(validity.badgeBgColorRes)
+            binding.tvReasonBadge.visibility = View.VISIBLE
 
             binding.root.transitionName = "transition_access_${accessCode.id}"
 
