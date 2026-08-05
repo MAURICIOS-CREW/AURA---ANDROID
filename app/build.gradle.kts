@@ -30,8 +30,8 @@ android {
         applicationId = "com.mexadev.aura"
         minSdk = 34
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.5.0-beta"
+        versionCode = 7
+        versionName = "1.6.0-beta"
         buildConfigField("String", "BASE_URL", apiBaseUrl)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

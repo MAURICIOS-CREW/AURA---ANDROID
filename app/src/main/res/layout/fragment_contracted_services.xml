@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_background">
+
+    <!-- Success Banner -->
+    <LinearLayout
+        android:id="@+id/successBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:elevation="100dp"
+        android:background="@color/aura_success"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_check"
+            app:tint="@color/aura_white"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSuccessBannerMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/aura_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="Servicio completado" />
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Standardized Island Filter Component ("Isla de Filtros") -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/islandFilterCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/aura_white"
+                    app:strokeColor="@color/aura_border_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <!-- Main Island Header Row (Always Visible) -->
+                        <LinearLayout
+                            android:id="@+id/layoutIslandHeader"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <!-- Icon Badge -->
+                            <FrameLayout
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_circle_primary_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_filter_list"
+                                    app:tint="@color/aura_primary"
+                                    tools:ignore="ContentDescription" />
+                            </FrameLayout>
+
+                            <!-- Title & Subtitle Badge -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvIslandTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/services_filter_title"
+                                    android:textColor="@color/aura_text_primary"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvIslandSubtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/services_filter_active_only"
+                                    android:textColor="@color/aura_text_secondary"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                            <!-- Toggle Switch Container for Finished Services -->
+                            <LinearLayout
+                                android:id="@+id/btnToggleFinished"
+                                android:layout_width="wrap_content"
+                                android:layout_height="34dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_filter_chip_inactive"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvToggleFinishedLabel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/services_filter_include_finished"
+                                    android:textColor="@color/aura_text_secondary"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.switchmaterial.SwitchMaterial
+                                    android:id="@+id/switchIncludeFinished"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    app:useMaterialThemeColors="true" />
+                            </LinearLayout>
+
+                            <!-- Expand / Collapse Drawer Button -->
+                            <ImageButton
+                                android:id="@+id/btnExpandFilters"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_back_button"
+                                android:contentDescription="@string/services_filter_title"
+                                android:src="@drawable/ic_chevron_down"
+                                app:tint="@color/aura_text_secondary" />
+                        </LinearLayout>
+
+                        <!-- Expandable Modular Filter Drawer (Extensible for Search, Ordering, Status, Dates) -->
+                        <LinearLayout
+                            android:id="@+id/layoutExpandableFilters"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <!-- Subtle Separator -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginVertical="10dp"
+                                android:background="@color/aura_divider" />
+
+                            <!-- Search Input Field -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_filter_search"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="10dp">
+
+                                <ImageView
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/ic_search"
+                                    app:tint="@color/aura_text_tertiary"
+                                    tools:ignore="ContentDescription" />
+
+                                <EditText
+                                    android:id="@+id/etFilterSearch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@null"
+                                    android:hint="@string/services_filter_search_hint"
+                                    android:imeOptions="actionSearch"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:textColor="@color/aura_text_primary"
+                                    android:textColorHint="@color/aura_text_tertiary"
+                                    android:textSize="12sp"
+                                    tools:ignore="Autofill" />
+
+                                <ImageButton
+                                    android:id="@+id/btnClearSearch"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:contentDescription="@string/services_filter_clear"
+                                    android:src="@drawable/ic_close"
+                                    android:visibility="gone"
+                                    app:tint="@color/aura_text_tertiary"
+                                    tools:visibility="visible" />
+                            </LinearLayout>
+
+                            <!-- Status Filter Title -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:text="@string/services_filter_status_label"
+                                android:textColor="@color/aura_text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <!-- Status Chips Horizontal Scroll -->
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:scrollbars="none"
+                                tools:ignore="TooDeepLayout">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <!-- Chip: Solo Activos -->
+                                    <TextView
+                                        android:id="@+id/chipFilterActive"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="28dp"
+                                        android:layout_marginEnd="6dp"
+                                        android:background="@drawable/bg_filter_chip_active"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="12dp"
+                                        android:text="@string/services_filter_active_only"
+                                        android:textColor="@color/aura_white"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold" />
+
+                                    <!-- Chip: Programados -->
+                                    <TextView
+                                        android:id="@+id/chipFilterScheduled"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="28dp"
+                                        android:layout_marginEnd="6dp"
+                                        android:background="@drawable/bg_filter_chip_inactive"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="12dp"
+                                        android:text="@string/services_status_scheduled"
+                                        android:textColor="@color/aura_text_secondary"
+                                        android:textSize="11sp" />
+
+                                    <!-- Chip: Finalizados (Completados / Cancelados) -->
+                                    <TextView
+                                        android:id="@+id/chipFilterFinished"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="28dp"
+                                        android:layout_marginEnd="6dp"
+                                        android:background="@drawable/bg_filter_chip_inactive"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="12dp"
+                                        android:text="@string/services_filter_finished_only"
+                                        android:textColor="@color/aura_text_secondary"
+                                        android:textSize="11sp" />
+
+                                    <!-- Chip: Todos -->
+                                    <TextView
+                                        android:id="@+id/chipFilterAll"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="28dp"
+                                        android:background="@drawable/bg_filter_chip_inactive"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="12dp"
+                                        android:text="@string/services_filter_all"
+                                        android:textColor="@color/aura_text_secondary"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+                            </HorizontalScrollView>
+
+                            <!-- Sorting & Re-ordering Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_sort"
+                                    app:tint="@color/aura_primary"
+                                    tools:ignore="ContentDescription" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:text="@string/services_filter_sort_label"
+                                    android:textColor="@color/aura_text_secondary"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/btnSortToggle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="26dp"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@drawable/bg_filter_chip_inactive"
+                                    android:gravity="center"
+                                    android:paddingHorizontal="10dp"
+                                    android:text="@string/services_filter_sort_recent"
+                                    android:textColor="@color/aura_primary"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Dynamic List Skeleton Container -->
+                <LinearLayout
+                    android:id="@+id/layoutCenterLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingVertical="8dp"
+                    android:visibility="visible">
+                    <include layout="@layout/item_contracted_service_skeleton" />
+                    <include layout="@layout/item_contracted_service_skeleton" />
+                    <include layout="@layout/item_contracted_service_skeleton" />
+                </LinearLayout>
+
+                <!-- RecyclerView for Contracted Services List -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvContractedServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone" />
+
+                <!-- Empty State View -->
+                <LinearLayout
+                    android:id="@+id/layoutEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="32dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivEmptyIcon"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_service"
+                        app:tint="@color/aura_text_tertiary"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/services_empty_contracted_title"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/services_empty_contracted_desc"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="13sp" />
+
+                    <!-- Quick Action Button to Toggle Showing Finished items when empty active list -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEmptyShowFinished"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/services_filter_empty_active_btn"
+                        android:textColor="@color/aura_primary"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        app:strokeColor="@color/aura_primary"
+                        app:strokeWidth="1dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>

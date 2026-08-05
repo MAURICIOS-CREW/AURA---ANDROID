@@ -98,4 +98,24 @@ interface ApiService {
         @Query("page") page: Int = 1,
         @Query("per_page") perPage: Int = 20
     ): Response<com.mexadev.aura.data.model.AccessLogPagedResponse>
+
+    // ── Services ──────────────────────────────────────────────────────
+    @GET("api/mobile/services")
+    suspend fun getServices(): Response<com.mexadev.aura.data.model.ServiceListResponse>
+
+    @Suppress("unused")
+    @GET("api/mobile/services/{id}")
+    suspend fun getServiceDetail(@Path("id") id: Long): Response<com.mexadev.aura.data.model.SingleServiceResponse>
+
+    @POST("api/mobile/services/{id}/contract")
+    suspend fun contractService(
+        @Path("id") id: Long,
+        @Body request: com.mexadev.aura.data.model.ServiceContractRequest
+    ): Response<com.mexadev.aura.data.model.ContractServiceResponse>
+
+    @GET("api/mobile/contracted-services")
+    suspend fun getContractedServices(): Response<com.mexadev.aura.data.model.ContractedServiceListResponse>
+
+    @PATCH("api/mobile/contracted-services/{id}/complete")
+    suspend fun completeContractedService(@Path("id") id: Long): Response<com.mexadev.aura.data.model.CompleteServiceResponse>
 }

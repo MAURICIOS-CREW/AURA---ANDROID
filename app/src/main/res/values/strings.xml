@@ -73,7 +73,7 @@
     <string name="dashboard_vehiculos">Vehículos</string>
     <string name="dashboard_incidencias">Incidencias</string>
     <string name="dashboard_pagos">Pagos</string>
-    <string name="dashboard_reservas">Reservas</string>
+    <string name="dashboard_servicios">Servicios</string>
     <string name="dashboard_documentos">Documentos</string>
     <string name="dashboard_comunidad">Comunidad</string>
     <string name="dashboard_encuestas">Encuestas</string>
@@ -250,4 +250,113 @@
     <string name="cd_code_guest_icon">Icono de invitado del código</string>
     <string name="cd_code_type_icon">Icono de tipo de código</string>
     <string name="cd_access_history_empty_icon">Sin registros</string>
+
+    <!-- Services -->
+    <string name="services_title">Servicios</string>
+    <string name="services_tab_available">Disponibles</string>
+    <string name="services_tab_mine">Mis Servicios</string>
+    <string name="services_price_format">%1$s MXN</string>
+    <string name="services_price_amount_format">$%1$s MXN</string>
+    <string name="services_price_amount_short">$%1$s</string>
+    <string name="services_btn_contract">Contratar</string>
+    <string name="services_btn_complete">Marcar como Finalizado</string>
+    <string name="services_status_pending">Pendiente Horario</string>
+    <string name="services_status_scheduled">Programado</string>
+    <string name="services_status_completed">Finalizado</string>
+    <string name="services_status_cancelled">Cancelado</string>
+    <string name="services_suggested_schedule">Sugerido: %1$s • %2$s - %3$s</string>
+    <string name="services_confirmed_schedule">Cita confirmada: %1$s</string>
+    <string name="services_active_access_code">Código de acceso activo (%1$s)</string>
+    <string name="services_empty_available_title">No hay servicios disponibles</string>
+    <string name="services_empty_available_desc">La administración publicará pronto los servicios disponibles para tu condominio.</string>
+    <string name="services_empty_contracted_title">Sin servicios contratados</string>
+    <string name="services_empty_contracted_desc">Aquí aparecerán las contrataciones que realices desde el catálogo.</string>
+    <string name="services_contract_success_banner">¡Servicio contratado exitosamente!</string>
+    <string name="services_complete_success">El servicio ha sido marcado como finalizado.</string>
+    <string name="services_error_fetch">Error al obtener servicios</string>
+    <string name="services_error_no_connection">Sin conexión a internet</string>
+    <string name="services_error_contract_failed">No se pudo contratar el servicio. Intenta más tarde.</string>
+
+    <!-- Filter Island Strings -->
+    <string name="services_filter_title">Filtros</string>
+    <string name="services_filter_active_only">Solo activos</string>
+    <string name="services_filter_include_finished">Incluir finalizados</string>
+    <string name="services_filter_finished_only">Finalizados</string>
+    <string name="services_filter_all">Todos</string>
+    <string name="services_filter_search_hint">Buscar servicio contratado&#8230;</string>
+    <string name="services_filter_sort_recent">Más recientes</string>
+    <string name="services_filter_sort_oldest">Más antiguos</string>
+    <string name="services_filter_empty_active_title">Sin servicios activos</string>
+    <string name="services_filter_empty_active_desc">Tus servicios finalizados (completados o cancelados) están ocultos por defecto.</string>
+    <string name="services_filter_empty_active_btn">Mostrar servicios finalizados</string>
+    <string name="services_filter_count_active">%1$d activo(s)</string>
+    <string name="services_filter_count_total">%1$d servicio(s)</string>
+    <string name="services_filter_clear">Limpiar filtros</string>
+
+    <!-- Service Booking Sheet -->
+    <string name="services_booking_schedule_title">Agendar Visita</string>
+    <string name="services_booking_selected_date">Fecha: %1$s</string>
+    <string name="services_booking_time_start">Hora Inicio</string>
+    <string name="services_booking_time_end">Hora Fin</string>
+    <string name="services_booking_notes_label">Instrucciones para el prestador (Opcional)</string>
+    <string name="services_booking_notes_hint">Ej. Tocar timbre principal o dejar aviso</string>
+    <string name="services_booking_btn_continue">Continuar a Método de Pago</string>
+    <string name="services_booking_payment_title">Método de Pago</string>
+    <string name="services_booking_tab_stripe">Tarjeta (Stripe)</string>
+    <string name="services_booking_tab_transfer">Transferencia</string>
+    <string name="services_booking_card_number">Número de Tarjeta</string>
+    <string name="services_booking_card_expiry">Vencimiento</string>
+    <string name="services_booking_card_cvc">CVC / CWW</string>
+    <string name="services_booking_card_holder">Nombre del Titular</string>
+    <string name="services_booking_bank_info_title">Datos de Transferencia Bancaria</string>
+    <string name="services_booking_bank_name">Banco: BBVA México</string>
+    <string name="services_booking_bank_beneficiary">Beneficiario: Coto Residencial AURA</string>
+    <string name="services_booking_bank_clabe">CLABE: %1$s</string>
+    <string name="services_booking_btn_copy">Copiar</string>
+    <string name="services_booking_clabe_copied">CLABE copiada al portapapeles</string>
+    <string name="services_booking_receipt_label">Comprobante de Pago</string>
+    <string name="services_booking_btn_upload_receipt">Adjuntar Comprobante (Opcional)</string>
+    <string name="services_booking_receipt_uploaded">Comprobante adjuntado</string>
+    <string name="services_booking_btn_confirm">Confirmar y Contratar Servicio</string>
+    <string name="services_booking_success_title">¡Servicio Contratado!</string>
+    <string name="services_booking_summary_payment">Método de Pago: %1$s</string>
+    <string name="services_booking_summary_status">Estado: %1$s</string>
+    <string name="services_booking_payment_stripe_name">Tarjeta de Crédito (Stripe)</string>
+    <string name="services_booking_payment_transfer_name">Transferencia Bancaria</string>
+    <string name="services_booking_btn_finish">Entendido y Ver Mis Servicios</string>
+    <string name="services_booking_invalid_time">La hora fin debe ser posterior a la hora de inicio.</string>
+
+    <!-- Contracted Service Detail -->
+    <string name="services_contracted_detail_title">Detalle de Contratación</string>
+    <string name="services_detail_provider_label">Prestador del Servicio</string>
+    <string name="services_detail_schedule_label">Horario de Atención</string>
+    <string name="services_detail_status_label">Estado de la Solicitud</string>
+    <string name="services_detail_notes_label">Instrucciones Especiales</string>
+    <string name="services_detail_price_label">Monto del Servicio</string>
+    <string name="services_detail_payment_method_label">Método de Pago</string>
+    <string name="services_detail_btn_completed">Servicio Finalizado</string>
+    <string name="services_detail_complete_confirm_title">Finalizar Servicio</string>
+    <string name="services_detail_complete_confirm_msg">¿Confirmas que el servicio fue brindado a tu entera satisfacción?</string>
+    <string name="services_detail_access_code_header">Código de Acceso Activo</string>
+    <string name="services_detail_access_code_desc">Este código le permite el ingreso al prestador de servicio durante el horario acordado.</string>
+
+    <string name="aura_logo_content_desc">AURA Logo</string>
+    <string name="home_amount_placeholder">$1,250.00 MXN</string>
+    <string name="home_next_payment_date_placeholder">15 de junio, 2024</string>
+    <string name="services_detail_confirmed_title">Cita Confirmada</string>
+    <string name="services_detail_confirmed_subtitle">Fecha y hora agendadas por administración</string>
+    <string name="services_detail_suggested_schedule_title">Horario Sugerido</string>
+    <string name="services_detail_cost_payment_title">Costo y Pago</string>
+    <string name="services_detail_access_code_active">Código de Acceso • Activo</string>
+    <string name="services_detail_qr_info">QR de referencia asignado para validación en caseta</string>
+    <string name="services_detail_description_title">Descripción del Servicio</string>
+    <string name="services_booking_card_placeholder">4000 1234 5678 9010</string>
+    <string name="services_booking_exp_placeholder">MM/AA</string>
+    <string name="services_booking_cvv_placeholder">123</string>
+    <string name="services_booking_cardholder_hint">Nombre como aparece en la tarjeta</string>
+    <string name="services_booking_clabe_info">CLABE: 012180001234567890</string>
+    <string name="services_filter_status_label">Filtrar por estado</string>
+    <string name="services_filter_sort_label">Ordenamiento:</string>
+    <string name="services_detail_schedule_range">%1$s\n%2$s - %3$s</string>
+    <string name="services_detail_schedule_single">%1$s\n%2$s</string>
 </resources>

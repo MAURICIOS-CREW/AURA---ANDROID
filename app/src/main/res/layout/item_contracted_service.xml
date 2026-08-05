@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mexadev.aura.ui.common.AuraCardBtn
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardContractedService"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/aura_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icon Container -->
+        <FrameLayout
+            android:id="@+id/flIconContainer"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_icon_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivServiceIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_service"
+                app:tint="@color/aura_primary"
+                tools:ignore="ContentDescription" />
+        </FrameLayout>
+
+        <!-- Status Badge -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pill_warning"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/aura_warning"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/flIconContainer"
+            tools:text="Pendiente" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/aura_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvStatus"
+            app:layout_constraintStart_toEndOf="@id/flIconContainer"
+            app:layout_constraintTop_toTopOf="@id/flIconContainer"
+            tools:text="Jardinería Profesional con Mantenimiento de Áreas Verdes Completo" />
+
+        <!-- Date and Time Window -->
+        <TextView
+            android:id="@+id/tvDateTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/aura_text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/flIconContainer"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="Sugerido: 05 Ago, 2026 • 10:00 - 14:00" />
+
+        <!-- Barrier for top section to dynamically position elements below long titles/dates -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="flIconContainer,tvDateTime" />
+
+        <!-- Exact Scheduled Time (if assigned) -->
+        <TextView
+            android:id="@+id/tvExactScheduled"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_pill_info"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:textColor="@color/aura_primary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrierHeader"
+            tools:text="Cita confirmada: 05 Ago, 11:30 AM"
+            tools:visibility="visible" />
+
+        <!-- Access Code Chip (if generated) -->
+        <LinearLayout
+            android:id="@+id/layoutAccessCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_rounded_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvExactScheduled"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_door_access"
+                app:tint="@color/aura_primary"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvAccessCodeInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Código de acceso activo: 8F92A10C" />
+        </LinearLayout>
+
+        <!-- Complete Action Button -->
+        <FrameLayout
+            android:id="@+id/btnCompleteContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="44dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutAccessCode">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="44dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="@string/services_btn_complete"
+                android:textAllCaps="false"
+                android:textColor="@color/aura_white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/pbCompleteLoading"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/aura_white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>
+

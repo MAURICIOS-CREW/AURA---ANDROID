@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_background"
+    android:fitsSystemWindows="false">
+
+    <!-- Sticky System Standard Toolbar Header -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_white"
+        app:elevation="0dp"
+        app:liftOnScroll="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/aura_white"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_back_button"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/cd_back"
+                app:tint="@color/aura_text_secondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/services_contracted_detail_title"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintEnd_toStartOf="@id/tvToolbarStatus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvToolbarStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/bg_pill_info"
+                tools:text="Programado"
+                tools:textColor="@color/aura_primary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/aura_divider" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="40dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp">
+
+            <!-- 1. Hero Service Header Card -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardHero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardClickAnimationEnabled="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@color/aura_white">
+
+                    <!-- Header Row: Shared Icon + (Title ON TOP, Description/Category BELOW) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical">
+
+                        <FrameLayout
+                            android:id="@+id/flIconContainer"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_icon_container">
+
+                            <ImageView
+                                android:id="@+id/ivServiceIcon"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_service"
+                                app:tint="@color/aura_primary"
+                                tools:ignore="ContentDescription" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical">
+
+                            <!-- TITLE ON TOP -->
+                            <TextView
+                                android:id="@+id/tvTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/aura_text_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:lineSpacingMultiplier="1.1"
+                                tools:text="Jardinería Profesional" />
+
+                            <!-- DESCRIPTION / CATEGORY BELOW -->
+                            <TextView
+                                android:id="@+id/tvCategory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/aura_text_secondary"
+                                android:textSize="13sp"
+                                tools:text="Mantenimiento integral de áreas verdes" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="@color/aura_divider" />
+
+                    <!-- Status Bar inside Hero Card -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/services_detail_status_label"
+                            android:textColor="@color/aura_text_secondary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="5dp"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_pill_warning"
+                            android:textColor="@color/aura_warning"
+                            tools:text="Pendiente Horario" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <!-- 2. Distinct Card for Confirmed Appointment (Cita Confirmada) -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardExactScheduled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:cardClickAnimationEnabled="false"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/aura_primary_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check"
+                            app:tint="@color/aura_primary"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/services_detail_confirmed_title"
+                            android:textColor="@color/aura_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textAllCaps="true"
+                            android:letterSpacing="0.05" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvExactScheduled"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="Miércoles 05 de Agosto, 2026 • 11:30 AM" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/services_detail_confirmed_subtitle"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <!-- 3. Two-Column Info Row (Horario Sugerido & Costo / Pago) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false">
+
+                <!-- Left Column Card: Horario Sugerido -->
+                <com.mexadev.aura.ui.common.AuraCardBtn
+                    android:id="@+id/cardSchedule"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardClickAnimationEnabled="false">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@color/aura_white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_clock"
+                                app:tint="@color/aura_primary"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/services_detail_suggested_schedule_title"
+                                android:textColor="@color/aura_text_secondary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Suggested date text -->
+                        <TextView
+                            android:id="@+id/tvDateTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/aura_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:lineSpacingMultiplier="1.2"
+                            tools:text="05 de Agosto, 2026\n10:00 AM - 02:00 PM" />
+
+                    </LinearLayout>
+
+                </com.mexadev.aura.ui.common.AuraCardBtn>
+
+                <!-- Right Column Card: Costo y Método de Pago -->
+                <com.mexadev.aura.ui.common.AuraCardBtn
+                    android:id="@+id/cardPayment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardClickAnimationEnabled="false">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@color/aura_white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_service"
+                                app:tint="@color/aura_primary"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/services_detail_cost_payment_title"
+                                android:textColor="@color/aura_text_secondary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/aura_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:text="$250.00 MXN" />
+
+                        <TextView
+                            android:id="@+id/tvPaymentMethod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/aura_text_secondary"
+                            android:textSize="12sp"
+                            tools:text="Tarjeta de Crédito" />
+
+                    </LinearLayout>
+
+                </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            </LinearLayout>
+
+            <!-- 3. Active Access Code Card (if generated) -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardAccessCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:cardClickAnimationEnabled="false"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/aura_white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_door_access"
+                            app:tint="@color/aura_primary"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/services_detail_access_code_header"
+                            android:textColor="@color/aura_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- QR Reference Image -->
+                    <ImageView
+                        android:id="@+id/ivAccessQrCode"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_rounded_gray"
+                        android:padding="8dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tvAccessCodeInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="Código de Acceso • Uso Administrativo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/services_detail_qr_info"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="12sp"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <!-- 4. Notes Card (if present) -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:cardClickAnimationEnabled="false"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/aura_white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/services_detail_notes_label"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.2"
+                        tools:text="Tocar el timbre de la casa 4B al llegar." />
+
+                </LinearLayout>
+
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <!-- 5. Description Card (if present) -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:visibility="gone"
+                app:cardClickAnimationEnabled="false"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/aura_white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/services_detail_description_title"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.2"
+                        tools:text="Incluye corte de césped, poda de arbustos y limpieza de residuos verdes." />
+
+                </LinearLayout>
+
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <!-- 6. Complete Action Button Container -->
+            <FrameLayout
+                android:id="@+id/btnCompleteContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:background="@drawable/bg_btn_primary"
+                    android:text="@string/services_btn_complete"
+                    android:textAllCaps="false"
+                    android:textColor="@color/aura_white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/pbCompleteLoading"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/aura_white"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Error Banner Overlay (top) -->
+    <FrameLayout
+        android:id="@+id/errorBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_error"
+        android:elevation="12dp"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvErrorBannerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aura_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="Error al realizar la acción" />
+    </FrameLayout>
+
+    <!-- Success Banner Overlay (top) -->
+    <FrameLayout
+        android:id="@+id/successBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_success"
+        android:elevation="12dp"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvSuccessBannerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aura_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="Servicio finalizado exitosamente" />
+    </FrameLayout>
+
+    <!-- Skeleton Loading Overlay -->
+    <include
+        android:id="@+id/layoutDetailSkeleton"
+        layout="@layout/layout_detail_skeleton"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

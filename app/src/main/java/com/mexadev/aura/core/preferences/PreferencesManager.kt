@@ -51,5 +51,15 @@ class PreferencesManager(context: Context) {
     var importanceIncident: String
         get() = prefs.getString("importance_incident", "high") ?: "high"
         set(value) = prefs.edit { putString("importance_incident", value) }
+
+    /** Number of available services for skeleton loading */
+    var availableServicesCount: Int
+        get() = prefs.getInt("available_services_count", 4)
+        set(value) = prefs.edit { putInt("available_services_count", value) }
+
+    /** Number of contracted services for skeleton loading */
+    var contractedServicesCount: Int
+        get() = prefs.getInt("contracted_services_count", 3)
+        set(value) = prefs.edit { putInt("contracted_services_count", value) }
 }
 

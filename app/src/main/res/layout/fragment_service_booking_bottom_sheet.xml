@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_rounded"
+    android:orientation="vertical"
+    android:paddingBottom="24dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_drag_handle" />
+
+    <!-- Error/Notification Banner inside sheet -->
+    <LinearLayout
+        android:id="@+id/sheetBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_error"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/ivSheetBannerIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_info"
+            app:tint="@color/aura_white"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSheetBannerMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textColor="@color/aura_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="Ocurrió un error al procesar el servicio." />
+    </LinearLayout>
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoStart="false">
+
+        <!-- ==================== STEP 1: SERVICE DETAILS & SCHEDULE ==================== -->
+        <LinearLayout
+            android:id="@+id/layoutStep1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="12dp">
+
+            <!-- Service Header Badge -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:id="@+id/flServiceIcon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_icon_container"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivStep1Icon"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_service"
+                        app:tint="@color/aura_primary"
+                        tools:ignore="ContentDescription" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStep1Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/tvStep1Price"
+                    app:layout_constraintStart_toEndOf="@id/flServiceIcon"
+                    app:layout_constraintTop_toTopOf="@id/flServiceIcon"
+                    tools:text="Jardinería Profesional" />
+
+                <TextView
+                    android:id="@+id/tvStep1Category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/tvStep1Price"
+                    app:layout_constraintStart_toEndOf="@id/flServiceIcon"
+                    app:layout_constraintTop_toBottomOf="@id/tvStep1Title"
+                    tools:text="Servicios del Coto" />
+
+                <TextView
+                    android:id="@+id/tvStep1Price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_info"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textColor="@color/aura_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/flServiceIcon"
+                    tools:text="$250.00 MXN" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvStep1Desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="13sp"
+                tools:text="Mantenimiento general y corte de césped. Incluye desmalezado y limpieza de restos." />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/aura_divider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/services_booking_schedule_title"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Date Selector Pill -->
+            <LinearLayout
+                android:id="@+id/btnSelectDate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/selector_input"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/aura_primary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSelectedDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Fecha Sugerida: 06 Ago, 2026" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/aura_text_secondary"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <!-- Time Window Selectors (From & To) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <!-- From Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/services_booking_time_start"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <Spinner
+                        android:id="@+id/spTimeFrom"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:background="@drawable/selector_input"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <!-- To Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/services_booking_time_end"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <Spinner
+                        android:id="@+id/spTimeTo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:background="@drawable/selector_input"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Notes Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp"
+                android:text="@string/services_booking_notes_label"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etNotes"
+                style="@style/Aura.Input"
+                android:hint="@string/services_booking_notes_hint"
+                android:inputType="textCapSentences"
+                android:imeOptions="actionDone"
+                tools:ignore="Autofill" />
+
+            <!-- Next Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStep1Next"
+                style="@style/Aura.Button.Filled"
+                android:layout_marginTop="24dp"
+                android:text="@string/services_booking_btn_continue" />
+        </LinearLayout>
+
+        <!-- ==================== STEP 2: PAYMENT METHOD & CONFIRMATION ==================== -->
+        <LinearLayout
+            android:id="@+id/layoutStep2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="12dp">
+
+            <!-- Step 2 Header with Back Button -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnStep2Back"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_back_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/aura_text_primary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/services_booking_payment_title"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btnStep2Back"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvStep2Amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_info"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/aura_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="$250.00" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Payment Switcher (Stripe / Transfer) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_segmented_control"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <TextView
+                    android:id="@+id/tabStripe"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_tab_active"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/services_booking_tab_stripe"
+                    android:textColor="@color/aura_white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabTransfer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/services_booking_tab_transfer"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Stripe Card Section -->
+            <LinearLayout
+                android:id="@+id/layoutStripeForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/services_booking_card_number"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <EditText
+                    android:id="@+id/etCardNumber"
+                    style="@style/Aura.Input"
+                    android:hint="@string/services_booking_card_placeholder"
+                    android:inputType="number"
+                    android:maxLength="19"
+                    android:imeOptions="actionNext"
+                    tools:ignore="Autofill" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/services_booking_card_expiry"
+                            android:textColor="@color/aura_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="6dp" />
+
+                        <EditText
+                            android:id="@+id/etCardExpiry"
+                            style="@style/Aura.Input"
+                            android:hint="@string/services_booking_exp_placeholder"
+                            android:inputType="number"
+                            android:maxLength="5"
+                            android:imeOptions="actionNext"
+                            tools:ignore="Autofill" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/services_booking_card_cvc"
+                            android:textColor="@color/aura_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="6dp" />
+
+                        <EditText
+                            android:id="@+id/etCardCvc"
+                            style="@style/Aura.Input"
+                            android:hint="@string/services_booking_cvv_placeholder"
+                            android:inputType="numberPassword"
+                            android:maxLength="4"
+                            android:imeOptions="actionNext"
+                            tools:ignore="Autofill" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/services_booking_card_holder"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etCardHolder"
+                    style="@style/Aura.Input"
+                    android:hint="@string/services_booking_cardholder_hint"
+                    android:inputType="textPersonName|textCapWords"
+                    android:imeOptions="actionDone"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
+
+            <!-- Bank Transfer Section -->
+            <LinearLayout
+                android:id="@+id/layoutTransferForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Bank Info Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:elevation="1dp"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/services_booking_bank_info_title"
+                        android:textColor="@color/aura_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <!-- Bank Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/services_booking_bank_name"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/services_booking_bank_beneficiary"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp" />
+
+                    <!-- CLABE Row + Copy Button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvClabe"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/services_booking_clabe_info"
+                            android:textColor="@color/aura_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/btnCopyClabe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_pill_info"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/ic_copy"
+                                app:tint="@color/aura_primary"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="@string/services_booking_btn_copy"
+                                android:textColor="@color/aura_primary"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Receipt Upload Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/services_booking_receipt_label"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/btnUploadReceipt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/selector_input"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp">
+
+                    <ImageView
+                        android:id="@+id/ivUploadIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_upload"
+                        app:tint="@color/aura_primary"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tvUploadStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/services_booking_btn_upload_receipt"
+                        android:textColor="@color/aura_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Confirm / Pay Action Button -->
+            <FrameLayout
+                android:id="@+id/btnConfirmContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnConfirmContract"
+                    style="@style/Aura.Button.Filled"
+                    android:text="@string/services_booking_btn_confirm" />
+
+                <ProgressBar
+                    android:id="@+id/pbContractLoading"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/aura_white"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- ==================== STEP 3: SUCCESS CONFIRMATION ==================== -->
+        <LinearLayout
+            android:id="@+id/layoutStep3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="20dp">
+
+            <!-- Check Icon Badge -->
+            <FrameLayout
+                android:id="@+id/flSuccessIcon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_icon_container">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_check"
+                    app:tint="@color/aura_success"
+                    tools:ignore="ContentDescription" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/services_booking_success_title"
+                android:textColor="@color/aura_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStep3Message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textColor="@color/aura_text_secondary"
+                android:textSize="13sp"
+                tools:text="Tu servicio ha sido registrado exitosamente. En espera de asignación de horario exacto por administración." />
+
+            <!-- Summary Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_dashboard_card"
+                android:elevation="1dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvSummaryServiceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/aura_text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="Jardinería Profesional" />
+
+                <TextView
+                    android:id="@+id/tvSummaryDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp"
+                    tools:text="Fecha: 06 Aug 2026 • 10:00 AM - 02:00 PM" />
+
+                <TextView
+                    android:id="@+id/tvSummaryPaymentMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp"
+                    tools:text="Pago: Tarjeta de Crédito (Stripe)" />
+
+                <TextView
+                    android:id="@+id/tvSummaryStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_pill_warning"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/aura_warning"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="Estado: Pendiente Asignación" />
+            </LinearLayout>
+
+            <!-- Done Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStep3Finish"
+                style="@style/Aura.Button.Filled"
+                android:layout_marginTop="24dp"
+                android:text="@string/services_booking_btn_finish" />
+        </LinearLayout>
+    </ViewFlipper>
+</LinearLayout>

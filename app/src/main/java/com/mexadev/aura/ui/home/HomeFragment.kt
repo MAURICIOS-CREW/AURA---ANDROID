@@ -1,31 +1,25 @@
 package com.mexadev.aura.ui.home
 
-import android.annotation.SuppressLint
 import android.animation.ValueAnimator
+import android.content.Context
+import android.content.Intent
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import android.content.Context
-import com.google.android.material.transition.Hold
-import com.mexadev.aura.R
-import com.mexadev.aura.databinding.FragmentHomeBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import android.content.Intent
 import com.mexadev.aura.LoginActivity
+import com.mexadev.aura.R
 import com.mexadev.aura.core.network.ApiClient
+import com.mexadev.aura.databinding.FragmentHomeBinding
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class HomeFragment : Fragment() {
@@ -239,12 +233,12 @@ class HomeFragment : Fragment() {
                     binding.tvResidentialName.text = residenceName
                     
                     binding.tvSaldoValue.visibility = View.VISIBLE
-                    binding.tvSaldoValue.text = "$1,250.00 MXN"
+                    binding.tvSaldoValue.text = getString(R.string.home_amount_placeholder)
                     
                     binding.tvCuotaMantenimiento.visibility = View.VISIBLE
                     
                     binding.tvProximoPagoValue.visibility = View.VISIBLE
-                    binding.tvProximoPagoValue.text = "15 de junio, 2024"
+                    binding.tvProximoPagoValue.text = getString(R.string.home_next_payment_date_placeholder)
                     
                     // Set header user name
                     binding.tvHeaderUserName.text = userName
@@ -290,10 +284,10 @@ class HomeFragment : Fragment() {
                         showErrorOverlay("Error", "Ocurrió un error inesperado (Código: $code).")
                     }
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 if (_binding == null) return@launch
                 showErrorOverlay("Sin Conexión", "No hay conexión al servidor.\nVerifica tu red y vuelve a intentarlo.")
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 if (_binding == null) return@launch
                 showErrorOverlay("Error", "Ha ocurrido un error en la aplicación.")
             } finally {
@@ -339,7 +333,7 @@ class HomeFragment : Fragment() {
         binding.btnVehiculos.setOnClickListener(clickListener)
         binding.btnIncidencias.setOnClickListener(clickListener)
         binding.btnPagos.setOnClickListener(clickListener)
-        binding.btnReservas.setOnClickListener(clickListener)
+        binding.btnServicios.setOnClickListener(clickListener)
         binding.btnDocumentos.setOnClickListener(clickListener)
         binding.btnComunidad.setOnClickListener(clickListener)
         binding.btnEncuestas.setOnClickListener(clickListener)
