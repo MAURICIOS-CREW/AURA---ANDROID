@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mexadev.aura.ui.common.AuraCardBtn xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardDoc"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:isPureWhite="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_white"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ivDocIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_document"
+            android:contentDescription="@null"
+            app:tint="@color/aura_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/tvDocTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Título del Documento"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+
+            <TextView
+                android:id="@+id/tvDocDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Descripción breve del documento y su contenido."
+                android:textSize="14sp"
+                android:textColor="@color/aura_text_secondary"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+        </LinearLayout>
+        
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            android:contentDescription="@null"
+            app:tint="@color/aura_nav_inactive"
+            android:layout_marginStart="8dp"/>
+
+    </LinearLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

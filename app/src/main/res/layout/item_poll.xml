@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mexadev.aura.ui.common.AuraCardBtn xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardPoll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:isPureWhite="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/aura_white"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/tvPollStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/polls_status_active"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_primary"
+                android:background="@drawable/bg_pill_info"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_chart"
+                android:contentDescription="@null"
+                app:tint="@color/aura_text_tertiary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPollQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/polls_default_question"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_text_primary"
+            android:layout_marginBottom="14dp" />
+
+        <!-- Vista cuando no se ha votado -->
+        <LinearLayout
+            android:id="@+id/layoutOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOption1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/polls_default_option1"
+                android:textColor="@color/aura_white"
+                android:background="@drawable/bg_btn_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOption2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/polls_default_option2"
+                android:textColor="@color/aura_white"
+                android:background="@drawable/bg_btn_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"/>
+        </LinearLayout>
+
+        <!-- Vista de Resultados (Gráfica) -->
+        <LinearLayout
+            android:id="@+id/layoutResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <com.mexadev.aura.ui.polls.PieChartView
+                android:id="@+id/pieChart"
+                android:layout_width="96dp"
+                android:layout_height="96dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:id="@+id/colorIndicator1"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:background="@drawable/bg_color_dot"
+                        android:backgroundTint="@color/aura_primary"/>
+
+                    <TextView
+                        android:id="@+id/tvResult1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Opción 1: 60%"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/aura_text_primary"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <View
+                        android:id="@+id/colorIndicator2"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:background="@drawable/bg_color_dot"
+                        android:backgroundTint="@color/aura_warning"/>
+
+                    <TextView
+                        android:id="@+id/tvResult2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Opción 2: 40%"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/aura_text_primary"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTotalVotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Total de votos: 100"
+            android:textSize="12sp"
+            android:textColor="@color/aura_text_secondary"
+            android:gravity="end"
+            android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

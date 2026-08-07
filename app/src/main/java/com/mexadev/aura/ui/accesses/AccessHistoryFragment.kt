@@ -86,6 +86,7 @@ class AccessHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupSharedElementCallback()
         setupRecyclerView()
         setupSwipeRefresh()
 
@@ -99,7 +100,33 @@ class AccessHistoryFragment : Fragment() {
         startPolling()
     }
 
+    private fun setupSharedElementCallback() {
+        requireActivity().setExitSharedElementCallback(object : androidx.core.app.SharedElementCallback() {
+            override fun onMapSharedElements(
+                names: MutableList<String>,
+                sharedElements: MutableMap<String, View>
+            ) {
+                val currentBinding = _binding ?: return
+                if (names.isEmpty()) return
+                val name = names[0]
+                val layoutManager = currentBinding.rvAccessLogs.layoutManager as? LinearLayoutManager
+                    ?: return
+                val firstVisible = layoutManager.findFirstVisibleItemPosition()
+                val lastVisible  = layoutManager.findLastVisibleItemPosition()
+                for (i in firstVisible..lastVisible) {
+                    val holder = currentBinding.rvAccessLogs.findViewHolderForAdapterPosition(i) as? AccessLogAdapter.ItemViewHolder
+                    val cardView = holder?.b?.cardAccessLog ?: continue
+                    if (cardView.transitionName == name) {
+                        sharedElements[name] = cardView
+                        return
+                    }
+                }
+            }
+        })
+    }
+
     override fun onDestroyView() {
+        activity?.setExitSharedElementCallback(null as androidx.core.app.SharedElementCallback?)
         super.onDestroyView()
         pollJob?.cancel()
         fetchJob?.cancel()
@@ -109,10 +136,33 @@ class AccessHistoryFragment : Fragment() {
     // ── Setup ──────────────────────────────────────────────────────────
 
     private fun setupRecyclerView() {
-        adapter = AccessLogAdapter(onItemClick = { log ->
-            val intent = Intent(requireContext(), AccessLogDetailActivity::class.java)
-            intent.putExtra(AccessLogDetailActivity.EXTRA_LOG_JSON, Gson().toJson(log))
-            startActivity(intent)
+        adapter = AccessLogAdapter(onItemClick = { log, itemBinding ->
+            val cardTransName = "access_log_card_${log.id}"
+            val nameTransName = "access_log_name_${log.id}"
+            val iconTransName = "access_log_icon_${log.id}"
+            val statusTransName = "access_log_status_${log.id}"
+
+            itemBinding.cardAccessLog.transitionName = cardTransName
+            itemBinding.tvGuestName.transitionName = nameTransName
+            itemBinding.ivAccessLogIcon.transitionName = iconTransName
+            itemBinding.tvStatus.transitionName = statusTransName
+
+            val intent = Intent(requireContext(), AccessLogDetailActivity::class.java).apply {
+                putExtra(AccessLogDetailActivity.EXTRA_LOG_JSON, Gson().toJson(log))
+                putExtra("transition_card_name", cardTransName)
+                putExtra("transition_name_name", nameTransName)
+                putExtra("transition_icon_name", iconTransName)
+                putExtra("transition_status_name", statusTransName)
+            }
+
+            val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(),
+                androidx.core.util.Pair(itemBinding.cardAccessLog, cardTransName),
+                androidx.core.util.Pair(itemBinding.tvGuestName, nameTransName),
+                androidx.core.util.Pair(itemBinding.ivAccessLogIcon, iconTransName),
+                androidx.core.util.Pair(itemBinding.tvStatus, statusTransName)
+            )
+            startActivity(intent, options.toBundle())
         })
 
         val layoutManager = LinearLayoutManager(requireContext())

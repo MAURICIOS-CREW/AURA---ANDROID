@@ -41,9 +41,18 @@ sealed class DashboardItem(
         override fun createFragment() = com.mexadev.aura.ui.services.ServicesFragment()
         override val fragmentTag = "ServicesFragment"
     }
-    object Documentos : DashboardItem(R.id.btnDocumentos, R.string.dashboard_documentos, R.drawable.ic_document)
-    object Comunidad : DashboardItem(R.id.btnComunidad, R.string.dashboard_comunidad, R.drawable.ic_people)
-    object Encuestas : DashboardItem(R.id.btnEncuestas, R.string.dashboard_encuestas, R.drawable.ic_chart)
+    object Documentos : DashboardItem(R.id.btnDocumentos, R.string.dashboard_documentos, R.drawable.ic_document) {
+        override fun createFragment() = com.mexadev.aura.ui.documents.DocumentsFragment()
+        override val fragmentTag = "DocumentsFragment"
+    }
+    object Comunidad : DashboardItem(R.id.btnComunidad, R.string.dashboard_comunidad, R.drawable.ic_people) {
+        override fun createFragment() = com.mexadev.aura.ui.community.CommunityFragment()
+        override val fragmentTag = "CommunityFragment"
+    }
+    object Encuestas : DashboardItem(R.id.btnEncuestas, R.string.dashboard_encuestas, R.drawable.ic_chart) {
+        override fun createFragment() = com.mexadev.aura.ui.polls.PollsFragment()
+        override val fragmentTag = "PollsFragment"
+    }
 
     companion object {
         fun fromId(@IdRes id: Int): DashboardItem? {

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.mexadev.aura.data.model
 
 import com.google.gson.annotations.SerializedName
@@ -234,7 +236,8 @@ data class AccessLog(
     @SerializedName("created_at") val createdAt: String?,
     @SerializedName("updated_at") val updatedAt: String?,
     @SerializedName("access_code") val accessCode: AccessLogCode? = null,
-    val residence: AccessLogResidence? = null
+    val residence: AccessLogResidence? = null,
+    val vehicle: Vehicle? = null
 )
 
 data class AccessLogCode(
@@ -248,8 +251,62 @@ data class AccessLogCode(
 
 data class AccessLogResidence(
     val id: Long,
-    val name: String?
+    val name: String? = null,
+    val block: Int? = null,
+    val number: String? = null
 )
+
+fun AccessLog.isVehicleAccess(): Boolean {
+    return vehicle != null ||
+            method.equals("license_plate", ignoreCase = true) ||
+            accessType.equals("vehicle", ignoreCase = true) ||
+            (accessType.equals("entry", ignoreCase = true) && vehicleId != null) ||
+            vehicleId != null
+}
+
+fun AccessLog.isQrAccess(): Boolean {
+    return accessCode != null ||
+            accessType.equals("qr", ignoreCase = true) ||
+            (method.equals("scan", ignoreCase = true) && accessCodeId != null) ||
+            accessCodeId != null
+}
+
+fun AccessLog.getDisplayTitle(): String {
+    if (isVehicleAccess()) {
+        val plate = vehicle?.plate?.takeIf { it.isNotBlank() } ?: scannedCode?.takeIf { it.isNotBlank() }
+        return if (!plate.isNullOrBlank()) {
+            "Vehículo: $plate"
+        } else {
+            "Acceso vehicular"
+        }
+    }
+
+    val guestName = accessCode?.guestName?.takeIf { it.isNotBlank() }
+    if (guestName != null) return guestName
+
+    return when (accessType.lowercase()) {
+        "qr"       -> "Acceso QR"
+        "vehicle"  -> "Acceso vehicular"
+        "facial"   -> "Reconocimiento facial"
+        "pin"      -> "Acceso PIN"
+        else       -> accessType.replaceFirstChar { it.uppercase() }
+    }
+}
+
+fun AccessLog.getFormattedResidence(): String {
+    val name = residence?.name?.takeIf { it.isNotBlank() }
+    if (name != null) return name
+
+    val block = residence?.block
+    val number = residence?.number
+    if (block != null && number != null) {
+        return "Mz. $block · Casa $number"
+    } else if (number != null) {
+        return "Casa $number"
+    }
+
+    return if (residenceId != null) "Residencia #$residenceId" else "Residencia de fraccionamiento"
+}
 
 data class AccessLogPagedData(
     @SerializedName("current_page") val currentPage: Int,

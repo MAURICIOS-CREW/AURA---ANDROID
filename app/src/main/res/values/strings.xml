@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Aura</string>
 
     <!-- Splash -->
@@ -27,7 +27,7 @@
     <!-- Navigation -->
     <string name="nav_home">Inicio</string>
     <string name="nav_notifications">Avisos</string>
-    <string name="nav_messages">Mensajes</string>
+    <string name="nav_payments">Pagos</string>
     <string name="nav_profile">Perfil</string>
     <string name="nav_settings">Configuración</string>
     
@@ -47,7 +47,7 @@
     <!-- Misc -->
     <string name="coming_soon">Próximamente disponible</string>
     <string name="coming_soon_description">La sección de %1$s estará disponible próximamente en Aura.</string>
-    <string name="cd_messages">Mensajes</string>
+    <string name="cd_payments">Pagos</string>
     
     <!-- Profile -->
     <string name="profile_default_name">Alex</string>
@@ -359,4 +359,68 @@
     <string name="services_filter_sort_label">Ordenamiento:</string>
     <string name="services_detail_schedule_range">%1$s\n%2$s - %3$s</string>
     <string name="services_detail_schedule_single">%1$s\n%2$s</string>
+
+    <!-- Documents -->
+    <string name="documents_title">Documentos</string>
+    <string name="documents_subtitle">Reglamentos, convocatorias y manuales del coto</string>
+    <string name="documents_detail_title">Detalle del Documento</string>
+    <string name="documents_btn_download">Descargar PDF</string>
+    <string name="documents_btn_share">Compartir documento</string>
+    <string name="documents_download_success">Documento descargado en el dispositivo</string>
+    <string name="documents_official_pdf">Documento Oficial PDF</string>
+
+    <!-- Polls -->
+    <string name="polls_title">Encuestas</string>
+    <string name="polls_subtitle">Participa y vota en las decisiones de la comunidad</string>
+    <string name="polls_total_votes_format">Total de votos: %1$d</string>
+    <string name="polls_voted_badge">Tu voto: %1$s</string>
+    <string name="polls_status_active">Votación Activa</string>
+
+    <!-- Community -->
+    <string name="community_title">Comunidad</string>
+    <string name="community_subtitle">Avisos y publicaciones del coto</string>
+    <string name="community_whats_happening">¿Qué está pasando en el coto?</string>
+    <string name="community_create_post">Crear publicación</string>
+    <string name="community_comment_count_format">%1$d Comentarios</string>
+    <string name="community_like_count_format">%1$d Me gusta</string>
+    <string name="cd_add_post">Icono de agregar publicación</string>
+    <string name="cd_like">Me gusta</string>
+    <string name="cd_comment">Comentar</string>
+    <string name="cd_send">Enviar</string>
+    <string name="cd_close">Cerrar</string>
+    <string name="cd_author_avatar" tools:ignore="Typos">Foto de perfil del autor</string>
+
+    <!-- Create Post Bottom Sheet -->
+    <string name="create_post_title">Nueva publicación</string>
+    <string name="create_post_author_you">Tú</string>
+    <string name="create_post_author_role">Publicando como residente</string>
+    <string name="create_post_label_message">Mensaje para la comunidad *</string>
+    <string name="create_post_hint_message">¿Qué está pasando en el coto? Comparte avisos o recomendaciones…</string>
+    <string name="create_post_btn_publish">Publicar</string>
+
+    <!-- Polls -->
+    <string name="polls_result_format">%1$s: %2$d%%</string>
+    <string name="polls_default_question">¿Pregunta de la encuesta?</string>
+    <string name="polls_default_option1">Opción 1</string>
+    <string name="polls_default_option2">Opción 2</string>
+
+    <!-- Payments / Messages Fragment -->
+    <string name="payments_summary_title">Resumen y Pagos</string>
+    <string name="payments_coming_soon">Próximamente</string>
+    <string name="payments_recent_history">Historial Reciente</string>
+    <string name="payments_maintenance_payment">Pago Mantenimiento</string>
+    <string name="payments_one_month_ago">Hace 1 mes</string>
+
+    <!-- Incidents Detail -->
+    <string name="incident_cancel">Cancelar reporte</string>
+    <string name="incident_no_comments">Sin comentarios aún</string>
+    <string name="incident_no_comments_sub">El equipo de administración responderá pronto</string>
+    <string name="incident_fetching_comments">Buscando nuevos comentarios…</string>
+    <string name="incident_add_comment_hint">Escribe un comentario…</string>
+
+    <!-- Access Log Detail -->
+    <string name="access_log_detail_section_vehicle">Información del Vehículo</string>
+    <string name="vehicle_label_plate">Placas</string>
+    <string name="vehicle_label_brand">Marca</string>
+    <string name="vehicle_no_color">Sin color especificado</string>
 </resources>

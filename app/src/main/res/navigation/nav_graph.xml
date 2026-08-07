@@ -41,11 +41,11 @@
         android:label="Notificaciones"
         tools:layout="@layout/fragment_notifications"/>
 
-    <!-- ─── MENSAJES ─── -->
+    <!-- ─── PAGOS ─── -->
     <fragment
         android:id="@+id/nav_messages"
         android:name="com.mexadev.aura.ui.messages.MessagesFragment"
-        android:label="Mensajes"
+        android:label="Pagos"
         tools:layout="@layout/fragment_messages"/>
 
     <!-- ─── PERFIL ─── -->

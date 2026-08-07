@@ -1,9 +1,12 @@
 package com.mexadev.aura.ui.accesses
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mexadev.aura.R
@@ -45,6 +48,7 @@ class AccessesAdapter(
         notifyItemInserted(index)
     }
 
+    @Suppress("unused")
     fun showSkeletons(count: Int) {
         val oldCount = itemCount
         this.items.clear()
@@ -81,6 +85,8 @@ class AccessesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AccessViewHolder) {
             holder.bind(items[position], onItemClick)
+        } else if (holder is SkeletonViewHolder) {
+            holder.bind()
         }
     }
 
@@ -88,7 +94,15 @@ class AccessesAdapter(
         return if (skeletonCount > 0) skeletonCount else items.size
     }
 
-    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind() {
+            ObjectAnimator.ofFloat(itemView, "alpha", 1f, 0.4f, 1f).apply {
+                duration     = 1200
+                repeatCount  = ValueAnimator.INFINITE
+                interpolator = AccelerateDecelerateInterpolator()
+            }.start()
+        }
+    }
 
     class AccessViewHolder(private val binding: ItemAccessBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(accessCode: AccessCode, onClick: (AccessCode, View) -> Unit) {

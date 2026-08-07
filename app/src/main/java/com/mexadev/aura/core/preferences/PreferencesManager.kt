@@ -61,5 +61,20 @@ class PreferencesManager(context: Context) {
     var contractedServicesCount: Int
         get() = prefs.getInt("contracted_services_count", 3)
         set(value) = prefs.edit { putInt("contracted_services_count", value) }
+
+    /** Number of documents for skeleton loading */
+    var documentsCount: Int
+        get() = prefs.getInt("documents_count", 3)
+        set(value) = prefs.edit { putInt("documents_count", value) }
+
+    /** Number of polls for skeleton loading */
+    var pollsCount: Int
+        get() = prefs.getInt("polls_count", 2)
+        set(value) = prefs.edit { putInt("polls_count", value) }
+
+    /** Number of community posts for skeleton loading */
+    var communityCount: Int
+        get() = prefs.getInt("community_count", 3)
+        set(value) = prefs.edit { putInt("community_count", value) }
 }
 

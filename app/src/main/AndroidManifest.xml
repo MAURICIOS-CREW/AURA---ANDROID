@@ -60,6 +60,17 @@
             android:exported="false"
             android:theme="@style/Theme.Aura.Detail" />
 
+        <activity
+            android:name=".ui.community.CommunityPostDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Aura.Detail"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.documents.DocumentDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Aura.Detail" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

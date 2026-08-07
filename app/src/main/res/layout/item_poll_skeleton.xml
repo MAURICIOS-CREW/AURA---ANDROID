@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mexadev.aura.ui.common.AuraCardBtn xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:isPureWhite="true"
+    app:cardClickAnimationEnabled="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/aura_white"
+        android:padding="16dp">
+
+        <View
+            android:layout_width="240dp"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_skeleton"
+            android:layout_marginBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_skeleton"
+            android:layout_marginBottom="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_skeleton" />
+
+    </LinearLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

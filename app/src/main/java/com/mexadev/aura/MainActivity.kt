@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.fragment.app.Fragment
@@ -26,9 +26,8 @@ import com.mexadev.aura.ui.home.HomeFragment
 import com.mexadev.aura.ui.home.DashboardNavigator
 import com.mexadev.aura.ui.home.DashboardItem
 import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.Hold
 import com.mexadev.aura.ui.notifications.NotificationsFragment
-import com.mexadev.aura.ui.messages.MessagesFragment
+import com.mexadev.aura.ui.payments.PaymentsFragment
 import com.mexadev.aura.ui.profile.ProfileFragment
 import kotlinx.coroutines.launch
 import com.mexadev.aura.databinding.ActivityMainBinding
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     private val tabIds = listOf(
         R.id.nav_item_home,
         R.id.nav_item_notifications,
-        R.id.nav_item_messages,
+        R.id.nav_item_payments,
         R.id.nav_item_profile
     )
 
@@ -58,13 +57,13 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     private val iconActive = mapOf(
         R.id.nav_item_home to R.drawable.ic_nav_home_filled,
         R.id.nav_item_notifications to R.drawable.ic_nav_notifications_filled,
-        R.id.nav_item_messages to R.drawable.ic_nav_messages_filled,
+        R.id.nav_item_payments to R.drawable.ic_wallet,
         R.id.nav_item_profile to R.drawable.ic_nav_profile_filled
     )
     private val iconInactive = mapOf(
         R.id.nav_item_home to R.drawable.ic_nav_home,
         R.id.nav_item_notifications to R.drawable.ic_nav_notifications,
-        R.id.nav_item_messages to R.drawable.ic_nav_messages,
+        R.id.nav_item_payments to R.drawable.ic_wallet,
         R.id.nav_item_profile to R.drawable.ic_nav_profile
     )
 
@@ -74,8 +73,8 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
             statusBarStyle = androidx.activity.SystemBarStyle.light(
-                android.graphics.Color.TRANSPARENT,
-                android.graphics.Color.TRANSPARENT
+                Color.TRANSPARENT,
+                Color.TRANSPARENT
             )
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -119,7 +118,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
         tabViews = mapOf(
             R.id.nav_item_home to TabViews(binding.iconHome, binding.labelHome),
             R.id.nav_item_notifications to TabViews(binding.iconNotifications, binding.labelNotifications),
-            R.id.nav_item_messages to TabViews(binding.iconMessages, binding.labelMessages),
+            R.id.nav_item_payments to TabViews(binding.iconPayments, binding.labelPayments),
             R.id.nav_item_profile to TabViews(binding.iconProfile, binding.labelProfile)
         )
 
@@ -206,10 +205,11 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
+    ) { _ ->
         // Si el usuario acepta, ya podrá recibir FCM. Si no, queda denegado.
     }
 
+    @Suppress("ObsoleteSdkInt")
     private fun checkNotificationPermission() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
@@ -407,7 +407,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
         backCallback.isEnabled = false
         val card = activeCardView
         
-        val isFragmentDetail = binding.detailFragmentContainer.visibility == View.VISIBLE
+        val isFragmentDetail = binding.detailFragmentContainer.isVisible
         val targetViewToHide = if (isFragmentDetail) binding.detailFragmentContainer else binding.detailView.root
 
         if (card == null) {
@@ -490,7 +490,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
             return when (position) {
                 0 -> HomeFragment()
                 1 -> NotificationsFragment()
-                2 -> MessagesFragment()
+                2 -> PaymentsFragment()
                 3 -> ProfileFragment()
                 else -> HomeFragment()
             }

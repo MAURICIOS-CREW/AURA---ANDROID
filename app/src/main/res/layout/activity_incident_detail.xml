@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    activity_incident_detail.xml
-
-    Pantalla de detalle de un incidente con su hilo de comentarios.
-    Diseño:
-      - Header fijo con info del incidente (título, status en color, descripción)
-      - Lista de comentarios con separación visual usuario/admin
-      - Campo sticky de input al fondo para añadir comentario nuevo
-      - Error banner tipo Spotify
--->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,16 +8,14 @@
     android:layout_height="match_parent"
     android:background="@color/aura_background">
 
-    <!-- ══════════════════════════════════════
-         APP BAR + CABECERA DEL INCIDENTE
-         ══════════════════════════════════════ -->
+    <!-- AppBar Cabecera -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/aura_white"
-        app:elevation="2dp"
-        app:liftOnScroll="true">
+        app:elevation="0dp"
+        app:liftOnScroll="false">
 
         <!-- Toolbar -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,6 +33,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="10dp"
                 android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/cd_back"
                 app:tint="@color/aura_text_secondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -171,7 +160,7 @@
                         android:id="@+id/tvCancelText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancelar reporte"
+                        android:text="@string/incident_cancel"
                         android:textColor="@color/aura_error"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -185,9 +174,7 @@
             android:background="@color/aura_divider" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- ══════════════════════════════════════
-         LISTA DE COMENTARIOS CON SWIPE TO REFRESH
-         ══════════════════════════════════════ -->
+    <!-- Lista de comentarios con Swipe to Refresh -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -231,7 +218,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Sin comentarios aún"
+                    android:text="@string/incident_no_comments"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/aura_text_secondary" />
@@ -240,7 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="El equipo de administración responderá pronto"
+                    android:text="@string/incident_no_comments_sub"
                     android:textSize="13sp"
                     android:textColor="@color/aura_text_tertiary"
                     android:textAlignment="center" />
@@ -273,15 +260,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Buscando nuevos comentarios..."
+            android:text="@string/incident_fetching_comments"
             android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="@color/aura_text_secondary" />
     </LinearLayout>
 
-    <!-- ══════════════════════════════════════
-         BARRA DE COMENTARIO STICKY (bottom)
-         ══════════════════════════════════════ -->
+    <!-- Barra de comentario sticky (bottom) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/commentInputBar"
         android:layout_width="match_parent"
@@ -297,7 +282,7 @@
             android:id="@+id/etComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Escribe un comentario..."
+            android:hint="@string/incident_add_comment_hint"
             android:background="@drawable/bg_dashboard_card"
             android:paddingHorizontal="14dp"
             android:paddingVertical="10dp"
@@ -305,6 +290,7 @@
             android:textColor="@color/aura_text_primary"
             android:textColorHint="@color/aura_text_tertiary"
             android:inputType="textCapSentences|textMultiLine"
+            android:importantForAutofill="no"
             android:maxLines="4"
             android:imeOptions="actionSend"
             app:layout_constraintStart_toStartOf="parent"
@@ -331,8 +317,8 @@
                 android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_right"
-                app:tint="@color/aura_white"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/cd_send"
+                app:tint="@color/aura_white" />
 
             <ProgressBar
                 android:id="@+id/pbSend"
@@ -345,9 +331,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- ══════════════════════════════════════
-         ERROR BANNER (Tipo Spotify Offline)
-         ══════════════════════════════════════ -->
+    <!-- Error Banner -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/errorBanner"
         android:layout_width="match_parent"
@@ -362,6 +346,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_warning"
+            android:contentDescription="@null"
             app:tint="@color/aura_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -398,6 +383,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_check"
+            android:contentDescription="@null"
             app:tint="@color/aura_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

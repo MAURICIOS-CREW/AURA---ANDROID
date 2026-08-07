@@ -332,7 +332,7 @@ class HomeFragment : Fragment() {
         binding.btnAccesos.setOnClickListener(clickListener)
         binding.btnVehiculos.setOnClickListener(clickListener)
         binding.btnIncidencias.setOnClickListener(clickListener)
-        binding.btnPagos.setOnClickListener(clickListener)
+
         binding.btnServicios.setOnClickListener(clickListener)
         binding.btnDocumentos.setOnClickListener(clickListener)
         binding.btnComunidad.setOnClickListener(clickListener)
@@ -348,14 +348,12 @@ class HomeFragment : Fragment() {
                     isNavigating = false
                     return@postDelayed
                 }
-                val item = DashboardItem.Pagos
-                val transitionName = "transition_pagos_${view.id}"
-                view.transitionName = transitionName
-                navigator?.navigateToDetail(view, item)
+                navigator?.navigateToTab(2)
                 view.postDelayed({ isNavigating = false }, 500L)
             }, 100L)
         }
 
+        binding.btnPagos.setOnClickListener(paymentsClickListener)
         binding.cardSaldo.setOnClickListener(paymentsClickListener)
         binding.cardProximoPago.setOnClickListener(paymentsClickListener)
         binding.btnPagarAhora.setOnClickListener(paymentsClickListener)
@@ -366,7 +364,7 @@ class HomeFragment : Fragment() {
             isNavigating = true
             view.postDelayed({
                 if (isAdded) {
-                    navigator?.navigateToDetailWithFade("Resumen Rápido", R.drawable.ic_document)
+                    navigator?.navigateToTab(2)
                 }
                 view.postDelayed({ isNavigating = false }, 500L)
             }, 100L)

@@ -1,14 +1,17 @@
 package com.mexadev.aura.ui.accesses
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mexadev.aura.R
-import com.mexadev.aura.data.model.AccessLog
+import com.mexadev.aura.data.model.*
 import com.mexadev.aura.databinding.ItemAccessLogBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -27,7 +30,7 @@ import java.util.concurrent.TimeUnit
  * Usa DiffUtil para actualizaciones atómicas sin parpadeos.
  */
 class AccessLogAdapter(
-    private val onItemClick: (AccessLog) -> Unit
+    private val onItemClick: (AccessLog, ItemAccessLogBinding) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -171,53 +174,80 @@ class AccessLogAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemViewHolder) {
-            holder.bind(items[position], onItemClick)
+        when (holder) {
+            is ItemViewHolder -> holder.bind(items[position], onItemClick)
+            is SkeletonViewHolder -> holder.bind()
+            is FooterViewHolder -> holder.bind()
         }
     }
 
     // ── ViewHolders ────────────────────────────────────────────────────
 
-    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view)
-    class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind() {
+            ObjectAnimator.ofFloat(itemView, "alpha", 1f, 0.4f, 1f).apply {
+                duration     = 1200
+                repeatCount  = ValueAnimator.INFINITE
+                interpolator = AccelerateDecelerateInterpolator()
+            }.start()
+        }
+    }
 
-    class ItemViewHolder(private val b: ItemAccessLogBinding) : RecyclerView.ViewHolder(b.root) {
+    class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind() {
+            ObjectAnimator.ofFloat(itemView, "alpha", 1f, 0.4f, 1f).apply {
+                duration     = 1200
+                repeatCount  = ValueAnimator.INFINITE
+                interpolator = AccelerateDecelerateInterpolator()
+            }.start()
+        }
+    }
 
-        fun bind(log: AccessLog, onClick: (AccessLog) -> Unit) {
+    class ItemViewHolder(val b: ItemAccessLogBinding) : RecyclerView.ViewHolder(b.root) {
+
+        fun bind(log: AccessLog, onClick: (AccessLog, ItemAccessLogBinding) -> Unit) {
             val ctx = b.root.context
 
-            // Nombre principal: preferimos el nombre del invitado del código, luego tipo
-            val guestLabel = log.accessCode?.guestName?.takeIf { it.isNotBlank() }
-                ?: when (log.accessType.lowercase()) {
-                    "qr"       -> "Acceso QR"
-                    "vehicle"  -> "Acceso vehicular"
-                    "facial"   -> "Reconocimiento facial"
-                    "pin"      -> "Acceso PIN"
-                    else       -> log.accessType.replaceFirstChar { it.uppercase() }
-                }
-            b.tvGuestName.text = guestLabel
+            val cardTransName = "access_log_card_${log.id}"
+            val nameTransName = "access_log_name_${log.id}"
+            val iconTransName = "access_log_icon_${log.id}"
+            val statusTransName = "access_log_status_${log.id}"
 
-            // Residencia
-            val residenceName = log.residence?.name?.takeIf { it.isNotBlank() }
-                ?: "Residencia #${log.residenceId ?: "–"}"
-            b.tvResidence.text = residenceName
+            b.cardAccessLog.transitionName = cardTransName
+            b.tvGuestName.transitionName = nameTransName
+            b.ivAccessLogIcon.transitionName = iconTransName
+            b.tvStatus.transitionName = statusTransName
+
+            // Nombre principal: vehículo con detalles o nombre del invitado / tipo de acceso
+            b.tvGuestName.text = log.getDisplayTitle()
+
+            // Residencia formateada
+            b.tvResidence.text = log.getFormattedResidence()
 
             // Timestamp relativo
             b.tvTimestamp.text = formatTimestamp(log.timestamp)
 
-            // Status badge
-            val (statusLabel, textColorRes, bgColorRes, iconRes) = when (log.status.lowercase()) {
-                "granted" -> StatusStyle(
+            // Icono según tipo de acceso: vehículo -> ic_car, QR -> ic_qr_code
+            val iconRes = when {
+                log.isVehicleAccess() -> R.drawable.ic_car
+                log.isQrAccess() -> R.drawable.ic_qr_code
+                log.accessType.equals("facial", ignoreCase = true) -> R.drawable.ic_profile
+                else -> R.drawable.ic_qr_code
+            }
+
+            // Estilo de status (Permitido = Verde, Denegado = Rojo)
+            val (statusLabel, textColorRes, bgColorRes) = when (log.status.lowercase()) {
+                "granted", "permitido" -> Triple(
                     ctx.getString(R.string.access_log_status_granted),
-                    R.color.aura_success, R.color.aura_success_light, R.drawable.ic_check
+                    R.color.aura_success, R.color.aura_success_light
                 )
-                "denied" -> StatusStyle(
+                "denied", "denegado" -> Triple(
                     ctx.getString(R.string.access_log_status_denied),
-                    R.color.aura_error, R.color.aura_error_light, R.drawable.ic_warning
+                    R.color.aura_error, R.color.aura_error_light
                 )
-                else -> StatusStyle(
+                else -> Triple(
                     log.status.replaceFirstChar { it.uppercase() },
-                    R.color.aura_text_tertiary, R.color.aura_surface_variant, R.drawable.ic_lock
+                    R.color.aura_text_tertiary, R.color.aura_surface_variant
                 )
             }
 
@@ -228,10 +258,17 @@ class AccessLogAdapter(
                 cornerRadius = 24 * ctx.resources.displayMetrics.density
                 setColor(ContextCompat.getColor(ctx, bgColorRes))
             }
-            b.ivAccessLogIcon.setColorFilter(ContextCompat.getColor(ctx, textColorRes))
-            b.ivAccessLogIcon.setImageResource(iconRes)
 
-            b.root.setOnClickListener { onClick(log) }
+            // Ícono tintado y contenedor de ícono con color de fondo del status (Verde o Rojo)
+            b.ivAccessLogIcon.setImageResource(iconRes)
+            b.ivAccessLogIcon.setColorFilter(ContextCompat.getColor(ctx, textColorRes))
+            b.iconContainer.background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 16 * ctx.resources.displayMetrics.density
+                setColor(ContextCompat.getColor(ctx, bgColorRes))
+            }
+
+            b.root.setOnClickListener { onClick(log, b) }
         }
 
         /**
@@ -265,10 +302,4 @@ class AccessLogAdapter(
         }
     }
 
-    private data class StatusStyle(
-        val label: String,
-        val textColorRes: Int,
-        val bgColorRes: Int,
-        val iconRes: Int
-    )
 }

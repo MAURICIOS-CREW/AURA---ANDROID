@@ -131,9 +131,9 @@
             android:baselineAligned="false"
             tools:ignore="NestedWeights">
 
-            <!-- Mensajes -->
+            <!-- Pagos -->
             <LinearLayout
-                android:id="@+id/nav_item_messages"
+                android:id="@+id/nav_item_payments"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -146,19 +146,19 @@
                 android:paddingBottom="8dp">
 
                 <ImageView
-                    android:id="@+id/icon_messages"
+                    android:id="@+id/icon_payments"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_nav_messages"
-                    android:contentDescription="@string/nav_messages"
+                    android:src="@drawable/ic_wallet"
+                    android:contentDescription="@string/nav_payments"
                     tools:ignore="ContentDescription"/>
 
                 <TextView
-                    android:id="@+id/label_messages"
+                    android:id="@+id/label_payments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="@string/nav_messages"
+                    android:text="@string/nav_payments"
                     android:textSize="11sp"
                     android:textColor="@color/aura_nav_inactive"
                     android:fontFamily="sans-serif-medium"
