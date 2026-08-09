@@ -23,9 +23,14 @@ colorpicker = "2.3.0"
 firebaseBom = "34.16.0"
 datastore = "1.1.1"
 tink = "1.9.0"
-
+stripe = "20.45.0"
+room = "2.6.1"
 
 [libraries]
+stripe-android = { group = "com.stripe", name = "stripe-android", version.ref = "stripe" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

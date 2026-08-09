@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_drag_handle"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Banner de error -->
+    <FrameLayout
+        android:id="@+id/formBannerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_error"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvFormBannerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aura_white"
+            android:textSize="12sp"
+            android:gravity="center"
+            tools:text="Mensaje de error" />
+    </FrameLayout>
+
+    <!-- ViewFlipper solo para Step1 ↔ Step2 Success (programático, sin swipe) -->
+    <ViewFlipper
+        android:id="@+id/viewFlipperForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoStart="false">
+
+        <!-- ==================== STEP 1: Selección de método de pago ==================== -->
+        <LinearLayout
+            android:id="@+id/step1Form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payments_form_title"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+
+            <TextView
+                android:id="@+id/tvFormAmountHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Total a pagar: $2,700.00 MXN"
+                android:textSize="14sp"
+                android:textColor="@color/aura_text_secondary" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/aura_border_light"
+                android:layout_marginVertical="16dp" />
+
+            <!-- Segmented Control: Stripe / Transfer -->
+            <com.mexadev.aura.ui.common.AuraSegmentedControl
+                android:id="@+id/segmentedControlPayment"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Contenedor deslizable de paneles.
+                 ClipChildren=false para que la animación slide salga del área.
+                 Overflow se maneja con clipToPadding=false en el padre. -->
+            <FrameLayout
+                android:id="@+id/panelContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <!-- Panel Stripe (visible por defecto) -->
+                <LinearLayout
+                    android:id="@+id/panelStripe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <com.mexadev.aura.ui.common.AuraCardBtn
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:isPureWhite="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:padding="14dp">
+
+                            <FrameLayout
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_circle_primary_light">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_wallet"
+                                    android:contentDescription="@null"
+                                    app:tint="@color/aura_primary" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/stripe_payment_secure_title"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/aura_text_primary" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/stripe_payment_secure_sub"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/aura_text_secondary" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.mexadev.aura.ui.common.AuraCardBtn>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_dashboard_card"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stripe_card_manual_hint"
+                            android:textSize="12sp"
+                            android:textColor="@color/aura_text_secondary"
+                            android:layout_marginBottom="6dp" />
+
+                        <com.stripe.android.view.CardInputWidget
+                            android:id="@+id/stripeCardInputWidget"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:theme="@style/ThemeOverlay.AppCompat.Light"
+                            app:cardTint="@color/aura_text_primary" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Panel Transfer SPEI (oculto por defecto, posicionado a la derecha) -->
+                <LinearLayout
+                    android:id="@+id/panelTransfer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transfer_instructions"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_text_primary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <com.mexadev.aura.ui.common.AuraCardBtn
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:isPureWhite="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="16dp">
+
+                            <FrameLayout
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_circle_primary_light">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_bank_transfer"
+                                    android:contentDescription="@null"
+                                    app:tint="@color/aura_primary" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/transfer_clabe_title"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/aura_text_secondary" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/transfer_default_clabe"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp"
+                                    android:textColor="@color/aura_text_primary" />
+                            </LinearLayout>
+
+                            <ImageButton
+                                android:id="@+id/btnCopyClabeForm"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_copy"
+                                android:contentDescription="@null"
+                                app:tint="@color/aura_primary" />
+                        </LinearLayout>
+                    </com.mexadev.aura.ui.common.AuraCardBtn>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transfer_upload_prompt"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_text_primary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUploadRealReceipt"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="@string/payments_form_upload_receipt"
+                        android:textColor="@color/aura_primary"
+                        android:textAllCaps="false"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_upload"
+                        app:iconTint="@color/aura_primary"
+                        app:iconGravity="textStart"
+                        app:strokeColor="@color/aura_primary"
+                        app:strokeWidth="1.5dp"
+                        app:cornerRadius="12dp" />
+
+                    <!-- Preview del comprobante -->
+                    <LinearLayout
+                        android:id="@+id/layoutReceiptPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/bg_dashboard_card"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/ivReceiptThumbnail"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_check"
+                            android:contentDescription="@null" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="10dp">
+
+                            <TextView
+                                android:id="@+id/tvReceiptFileName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:textColor="@color/aura_text_primary"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/transfer_receipt_ready"
+                                android:textSize="11sp"
+                                android:textColor="@color/aura_success" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- Botón de pago + ProgressBar -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSubmitPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/payments_form_confirm_pay"
+                    android:textColor="@color/aura_white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_btn_primary" />
+
+                <ProgressBar
+                    android:id="@+id/pbSubmitLoading"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/aura_white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- ==================== STEP 2: Confirmación / Éxito ==================== -->
+        <LinearLayout
+            android:id="@+id/step2SuccessForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingVertical="16dp">
+
+            <FrameLayout
+                android:id="@+id/flFormSuccessIcon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/bg_circle_primary_light"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_check"
+                    app:tint="@color/aura_success"
+                    android:contentDescription="@null" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payments_form_success_title"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/payments_form_success_sub"
+                android:textSize="14sp"
+                android:textColor="@color/aura_text_secondary"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tvFormTotalPaidSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:text="Total pagado: $2,700.00 MXN"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_primary" />
+
+            <TextView
+                android:id="@+id/tvFormPaymentMethodSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:text="Método de pago: Tarjeta de Crédito (Stripe)"
+                android:textSize="13sp"
+                android:textColor="@color/aura_text_secondary" />
+
+            <TextView
+                android:id="@+id/tvFormItemsCountSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="2 concepto(s) pagado(s)"
+                android:textSize="13sp"
+                android:textColor="@color/aura_text_secondary" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFinishForm"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/payments_form_finish"
+                android:textColor="@color/aura_white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:background="@drawable/bg_btn_primary" />
+        </LinearLayout>
+
+    </ViewFlipper>
+</LinearLayout>

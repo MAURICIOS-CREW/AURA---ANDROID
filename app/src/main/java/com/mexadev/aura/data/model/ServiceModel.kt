@@ -26,8 +26,12 @@ data class ServiceContractRequest(
     @SerializedName("preferred_date") val preferredDate: String,
     @SerializedName("visit_time_from") val visitTimeFrom: String,
     @SerializedName("visit_time_to") val visitTimeTo: String,
+    @SerializedName("is_recurrent") val isRecurrent: Boolean = false,
+    @SerializedName("suggested_schedule") val suggestedSchedule: List<String>? = null,
     val notes: String? = null,
-    @SerializedName("payment_method") val paymentMethod: String = "stripe"
+    @SerializedName("payment_method") val paymentMethod: String = "stripe",
+    @SerializedName("stripe_payment_intent_id") val stripePaymentIntentId: String? = null,
+    @SerializedName("payment_method_id") val paymentMethodId: String? = null
 )
 
 data class FinancialChargeMinimal(
@@ -48,6 +52,8 @@ data class ContractedService(
     @SerializedName("exact_scheduled_at") val exactScheduledAt: String?,
     val amount: String?,
     val status: String, // "created", "scheduled", "completed", "cancelled"
+    @SerializedName("is_recurrent") val isRecurrent: Boolean? = false,
+    @SerializedName("suggested_schedule") val suggestedSchedule: List<String>? = null,
     val notes: String?,
     @SerializedName("payment_method") val paymentMethod: String?,
     @SerializedName("financial_charge") val financialCharge: FinancialChargeMinimal?,

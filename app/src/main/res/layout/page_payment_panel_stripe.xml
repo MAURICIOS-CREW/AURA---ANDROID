@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/etCardNumber"
+        style="@style/Aura.Input"
+        android:hint="@string/services_booking_card_number"
+        android:inputType="number"
+        android:autofillHints="creditCardNumber"
+        android:maxLength="16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:id="@+id/etCardExpiry"
+            style="@style/Aura.Input"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:hint="@string/services_booking_exp_placeholder"
+            android:inputType="datetime"
+            android:autofillHints="creditCardExpirationDate"
+            android:maxLength="5" />
+
+        <EditText
+            android:id="@+id/etCardCvc"
+            style="@style/Aura.Input"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:hint="@string/services_booking_card_cvc"
+            android:inputType="numberPassword"
+            android:autofillHints="creditCardSecurityCode"
+            android:maxLength="4" />
+    </LinearLayout>
+</LinearLayout>

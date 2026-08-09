@@ -166,6 +166,25 @@
                                 android:textSize="13sp"
                                 tools:text="Mantenimiento integral de áreas verdes" />
 
+                            <!-- RECURRENT BADGE -->
+                            <TextView
+                                android:id="@+id/tvRecurrentBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/bg_pill_info"
+                                app:drawableStartCompat="@drawable/ic_repeat"
+                                android:drawablePadding="4dp"
+                                app:drawableTint="@color/aura_primary"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="@string/services_recurrent_badge"
+                                android:textColor="@color/aura_primary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:visibility="gone"
+                                tools:visibility="visible" />
+
                         </LinearLayout>
 
                     </LinearLayout>

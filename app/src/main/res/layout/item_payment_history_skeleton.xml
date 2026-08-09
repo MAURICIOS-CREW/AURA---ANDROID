@@ -12,41 +12,47 @@
 
     <View
         android:id="@+id/skIcon"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:background="@drawable/bg_skeleton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/skStatus"
-        android:layout_width="70dp"
-        android:layout_height="20dp"
-        android:background="@drawable/bg_skeleton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/skIcon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <View
         android:id="@+id/skTitle"
-        android:layout_width="0dp"
+        android:layout_width="120dp"
         android:layout_height="16dp"
         android:layout_marginStart="12dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/bg_skeleton"
-        app:layout_constraintEnd_toStartOf="@id/skStatus"
         app:layout_constraintStart_toEndOf="@id/skIcon"
-        app:layout_constraintTop_toTopOf="@id/skIcon" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/skDate"
-        android:layout_width="0dp"
-        android:layout_height="14dp"
+        android:id="@+id/skSub"
+        android:layout_width="80dp"
+        android:layout_height="12dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="6dp"
         android:background="@drawable/bg_skeleton"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/skIcon"
         app:layout_constraintTop_toBottomOf="@id/skTitle" />
+
+    <View
+        android:id="@+id/skAmount"
+        android:layout_width="70dp"
+        android:layout_height="16dp"
+        android:background="@drawable/bg_skeleton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/skBadge"
+        android:layout_width="50dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_skeleton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skAmount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,168 +3,370 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/paymentsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aura_background"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/aura_background"
+        app:liftOnScroll="false"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-            
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/aura_background">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/payments_summary_title"
+                android:text="@string/payments_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/aura_text_primary" />
-                
+
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/aura_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <com.mexadev.aura.ui.common.AuraCardBtn
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:isPureWhite="true">
+                android:orientation="vertical"
+                android:paddingBottom="32dp">
 
+                <!-- Saldo Actual Card matching Maqueta -->
+                <com.mexadev.aura.ui.common.AuraCardBtn
+                    android:id="@+id/cardBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:isPureWhite="true"
+                    android:transitionName="transition_card_balance">
+
+                    <LinearLayout
+                        android:background="@color/aura_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="20dp">
+
+                            <TextView
+                                android:id="@+id/tvBalanceLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/payments_current_balance"
+                                android:textSize="13sp"
+                                android:textColor="@color/aura_text_secondary"
+                                android:transitionName="transition_tv_label"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <FrameLayout
+                                android:id="@+id/flBalanceContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvBalanceLabel">
+
+                                <TextView
+                                    android:id="@+id/tvBalance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="$1,250.00 MXN"
+                                    android:textSize="26sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/aura_text_primary"
+                                    android:transitionName="transition_tv_balance" />
+
+                                <View
+                                    android:id="@+id/skBalance"
+                                    android:layout_width="150dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/bg_skeleton"
+                                    android:visibility="gone"
+                                    tools:visibility="visible" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llSubtitleContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                tools:ignore="UseCompoundDrawables"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/flBalanceContainer">
+
+                                <TextView
+                                    android:id="@+id/tvBalanceSubtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="Cuota de mantenimiento"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/aura_text_secondary" />
+
+                                <ImageView
+                                    android:id="@+id/ivExpandArrow"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_marginStart="4dp"
+                                    android:src="@drawable/ic_chevron_down"
+                                    android:contentDescription="@null"
+                                    app:tint="@color/aura_primary" />
+                            </LinearLayout>
+
+                            <!-- Circular Blue Wallet Icon Button -->
+                            <FrameLayout
+                                android:id="@+id/flWalletIcon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/bg_btn_primary"
+                                android:enabled="false"
+                                android:clickable="false"
+                                android:alpha="0.5"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_wallet"
+                                    android:contentDescription="@null"
+                                    app:tint="@color/aura_white" />
+                            </FrameLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Expandable Concepts Summary Layout -->
+                        <LinearLayout
+                            android:id="@+id/layoutConceptsSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="20dp"
+                            android:paddingBottom="16dp"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/aura_border"
+                                android:layout_marginBottom="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/payments_summary_concepts"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/aura_text_tertiary"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.05"
+                                android:layout_marginBottom="4dp" />
+
+                            <LinearLayout
+                                android:id="@+id/llConceptsContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.mexadev.aura.ui.common.AuraCardBtn>
+
+                <!-- Historial Header Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvHistoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payments_history_title"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/aura_text_primary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Skeleton Container for Initial Loading -->
+                <LinearLayout
+                    android:id="@+id/layoutSkeleton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <include layout="@layout/item_payment_history_skeleton" />
+                    <include layout="@layout/item_payment_history_skeleton" />
+                    <include layout="@layout/item_payment_history_skeleton" />
+                    <include layout="@layout/item_payment_history_skeleton" />
+                </LinearLayout>
+
+                <!-- History RecyclerView -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPaymentHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_payment_history" />
+
+                <!-- Empty State Layout -->
+                <LinearLayout
+                    android:id="@+id/layoutEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="32dp"
+                    tools:ignore="UseCompoundDrawables"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_wallet"
+                        android:contentDescription="@null"
+                        app:tint="@color/aura_text_tertiary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/payments_empty_history"
+                        android:textSize="14sp"
+                        android:textColor="@color/aura_text_secondary"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <!-- Load More Button for Pagination -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLoadMore"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/payments_load_more"
+                    android:textColor="@color/aura_primary"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/aura_primary"
+                    app:strokeWidth="1.5dp"
+                    app:cornerRadius="12dp"
+                    android:visibility="gone" />
+
+                <!-- Load More Progress Bar -->
+                <ProgressBar
+                    android:id="@+id/pbLoadMore"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:indeterminateTint="@color/aura_primary"
+                    android:visibility="gone" />
+
+                <!-- Bottom Action Buttons matching Maqueta -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dashboard_current_balance"
-                        android:textSize="14sp"
-                        android:textColor="@color/aura_text_secondary"/>
-                        
-                    <TextView
-                        android:id="@+id/tvBalance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="$0.00"
-                        android:textSize="32sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/aura_primary"
-                        android:layout_marginTop="4dp"/>
-                        
-                    <View
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginTop="24dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnPayNow"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/aura_border_light"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"/>
-                        
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dashboard_next_payment"
-                        android:textSize="12sp"
-                        android:textColor="@color/aura_text_secondary"/>
-                        
-                    <TextView
-                        android:id="@+id/tvNextPayment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/payments_coming_soon"
+                        android:layout_height="52dp"
+                        android:text="@string/dashboard_pay_now"
+                        android:textColor="@color/aura_white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:background="@drawable/bg_btn_primary"
+                        android:layout_marginBottom="12dp"
+                        android:enabled="false"
+                        android:alpha="0.5"
+                        android:transitionName="transition_btn_pay" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPaymentSettings"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="@string/payments_settings"
+                        android:textColor="@color/aura_text_primary"
+                        android:textAllCaps="false"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="@color/aura_text_primary"/>
-                </LinearLayout>
-            </com.mexadev.aura.ui.common.AuraCardBtn>
+                        app:strokeColor="@color/aura_border"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="12dp" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:text="@string/dashboard_pay_now"
-                android:textColor="@color/aura_white"
-                android:textStyle="bold"
-                android:background="@drawable/bg_btn_primary"
-                android:layout_marginBottom="24dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/payments_recent_history"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/aura_text_primary"
-                android:layout_marginBottom="12dp"/>
-                
-            <com.mexadev.aura.ui.common.AuraCardBtn
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:isPureWhite="true">
-                
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-                    
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_check"
-                        android:contentDescription="@null"
-                        app:tint="@color/aura_success" />
-                        
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
-                        
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/payments_maintenance_payment"
-                            android:textStyle="bold"
-                            android:textColor="@color/aura_text_primary"/>
-                            
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/payments_one_month_ago"
-                            android:textSize="12sp"
-                            android:textColor="@color/aura_text_secondary"/>
-                    </LinearLayout>
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="$1,250.00"
-                        android:textStyle="bold"
-                        android:textColor="@color/aura_text_primary"/>
                 </LinearLayout>
-            </com.mexadev.aura.ui.common.AuraCardBtn>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Error Banner overlay at top -->
+    <FrameLayout
+        android:id="@+id/errorBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_error"
+        android:elevation="10dp"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvErrorBannerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aura_white"
+            android:textSize="13sp"
+            android:gravity="center"
+            tools:text="Mensaje de error" />
+    </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

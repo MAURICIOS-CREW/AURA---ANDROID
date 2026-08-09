@@ -10,12 +10,12 @@
     android:layout_marginVertical="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/aura_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/aura_white"
         android:padding="16dp">
 
-        <!-- Icon Container -->
+        <!-- Icon Container (Neutral Primary Surface) -->
         <FrameLayout
             android:id="@+id/flIconContainer"
             android:layout_width="44dp"
@@ -64,7 +64,29 @@
             app:layout_constraintEnd_toStartOf="@id/tvStatus"
             app:layout_constraintStart_toEndOf="@id/flIconContainer"
             app:layout_constraintTop_toTopOf="@id/flIconContainer"
-            tools:text="Jardinería Profesional con Mantenimiento de Áreas Verdes Completo" />
+            tools:text="Jardinería Profesional" />
+
+        <!-- Recurrent Tag / Pill Badge -->
+        <TextView
+            android:id="@+id/tvRecurrentBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_pill_info"
+            app:drawableStartCompat="@drawable/ic_repeat"
+            android:drawablePadding="4dp"
+            app:drawableTint="@color/aura_primary"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="@string/services_recurrent_badge"
+            android:textColor="@color/aura_primary"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/flIconContainer"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:visibility="visible" />
 
         <!-- Date and Time Window -->
         <TextView
@@ -77,10 +99,10 @@
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/flIconContainer"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvRecurrentBadge"
             tools:text="Sugerido: 05 Ago, 2026 • 10:00 - 14:00" />
 
-        <!-- Barrier for top section to dynamically position elements below long titles/dates -->
+        <!-- Barrier for top section -->
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierHeader"
             android:layout_width="wrap_content"
@@ -119,6 +141,7 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvExactScheduled"
@@ -140,44 +163,8 @@
                 android:textColor="@color/aura_text_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                tools:text="Código de acceso activo: 8F92A10C" />
+                tools:text="Código de acceso activo (QR Reutilizable)" />
         </LinearLayout>
-
-        <!-- Complete Action Button -->
-        <FrameLayout
-            android:id="@+id/btnCompleteContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="44dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutAccessCode">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnComplete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="44dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="10dp"
-                android:background="@drawable/bg_btn_primary"
-                android:text="@string/services_btn_complete"
-                android:textAllCaps="false"
-                android:textColor="@color/aura_white"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/pbCompleteLoading"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/aura_white"
-                android:visibility="gone" />
-        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.mexadev.aura.ui.common.AuraCardBtn>
-

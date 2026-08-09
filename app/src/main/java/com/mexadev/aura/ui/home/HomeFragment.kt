@@ -1,6 +1,7 @@
 package com.mexadev.aura.ui.home
 
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.RenderEffect
@@ -10,15 +11,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.app.SharedElementCallback
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
 import com.mexadev.aura.LoginActivity
 import com.mexadev.aura.R
 import com.mexadev.aura.core.network.ApiClient
+import com.mexadev.aura.data.model.PendingPaymentItem
 import com.mexadev.aura.databinding.FragmentHomeBinding
+import com.mexadev.aura.ui.payments.PaymentSelectionActivity
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -31,6 +38,16 @@ class HomeFragment : Fragment() {
     
     // Pull to Refresh state
     private var isRefreshing = false
+    private var isNavigating = false
+    private var pendingPaymentItems: List<PendingPaymentItem> = emptyList()
+
+    private val selectionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            fetchDashboardData()
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -163,6 +180,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun startSkeletonAnimation() {
+        setPayButtonsEnabled(false)
         binding.tvWelcomeName.visibility = View.INVISIBLE
         binding.tvResidentialName.visibility = View.INVISIBLE
         binding.tvSaldoValue.visibility = View.INVISIBLE
@@ -232,13 +250,38 @@ class HomeFragment : Fragment() {
                     binding.tvResidentialName.visibility = View.VISIBLE
                     binding.tvResidentialName.text = residenceName
                     
+                    // Fetch real payments data for quick summary section
+                    try {
+                        val paymentsResponse = ApiClient.apiService.getPaymentsSummary(1)
+                        if (paymentsResponse.isSuccessful && paymentsResponse.body()?.status == "success") {
+                            val data = paymentsResponse.body()?.data
+                            val balance = data?.saldoPendiente ?: "0.00"
+                            binding.tvSaldoValue.text = getString(R.string.payments_balance_format, balance)
+
+                            pendingPaymentItems = data?.pagosPendientes.orEmpty()
+                            if (pendingPaymentItems.isNotEmpty()) {
+                                binding.tvCuotaMantenimiento.text = pendingPaymentItems.first().title
+                                binding.tvProximoPagoValue.text = pendingPaymentItems.first().title
+                            } else {
+                                binding.tvCuotaMantenimiento.text = getString(R.string.payments_no_pending)
+                                binding.tvProximoPagoValue.text = getString(R.string.payments_no_pending)
+                            }
+                            setPayButtonsEnabled(true)
+                        } else {
+                            pendingPaymentItems = emptyList()
+                            binding.tvSaldoValue.text = getString(R.string.payments_balance_format, "0.00")
+                            binding.tvProximoPagoValue.text = getString(R.string.payments_no_pending)
+                            setPayButtonsEnabled(false)
+                        }
+                    } catch (_: Exception) {
+                        pendingPaymentItems = emptyList()
+                        binding.tvSaldoValue.text = getString(R.string.payments_balance_format, "0.00")
+                        setPayButtonsEnabled(false)
+                    }
+
                     binding.tvSaldoValue.visibility = View.VISIBLE
-                    binding.tvSaldoValue.text = getString(R.string.home_amount_placeholder)
-                    
                     binding.tvCuotaMantenimiento.visibility = View.VISIBLE
-                    
                     binding.tvProximoPagoValue.visibility = View.VISIBLE
-                    binding.tvProximoPagoValue.text = getString(R.string.home_next_payment_date_placeholder)
                     
                     // Set header user name
                     binding.tvHeaderUserName.text = userName
@@ -272,6 +315,7 @@ class HomeFragment : Fragment() {
                         binding.btnPagarAhora.visibility = View.VISIBLE
                     }
                 } else {
+                    setPayButtonsEnabled(false)
                     val code = response.code()
                     if (code == 401 || code == 403) {
                         // Token expiró y refresh falló (TokenAuthenticator limpió la sesión)
@@ -286,9 +330,11 @@ class HomeFragment : Fragment() {
                 }
             } catch (_: IOException) {
                 if (_binding == null) return@launch
+                setPayButtonsEnabled(false)
                 showErrorOverlay("Sin Conexión", "No hay conexión al servidor.\nVerifica tu red y vuelve a intentarlo.")
             } catch (_: Exception) {
                 if (_binding == null) return@launch
+                setPayButtonsEnabled(false)
                 showErrorOverlay("Error", "Ha ocurrido un error en la aplicación.")
             } finally {
                 if (_binding != null && isRefreshing) {
@@ -299,6 +345,61 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setPayButtonsEnabled(enabled: Boolean) {
+        if (_binding == null) return
+        binding.btnPagarAhora.isEnabled = enabled
+        binding.btnPagarAhora.alpha = if (enabled) 1.0f else 0.5f
+        binding.ivWalletBtn.isEnabled = enabled
+        binding.ivWalletBtn.isClickable = enabled
+        binding.ivWalletBtn.alpha = if (enabled) 1.0f else 0.5f
+    }
+
+    private fun launchPaymentSelection(mode: String) {
+        if (isNavigating) return
+        isNavigating = true
+
+        val json = Gson().toJson(pendingPaymentItems)
+
+        val intent = Intent(requireContext(), PaymentSelectionActivity::class.java).apply {
+            putExtra(PaymentSelectionActivity.EXTRA_PENDING_ITEMS_JSON, json)
+            putExtra(PaymentSelectionActivity.EXTRA_TRANSITION_MODE, mode)
+        }
+
+        // Re-map shared elements on return so each transition reverses to the right origin view
+        requireActivity().setExitSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(
+                names: MutableList<String>,
+                sharedElements: MutableMap<String, View>
+            ) {
+                _binding?.let { b ->
+                    sharedElements["transition_card_balance"] = b.cardSaldo
+                    sharedElements["transition_tv_balance"] = b.tvSaldoValue
+                    sharedElements["transition_tv_label"] = b.tvSaldoLabel
+                    sharedElements["transition_btn_pay"] = b.btnPagarAhora
+                }
+            }
+        })
+
+        val pairs = if (mode == PaymentSelectionActivity.MODE_BUTTON) {
+            // Only the button morphs; the rest of the destination screen springs in on its own
+            arrayOf(Pair.create(binding.btnPagarAhora as View, "transition_btn_pay"))
+        } else {
+            arrayOf(
+                Pair.create(binding.cardSaldo as View, "transition_card_balance"),
+                Pair.create(binding.tvSaldoValue as View, "transition_tv_balance"),
+                Pair.create(binding.tvSaldoLabel as View, "transition_tv_label")
+            )
+        }
+
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(), *pairs
+        )
+
+        selectionLauncher.launch(intent, options)
+
+        binding.root.postDelayed({ isNavigating = false }, 500L)
+    }
+
     private fun showErrorOverlay(title: String, message: String) {
         val mainActivity = requireActivity() as? com.mexadev.aura.MainActivity
         mainActivity?.showGlobalError(title, message) {
@@ -307,7 +408,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupGridClickListeners() {
-        var isNavigating = false
         val clickListener = View.OnClickListener { view ->
             if (isNavigating) return@OnClickListener
             val item = DashboardItem.fromId(view.id) ?: return@OnClickListener
@@ -338,26 +438,34 @@ class HomeFragment : Fragment() {
         binding.btnComunidad.setOnClickListener(clickListener)
         binding.btnEncuestas.setOnClickListener(clickListener)
 
-        // Configurar clicks para elementos del Resumen Rápido (Saldo, Próximo Pago y Botones asociados)
-        val paymentsClickListener = View.OnClickListener { view ->
+        // Configurar clicks para elementos del Resumen Rápido
+        val navToPaymentsListener = View.OnClickListener { _ ->
             if (isNavigating) return@OnClickListener
             isNavigating = true
 
-            view.postDelayed({
+            binding.root.postDelayed({
                 if (!isAdded) {
                     isNavigating = false
                     return@postDelayed
                 }
                 navigator?.navigateToTab(2)
-                view.postDelayed({ isNavigating = false }, 500L)
+                binding.root.postDelayed({ isNavigating = false }, 500L)
             }, 100L)
         }
 
-        binding.btnPagos.setOnClickListener(paymentsClickListener)
-        binding.cardSaldo.setOnClickListener(paymentsClickListener)
-        binding.cardProximoPago.setOnClickListener(paymentsClickListener)
-        binding.btnPagarAhora.setOnClickListener(paymentsClickListener)
-        binding.ivWalletBtn.setOnClickListener(paymentsClickListener)
+        binding.btnPagos.setOnClickListener(navToPaymentsListener)
+        binding.cardProximoPago.setOnClickListener(navToPaymentsListener)
+
+        val payNowFromButtonListener = View.OnClickListener { _ ->
+            launchPaymentSelection(PaymentSelectionActivity.MODE_BUTTON)
+        }
+        val payNowFromCardListener = View.OnClickListener { _ ->
+            launchPaymentSelection(PaymentSelectionActivity.MODE_CARD)
+        }
+
+        binding.btnPagarAhora.setOnClickListener(payNowFromButtonListener)
+        binding.ivWalletBtn.setOnClickListener(payNowFromCardListener)
+        binding.cardSaldo.setOnClickListener(payNowFromCardListener)
 
         binding.tvSeeAll.setOnClickListener { view ->
             if (isNavigating) return@setOnClickListener

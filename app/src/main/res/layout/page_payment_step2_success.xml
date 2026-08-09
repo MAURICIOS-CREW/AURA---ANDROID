@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingVertical="16dp">
+
+    <FrameLayout
+        android:id="@+id/flFormSuccessIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/bg_circle_primary_light"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check"
+            app:tint="@color/aura_success"
+            android:contentDescription="@null"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payments_form_success_title"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/aura_text_primary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/payments_form_success_sub"
+        android:textSize="14sp"
+        android:textColor="@color/aura_text_secondary"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvFormTotalPaidSuccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/aura_primary" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFinishForm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/payments_form_finish"
+        android:textColor="@color/aura_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/bg_btn_primary" />
+</LinearLayout>

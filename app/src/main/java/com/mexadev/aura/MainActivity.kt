@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), DashboardNavigator {
     private val iconActive = mapOf(
         R.id.nav_item_home to R.drawable.ic_nav_home_filled,
         R.id.nav_item_notifications to R.drawable.ic_nav_notifications_filled,
-        R.id.nav_item_payments to R.drawable.ic_wallet,
+        R.id.nav_item_payments to R.drawable.ic_wallet_filled,
         R.id.nav_item_profile to R.drawable.ic_nav_profile_filled
     )
     private val iconInactive = mapOf(

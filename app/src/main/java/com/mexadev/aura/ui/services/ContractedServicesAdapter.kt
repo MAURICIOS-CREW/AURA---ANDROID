@@ -15,7 +15,7 @@ import java.util.Locale
 
 class ContractedServicesAdapter(
     private val onItemClick: (ContractedService, ItemContractedServiceBinding) -> Unit,
-    private val onCompleteClick: (ContractedService, ItemContractedServiceBinding) -> Unit
+    private val onCompleteClick: ((ContractedService, ItemContractedServiceBinding) -> Unit)? = null
 ) : ListAdapter<ContractedService, ContractedServicesAdapter.ViewHolder>(ContractedServiceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,7 +37,7 @@ class ContractedServicesAdapter(
         fun bind(
             item: ContractedService,
             onItemClick: (ContractedService, ItemContractedServiceBinding) -> Unit,
-            onComplete: (ContractedService, ItemContractedServiceBinding) -> Unit
+            @Suppress("UNUSED_PARAMETER") onComplete: ((ContractedService, ItemContractedServiceBinding) -> Unit)?
         ) {
             val context = binding.root.context
             val sTitle = item.service?.title ?: context.getString(R.string.services_title)
@@ -54,26 +54,38 @@ class ContractedServicesAdapter(
                     binding.tvStatus.text = context.getString(R.string.services_status_completed)
                     binding.tvStatus.setBackgroundResource(R.drawable.bg_pill_success)
                     binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_success))
-                    binding.btnCompleteContainer.visibility = View.GONE
                 }
                 "scheduled" -> {
                     binding.tvStatus.text = context.getString(R.string.services_status_scheduled)
                     binding.tvStatus.setBackgroundResource(R.drawable.bg_pill_info)
                     binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_primary))
-                    binding.btnCompleteContainer.visibility = View.VISIBLE
                 }
-                "cancelled" -> {
+                "cancelled", "canceled" -> {
                     binding.tvStatus.text = context.getString(R.string.services_status_cancelled)
                     binding.tvStatus.setBackgroundResource(R.drawable.bg_pill_error)
                     binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_error))
-                    binding.btnCompleteContainer.visibility = View.GONE
                 }
                 else -> { // "created" / pending
                     binding.tvStatus.text = context.getString(R.string.services_status_pending)
                     binding.tvStatus.setBackgroundResource(R.drawable.bg_pill_warning)
                     binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.aura_warning))
-                    binding.btnCompleteContainer.visibility = View.VISIBLE
                 }
+            }
+
+            // Recurrent Badge
+            if (item.isRecurrent == true) {
+                binding.tvRecurrentBadge.visibility = View.VISIBLE
+                val sched = item.suggestedSchedule
+                if (!sched.isNullOrEmpty()) {
+                    binding.tvRecurrentBadge.text = context.getString(
+                        R.string.services_recurrent_schedule_format,
+                        sched.joinToString(", ")
+                    )
+                } else {
+                    binding.tvRecurrentBadge.text = context.getString(R.string.services_recurrent_badge)
+                }
+            } else {
+                binding.tvRecurrentBadge.visibility = View.GONE
             }
 
             // Dates & Times
@@ -109,15 +121,6 @@ class ContractedServicesAdapter(
 
             binding.root.setOnClickListener {
                 onItemClick(item, binding)
-            }
-
-            // Complete button action
-            binding.btnComplete.isEnabled = true
-            binding.btnComplete.text = context.getString(R.string.services_btn_complete)
-            binding.pbCompleteLoading.visibility = View.GONE
-
-            binding.btnComplete.setOnClickListener {
-                onComplete(item, binding)
             }
         }
 

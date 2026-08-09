@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/transfer_instructions"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/aura_text_primary"
+        android:layout_marginBottom="8dp"/>
+
+    <com.mexadev.aura.ui.common.AuraCardBtn
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:isPureWhite="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle_primary_light">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_bank_transfer"
+                    android:contentDescription="@null"
+                    app:tint="@color/aura_primary" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transfer_clabe_title"
+                    android:textSize="12sp"
+                    android:textColor="@color/aura_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transfer_default_clabe"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/aura_text_primary" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnCopyClabeForm"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_copy"
+                android:contentDescription="@null"
+                app:tint="@color/aura_primary" />
+        </LinearLayout>
+    </com.mexadev.aura.ui.common.AuraCardBtn>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/transfer_upload_prompt"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/aura_text_primary"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Button to pick REAL receipt image -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnUploadRealReceipt"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="@string/payments_form_upload_receipt"
+        android:textColor="@color/aura_primary"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_upload"
+        app:iconTint="@color/aura_primary"
+        app:iconGravity="textStart"
+        app:strokeColor="@color/aura_primary"
+        app:strokeWidth="1.5dp"
+        app:cornerRadius="12dp" />
+
+    <!-- Receipt Image Preview Container -->
+    <LinearLayout
+        android:id="@+id/layoutReceiptPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@drawable/bg_dashboard_card"
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivReceiptThumbnail"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_check"
+            android:contentDescription="@null" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/tvReceiptFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:textColor="@color/aura_text_primary"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transfer_receipt_ready"
+                android:textSize="11sp"
+                android:textColor="@color/aura_success" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

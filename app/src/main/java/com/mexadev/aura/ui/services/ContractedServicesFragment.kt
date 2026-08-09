@@ -51,6 +51,7 @@ class ContractedServicesFragment : Fragment() {
     companion object {
         private const val CHIP_ACTIVE = "active"
         private const val CHIP_SCHEDULED = "scheduled"
+        private const val CHIP_RECURRENT = "recurrent"
         private const val CHIP_FINISHED = "finished"
         private const val CHIP_ALL = "all"
     }
@@ -142,9 +143,6 @@ class ContractedServicesFragment : Fragment() {
         adapter = ContractedServicesAdapter(
             onItemClick = { item, itemBinding ->
                 openServiceDetail(item, itemBinding)
-            },
-            onCompleteClick = { item, itemBinding ->
-                completeService(item, itemBinding)
             }
         )
         binding.rvContractedServices.adapter = adapter
@@ -197,6 +195,7 @@ class ContractedServicesFragment : Fragment() {
         // Chips Selection
         binding.chipFilterActive.setOnClickListener { selectChip(CHIP_ACTIVE) }
         binding.chipFilterScheduled.setOnClickListener { selectChip(CHIP_SCHEDULED) }
+        binding.chipFilterRecurrent.setOnClickListener { selectChip(CHIP_RECURRENT) }
         binding.chipFilterFinished.setOnClickListener { selectChip(CHIP_FINISHED) }
         binding.chipFilterAll.setOnClickListener { selectChip(CHIP_ALL) }
 
@@ -258,10 +257,11 @@ class ContractedServicesFragment : Fragment() {
 
         var filtered = contractedList.toList()
 
-        // 1. Status Chip Filtering
+        // 1. Status / Modality Chip Filtering
         filtered = when (selectedChipFilter) {
             CHIP_ACTIVE -> filtered.filter { !isFinishedStatus(it.status) }
             CHIP_SCHEDULED -> filtered.filter { it.status.lowercase(Locale.getDefault()) == "scheduled" }
+            CHIP_RECURRENT -> filtered.filter { it.isRecurrent == true }
             CHIP_FINISHED -> filtered.filter { isFinishedStatus(it.status) }
             CHIP_ALL -> filtered
             else -> {
@@ -360,6 +360,7 @@ class ContractedServicesFragment : Fragment() {
         // Update Chip Styles
         updateChipStyle(binding.chipFilterActive, selectedChipFilter == CHIP_ACTIVE)
         updateChipStyle(binding.chipFilterScheduled, selectedChipFilter == CHIP_SCHEDULED)
+        updateChipStyle(binding.chipFilterRecurrent, selectedChipFilter == CHIP_RECURRENT)
         updateChipStyle(binding.chipFilterFinished, selectedChipFilter == CHIP_FINISHED)
         updateChipStyle(binding.chipFilterAll, selectedChipFilter == CHIP_ALL)
     }
@@ -468,44 +469,6 @@ class ContractedServicesFragment : Fragment() {
         contractedList.addAll(list)
 
         applyFilters(animate = !isPullToRefresh)
-    }
-
-    private fun completeService(item: ContractedService, itemBinding: ItemContractedServiceBinding) {
-        itemBinding.btnComplete.isEnabled = false
-        itemBinding.btnComplete.text = ""
-        itemBinding.pbCompleteLoading.visibility = View.VISIBLE
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val response = ApiClient.apiService.completeContractedService(item.id)
-                if (_binding == null) return@launch
-
-                itemBinding.pbCompleteLoading.visibility = View.GONE
-
-                if (response.isSuccessful && response.body()?.status == "success") {
-                    successBanner.show(response.body()?.message ?: getString(R.string.services_complete_success))
-
-                    val updatedItem = item.copy(status = "completed")
-                    val index = contractedList.indexOfFirst { it.id == item.id }
-                    if (index != -1) {
-                        contractedList[index] = updatedItem
-                        applyFilters()
-                    } else {
-                        fetchContractedServices(isPullToRefresh = true)
-                    }
-                } else {
-                    itemBinding.btnComplete.isEnabled = true
-                    itemBinding.btnComplete.text = getString(R.string.services_btn_complete)
-                    Toast.makeText(requireContext(), R.string.services_error_contract_failed, Toast.LENGTH_SHORT).show()
-                }
-            } catch (_: Exception) {
-                if (_binding == null) return@launch
-                itemBinding.pbCompleteLoading.visibility = View.GONE
-                itemBinding.btnComplete.isEnabled = true
-                itemBinding.btnComplete.text = getString(R.string.services_btn_complete)
-                Toast.makeText(requireContext(), R.string.services_error_no_connection, Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     override fun onResume() {

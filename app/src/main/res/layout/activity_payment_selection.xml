@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/selectionRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/aura_background"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_background"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarSelection"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/btnBackSelection"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_back_button"
+                android:src="@drawable/ic_arrow_right"
+                android:rotation="180"
+                android:contentDescription="@string/cd_back"
+                app:tint="@color/aura_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/payments_select_concepts_title"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <!-- Subtitle Header Card -->
+            <com.mexadev.aura.ui.common.AuraCardBtn
+                android:id="@+id/cardSelectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:isPureWhite="true"
+                android:transitionName="transition_card_balance">
+
+                <LinearLayout
+                    android:background="@color/aura_white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvSelectionSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payments_select_concepts_subtitle"
+                        android:textSize="14sp"
+                        android:textColor="@color/aura_text_secondary"
+                        android:transitionName="transition_tv_label" />
+
+                    <TextView
+                        android:id="@+id/tvTotalCalculatedAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        tools:text="$2,700.00 MXN"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_primary"
+                        android:transitionName="transition_tv_balance" />
+                </LinearLayout>
+            </com.mexadev.aura.ui.common.AuraCardBtn>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/payments_pending_concepts_title"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/aura_text_primary" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPendingConcepts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_pending_payment_selection" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Sticky Bar with Action Button -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/aura_white"
+        android:elevation="8dp"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnProceedToPay"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/payments_proceed_to_pay"
+            android:textColor="@color/aura_white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_btn_primary"
+            android:transitionName="transition_btn_pay" />
+    </FrameLayout>
+
+    <!-- Banner Manager Container -->
+    <FrameLayout
+        android:id="@+id/selectionBannerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/aura_error"
+        android:elevation="10dp"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvSelectionBannerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aura_white"
+            android:textSize="13sp"
+            android:gravity="center"
+            tools:text="Mensaje de error" />
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

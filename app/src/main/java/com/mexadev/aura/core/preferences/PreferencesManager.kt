@@ -76,5 +76,10 @@ class PreferencesManager(context: Context) {
     var communityCount: Int
         get() = prefs.getInt("community_count", 3)
         set(value) = prefs.edit { putInt("community_count", value) }
+
+    /** Number of payment history items for skeleton loading */
+    var paymentsHistoryCount: Int
+        get() = prefs.getInt("payments_history_count", 4)
+        set(value) = prefs.edit { putInt("payments_history_count", value) }
 }
 

@@ -71,6 +71,11 @@
             android:exported="false"
             android:theme="@style/Theme.Aura.Detail" />
 
+        <activity
+            android:name=".ui.payments.PaymentSelectionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Aura.Detail" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -220,6 +220,19 @@ class ContractedServiceDetailActivity : AppCompatActivity() {
         binding.ivServiceIcon.setColorFilter(ContextCompat.getColor(this, theme.iconColorRes))
         binding.flIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, theme.bgColorRes))
 
+        // Recurrent Badge
+        if (item.isRecurrent == true) {
+            binding.tvRecurrentBadge.visibility = View.VISIBLE
+            val days = item.suggestedSchedule
+            if (!days.isNullOrEmpty()) {
+                binding.tvRecurrentBadge.text = getString(R.string.services_recurrent_schedule_format, days.joinToString(", "))
+            } else {
+                binding.tvRecurrentBadge.text = getString(R.string.services_recurrent_badge)
+            }
+        } else {
+            binding.tvRecurrentBadge.visibility = View.GONE
+        }
+
         // Status Badge & Toolbar Status
         when (item.status.lowercase(Locale.getDefault())) {
             "completed" -> {

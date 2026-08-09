@@ -7,12 +7,19 @@ import com.mexadev.aura.data.model.IncidentComment
 import com.mexadev.aura.data.model.IncidentCreateRequest
 import com.mexadev.aura.data.model.IncidentDetail
 import com.mexadev.aura.data.model.IncidentUpdateRequest
+import com.mexadev.aura.data.model.PaymentsResponse
+import com.mexadev.aura.data.model.PaymentProcessRequest
+import com.mexadev.aura.data.model.PaymentProcessResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -118,4 +125,30 @@ interface ApiService {
 
     @PATCH("api/mobile/contracted-services/{id}/complete")
     suspend fun completeContractedService(@Path("id") id: Long): Response<com.mexadev.aura.data.model.CompleteServiceResponse>
+
+    // ── Payments ──────────────────────────────────────────────────────
+    @GET("api/mobile/payments")
+    suspend fun getPaymentsSummary(
+        @Query("page") page: Int = 1
+    ): Response<PaymentsResponse>
+
+    @POST("api/mobile/payments/stripe/create-intent")
+    suspend fun createStripeIntent(
+        @Body request: com.mexadev.aura.data.model.StripeCreateIntentRequest
+    ): Response<com.mexadev.aura.data.model.StripeCreateIntentResponse>
+
+    @POST("api/mobile/payments/pay")
+    suspend fun payPendingItemsJson(
+        @Body request: PaymentProcessRequest
+    ): Response<PaymentProcessResponse>
+
+    @Multipart
+    @POST("api/mobile/payments/pay")
+    suspend fun payPendingItemsMultipart(
+        @Part("items") items: RequestBody,
+        @Part("payment_method") paymentMethod: RequestBody,
+        @Part("stripe_payment_intent_id") stripePaymentIntentId: RequestBody? = null,
+        @Part("payment_method_id") paymentMethodId: RequestBody? = null,
+        @Part receipt: MultipartBody.Part? = null
+    ): Response<PaymentProcessResponse>
 }

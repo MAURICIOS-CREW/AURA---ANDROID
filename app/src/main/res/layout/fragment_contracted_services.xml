@@ -279,6 +279,19 @@
                                         android:textColor="@color/aura_text_secondary"
                                         android:textSize="11sp" />
 
+                                    <!-- Chip: Recurrentes -->
+                                    <TextView
+                                        android:id="@+id/chipFilterRecurrent"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="28dp"
+                                        android:layout_marginEnd="6dp"
+                                        android:background="@drawable/bg_filter_chip_inactive"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="12dp"
+                                        android:text="@string/services_filter_recurrent_only"
+                                        android:textColor="@color/aura_text_secondary"
+                                        android:textSize="11sp" />
+
                                     <!-- Chip: Finalizados (Completados / Cancelados) -->
                                     <TextView
                                         android:id="@+id/chipFilterFinished"

@@ -21,16 +21,16 @@ object ServiceIconHelper {
             text.contains("jardin") || text.contains("pasto") || text.contains("planta") || text.contains("poda") -> {
                 ServiceCategoryTheme(
                     iconRes = R.drawable.ic_gardening,
-                    iconColorRes = R.color.aura_success,
-                    bgColorRes = R.color.aura_success_light,
+                    iconColorRes = R.color.aura_primary,
+                    bgColorRes = R.color.aura_primary_surface,
                     categoryName = "Jardinería"
                 )
             }
             text.contains("limp") || text.contains("aseo") || text.contains("sanit") || text.contains("lavad") -> {
                 ServiceCategoryTheme(
                     iconRes = R.drawable.ic_cleaning,
-                    iconColorRes = R.color.aura_info,
-                    bgColorRes = R.color.aura_info_light,
+                    iconColorRes = R.color.aura_primary,
+                    bgColorRes = R.color.aura_primary_surface,
                     categoryName = "Limpieza"
                 )
             }
@@ -45,15 +45,15 @@ object ServiceIconHelper {
             text.contains("electr") || text.contains("luz") || text.contains("cabl") || text.contains("foco") -> {
                 ServiceCategoryTheme(
                     iconRes = R.drawable.ic_lightning,
-                    iconColorRes = R.color.aura_warning,
-                    bgColorRes = R.color.aura_warning_light,
+                    iconColorRes = R.color.aura_primary,
+                    bgColorRes = R.color.aura_primary_surface,
                     categoryName = "Electricidad"
                 )
             }
             text.contains("pint") || text.contains("imper") || text.contains("resan") -> {
                 ServiceCategoryTheme(
                     iconRes = R.drawable.ic_paint,
-                    iconColorRes = R.color.aura_badge_blue,
+                    iconColorRes = R.color.aura_primary,
                     bgColorRes = R.color.aura_primary_surface,
                     categoryName = "Mantenimiento"
                 )
@@ -61,8 +61,8 @@ object ServiceIconHelper {
             text.contains("segur") || text.contains("chapa") || text.contains("cerraj") || text.contains("camara") -> {
                 ServiceCategoryTheme(
                     iconRes = R.drawable.ic_security,
-                    iconColorRes = R.color.aura_primary_dark,
-                    bgColorRes = R.color.aura_surface_variant,
+                    iconColorRes = R.color.aura_primary,
+                    bgColorRes = R.color.aura_primary_surface,
                     categoryName = "Seguridad"
                 )
             }

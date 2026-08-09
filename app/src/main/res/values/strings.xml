@@ -282,6 +282,7 @@
     <string name="services_filter_active_only">Solo activos</string>
     <string name="services_filter_include_finished">Incluir finalizados</string>
     <string name="services_filter_finished_only">Finalizados</string>
+    <string name="services_filter_recurrent_only">Recurrentes</string>
     <string name="services_filter_all">Todos</string>
     <string name="services_filter_search_hint">Buscar servicio contratado&#8230;</string>
     <string name="services_filter_sort_recent">Más recientes</string>
@@ -293,9 +294,27 @@
     <string name="services_filter_count_total">%1$d servicio(s)</string>
     <string name="services_filter_clear">Limpiar filtros</string>
 
+    <!-- Service Badges -->
+    <string name="services_recurrent_badge">Recurrente</string>
+    <string name="services_single_badge">Único</string>
+    <string name="services_recurrent_schedule_format">Recurrente: %1$s</string>
+
     <!-- Service Booking Sheet -->
     <string name="services_booking_schedule_title">Agendar Visita</string>
-    <string name="services_booking_selected_date">Fecha: %1$s</string>
+    <string name="services_booking_modality_label">Modalidad de Contratación</string>
+    <string name="services_booking_modality_single">Servicio Único</string>
+    <string name="services_booking_modality_recurrent">Recurrente</string>
+    <string name="services_booking_days_label">Días sugeridos para visitas recurrentes</string>
+    <string name="services_booking_day_monday">Lun</string>
+    <string name="services_booking_day_tuesday">Mar</string>
+    <string name="services_booking_day_wednesday">Mié</string>
+    <string name="services_booking_day_thursday">Jue</string>
+    <string name="services_booking_day_friday">Vie</string>
+    <string name="services_booking_day_saturday">Sáb</string>
+    <string name="services_booking_day_sunday">Dom</string>
+    <string name="services_booking_select_days_error">Selecciona al menos un día para la atención recurrente.</string>
+    <string name="services_booking_selected_date">Fecha Sugerida: %1$s</string>
+    <string name="services_booking_start_date">Fecha Inicio Sugerida: %1$s</string>
     <string name="services_booking_time_start">Hora Inicio</string>
     <string name="services_booking_time_end">Hora Fin</string>
     <string name="services_booking_notes_label">Instrucciones para el prestador (Opcional)</string>
@@ -319,6 +338,7 @@
     <string name="services_booking_receipt_uploaded">Comprobante adjuntado</string>
     <string name="services_booking_btn_confirm">Confirmar y Contratar Servicio</string>
     <string name="services_booking_success_title">¡Servicio Contratado!</string>
+    <string name="services_booking_summary_modality">Modalidad: %1$s</string>
     <string name="services_booking_summary_payment">Método de Pago: %1$s</string>
     <string name="services_booking_summary_status">Estado: %1$s</string>
     <string name="services_booking_payment_stripe_name">Tarjeta de Crédito (Stripe)</string>
@@ -405,11 +425,54 @@
     <string name="polls_default_option2">Opción 2</string>
 
     <!-- Payments / Messages Fragment -->
+    <string name="payments_title">Pagos</string>
     <string name="payments_summary_title">Resumen y Pagos</string>
+    <string name="payments_summary_concepts">Conceptos pendientes</string>
     <string name="payments_coming_soon">Próximamente</string>
     <string name="payments_recent_history">Historial Reciente</string>
     <string name="payments_maintenance_payment">Pago Mantenimiento</string>
     <string name="payments_one_month_ago">Hace 1 mes</string>
+    <string name="payments_current_balance">Saldo actual</string>
+    <string name="payments_balance_format">$%1$s MXN</string>
+    <string name="payments_pending_concepts_count">%1$d concepto(s) pendiente(s)</string>
+    <string name="payments_no_pending">Al corriente (Sin saldo pendiente)</string>
+    <string name="payments_history_title">Historial de pagos</string>
+    <string name="payments_load_more">Mostrar más</string>
+    <string name="payments_no_more_history">No hay más pagos en el historial</string>
+    <string name="payments_empty_history">No tienes pagos registrados en el historial</string>
+    <string name="payments_status_paid">Pagado</string>
+    <string name="payments_status_pending">Pendiente</string>
+    <string name="payments_status_approved">Aprobado</string>
+    <string name="payments_status_rejected">Rechazado</string>
+    <string name="payments_settings">Configuración de pagos</string>
+    <string name="payments_pay_selected">Pagar seleccionados (%1$s)</string>
+    <string name="payments_select_concepts_title">Seleccionar conceptos a pagar</string>
+    <string name="payments_select_concepts_subtitle">Marca los conceptos que deseas liquidar hoy</string>
+    <string name="payments_total_to_pay">Total a pagar</string>
+    <string name="payments_proceed_to_pay">Proceder al pago</string>
+    <string name="payments_select_at_least_one">Selecciona al menos un concepto para realizar el pago</string>
+    <string name="payments_detail_title">Detalle del Pago</string>
+    <string name="payments_detail_id">ID de Transacción: #%1$s</string>
+    <string name="payments_detail_amount">Monto</string>
+    <string name="payments_detail_date">Fecha de pago</string>
+    <string name="payments_detail_method">Método de pago</string>
+    <string name="payments_detail_status">Estado</string>
+    <string name="payments_detail_receipt_btn">Ver comprobante de pago</string>
+    <string name="payments_detail_close">Cerrar</string>
+    <string name="payments_form_title">Formulario de Pago</string>
+    <string name="payments_form_stripe_tab">Tarjeta (Stripe)</string>
+    <string name="payments_form_transfer_tab">Transferencia SPEI</string>
+    <string name="payments_form_upload_receipt">Adjuntar comprobante real</string>
+    <string name="payments_form_receipt_selected">Comprobante: %1$s</string>
+    <string name="payments_form_confirm_pay">Confirmar Pago</string>
+    <string name="payments_form_success_title">¡Pago Procesado!</string>
+    <string name="payments_form_success_sub">Tu pago se ha registrado correctamente en el sistema.</string>
+    <string name="payments_form_finish">Entendido / Finalizar</string>
+    <string name="payments_form_success_method">Método de pago: %1$s</string>
+    <string name="payments_form_success_items_count">%1$d concepto(s) pagado(s)</string>
+    <string name="payments_error_fetch">Error al cargar la información de pagos</string>
+    <string name="payments_error_process">Ocurrió un error al procesar el pago</string>
+    <string name="payments_form_card_incomplete">Completa los datos de tu tarjeta para continuar</string>
 
     <!-- Incidents Detail -->
     <string name="incident_cancel">Cancelar reporte</string>
@@ -423,4 +486,21 @@
     <string name="vehicle_label_plate">Placas</string>
     <string name="vehicle_label_brand">Marca</string>
     <string name="vehicle_no_color">Sin color especificado</string>
+
+    <!-- Additional Commit Warning Strings -->
+    <string name="vehicle_hint_color">Color (Opcional)</string>
+    <string name="transfer_instructions">Instrucciones para transferir</string>
+    <string name="transfer_clabe_title">CLABE Interbancaria (STP)</string>
+    <string name="transfer_default_clabe">012180001234567890</string>
+    <string name="transfer_upload_prompt">Una vez realizada, sube tu comprobante</string>
+    <string name="transfer_receipt_ready">Comprobante listo para enviar</string>
+    <string name="confirm_sheet_title">Confirmación</string>
+    <string name="confirm_sheet_message">¿Estás seguro que deseas realizar esta acción?</string>
+    <string name="confirm_sheet_confirm">Confirmar</string>
+    <string name="stripe_payment_secure_title">Pago Seguro vía Stripe</string>
+    <string name="stripe_payment_secure_sub">Procesamiento encriptado de tarjeta sin salir de la app</string>
+    <string name="stripe_payment_secure_native_sub">Tarjeta o PaymentSheet nativo sin salir de la app</string>
+    <string name="stripe_card_manual_hint">Ingresar tarjeta manualmente (Opcional)</string>
+    <string name="payments_pending_concepts_title">Conceptos Pendientes</string>
+    <string name="payments_history_sub_format">%1$s • %2$s</string>
 </resources>

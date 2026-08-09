@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_rounded"
+    android:padding="24dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_drag_handle"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payments_detail_title"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/aura_text_primary" />
+
+    <TextView
+        android:id="@+id/tvDetailTransactionId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp"
+        tools:text="ID de Transacción: #10"
+        android:textSize="12sp"
+        android:textColor="@color/aura_text_secondary" />
+
+    <!-- Card 1: Monto y Concepto principal -->
+    <com.mexadev.aura.ui.common.AuraCardBtn
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:isPureWhite="true"
+        app:cardClickAnimationEnabled="false">
+
+        <LinearLayout
+            android:background="@color/aura_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:gravity="center_vertical">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_circle_primary_light">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_wallet_filled"
+                        app:tint="@color/aura_primary"
+                        android:contentDescription="@null" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payments_detail_amount"
+                        android:textSize="12sp"
+                        android:textColor="@color/aura_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvDetailAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        tools:text="$1,500.00 MXN"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/aura_primary" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/aura_border_light"
+                android:layout_marginVertical="12dp" />
+
+            <TextView
+                android:id="@+id/tvDetailConceptTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Mantenimiento Mensual - 7/2026"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary" />
+        </LinearLayout>
+    </com.mexadev.aura.ui.common.AuraCardBtn>
+
+    <!-- Card 2: Detalles de fecha, método y estado -->
+    <com.mexadev.aura.ui.common.AuraCardBtn
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:isPureWhite="true"
+        app:cardClickAnimationEnabled="false">
+
+        <LinearLayout
+            android:background="@color/aura_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Fila: Fecha -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/aura_text_secondary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/payments_detail_date"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDetailDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="05 de Julio, 2026 14:30"
+                    android:textColor="@color/aura_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/aura_border_light"
+                android:layout_marginVertical="8dp" />
+
+            <!-- Fila: Método de Pago -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_credit_card"
+                    app:tint="@color/aura_text_secondary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/payments_detail_method"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDetailMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Stripe"
+                    android:textColor="@color/aura_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/aura_border_light"
+                android:layout_marginVertical="8dp" />
+
+            <!-- Fila: Estado -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_info"
+                    app:tint="@color/aura_text_secondary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/payments_detail_status"
+                    android:textColor="@color/aura_text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDetailStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:background="@drawable/bg_pill_success"
+                    tools:text="Pagado"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/aura_success" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.mexadev.aura.ui.common.AuraCardBtn>
+
+    <!-- Botón de comprobante (opcional) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnViewReceipt"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/payments_detail_receipt_btn"
+        android:textColor="@color/aura_primary"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_document"
+        app:iconTint="@color/aura_primary"
+        app:iconGravity="textStart"
+        app:strokeColor="@color/aura_primary"
+        app:strokeWidth="1.5dp"
+        app:cornerRadius="12dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone" />
+
+    <!-- Botón Cerrar -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCloseDetail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/payments_detail_close"
+        android:textColor="@color/aura_white"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:background="@drawable/bg_btn_primary" />
+
+</LinearLayout>

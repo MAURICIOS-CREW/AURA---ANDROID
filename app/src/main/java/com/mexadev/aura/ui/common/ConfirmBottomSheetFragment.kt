@@ -70,7 +70,7 @@ class ConfirmBottomSheetFragment : BottomSheetDialogFragment() {
         binding.ivIcon.setColorFilter(ContextCompat.getColor(requireContext(), iconColorRes))
         
         binding.btnConfirm.setTextColor(ContextCompat.getColor(requireContext(), confirmTextColorRes))
-        binding.btnConfirm.setBackgroundResource(confirmBgRes)
+        binding.btnConfirm.backgroundTintList = ContextCompat.getColorStateList(requireContext(), iconColorRes)
 
         setupPhysicsInteractions()
         runPhysicsEntranceAnimations()
@@ -82,10 +82,8 @@ class ConfirmBottomSheetFragment : BottomSheetDialogFragment() {
         val dialog = dialog as? BottomSheetDialog
         dialog?.window?.let { window ->
             window.setDimAmount(0.55f)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-                window.attributes.blurBehindRadius = 24
-            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+            window.attributes.blurBehindRadius = 24
         }
         
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
@@ -98,11 +96,6 @@ class ConfirmBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun applyBackgroundBlurAnimation(show: Boolean, onComplete: (() -> Unit)? = null) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            onComplete?.invoke()
-            return
-        }
-
         val targetView = activity?.findViewById<View>(android.R.id.content) ?: run {
             onComplete?.invoke()
             return
@@ -284,9 +277,7 @@ class ConfirmBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         blurAnimator?.cancel()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            activity?.findViewById<View>(android.R.id.content)?.setRenderEffect(null)
-        }
+        activity?.findViewById<View>(android.R.id.content)?.setRenderEffect(null)
         _binding = null
     }
 

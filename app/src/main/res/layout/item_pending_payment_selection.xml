@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mexadev.aura.ui.common.AuraCardBtn
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardPendingConcept"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:isPureWhite="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/aura_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbConceptSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            app:buttonTint="@color/aura_primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layoutConceptDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@id/cbConceptSelect"
+            app:layout_constraintEnd_toStartOf="@id/tvConceptAmount"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tvConceptTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Mantenimiento Mensual - Agosto 2026"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_text_primary"
+                android:ellipsize="end"
+                android:maxLines="2" />
+
+            <TextView
+                android:id="@+id/tvConceptBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:background="@drawable/bg_pill_info"
+                tools:text="Cuota Mensual"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/aura_info" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvConceptAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="$1,500.00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/aura_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.mexadev.aura.ui.common.AuraCardBtn>

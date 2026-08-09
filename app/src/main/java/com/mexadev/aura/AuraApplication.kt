@@ -19,6 +19,9 @@ class AuraApplication : Application(), DefaultLifecycleObserver {
         super<Application>.onCreate()
         
         ApiClient.initialize(this)
+        val publishableKey = BuildConfig.STRIPE_PUBLISHABLE_KEY.ifEmpty { "pk_test_51Pxxx" }
+        com.stripe.android.PaymentConfiguration.init(this, publishableKey)
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {

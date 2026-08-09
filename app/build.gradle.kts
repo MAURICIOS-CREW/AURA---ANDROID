@@ -11,15 +11,11 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "\"http://10.0.2.2:8000/\""
-
+val stripePublishableKey = localProperties.getProperty("STRIPE_PUBLISHABLE_KEY") ?: "\"\""
 
 android {
     namespace = "com.mexadev.aura"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     buildFeatures {
         viewBinding = true
@@ -30,9 +26,10 @@ android {
         applicationId = "com.mexadev.aura"
         minSdk = 34
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.7.0-beta"
+        versionCode = 9
+        versionName = "1.0.0"
         buildConfigField("String", "BASE_URL", apiBaseUrl)
+        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", stripePublishableKey)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,9 +50,9 @@ android {
 
     sourceSets {
         getByName("main") {
-            res.srcDir("src/main/res")
-            res.srcDir("src/main/res-icons")
-            res.srcDir("src/main/res-shapes")
+            res.directories.add("src/main/res")
+            res.directories.add("src/main/res-icons")
+            res.directories.add("src/main/res-shapes")
         }
     }
 }
@@ -89,9 +86,10 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.datastore.preferences)
     implementation(libs.tink.android)
+    implementation(libs.stripe.android)
     
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    annotationProcessor(libs.room.compiler)
 }

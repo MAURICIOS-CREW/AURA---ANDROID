@@ -21,6 +21,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aura_white"
@@ -37,14 +38,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            tools:ignore="UseCompoundDrawables">
 
             <TextView
                 android:id="@+id/tvFormTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Vehículo"
+                android:text="@string/vehicle_title"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/aura_text_primary" />
@@ -55,6 +57,7 @@
                 android:layout_height="36dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/cd_close"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/aura_text_secondary"
                 android:rotation="270" />
@@ -70,55 +73,37 @@
             android:background="@color/aura_border_light" />
 
         <!-- ── Campo: Placas ── -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilPlate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/etPlate"
+            style="@style/Aura.Input"
             android:layout_marginTop="16dp"
-            android:hint="Placas *"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPlate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapCharacters"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/vehicle_hint_plate"
+            android:inputType="textCapCharacters"
+            android:autofillHints="none"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
 
         <!-- ── Campo: Marca ── -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilBrand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/etBrand"
+            style="@style/Aura.Input"
             android:layout_marginTop="12dp"
-            android:hint="Marca (Opcional)"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBrand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/vehicle_hint_brand"
+            android:inputType="textCapWords"
+            android:autofillHints="none"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
 
         <!-- ── Campo: Color ── -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/etColor"
+            style="@style/Aura.Input"
             android:layout_marginTop="12dp"
-            android:hint="Color (Opcional)"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/vehicle_hint_color"
+            android:inputType="textCapWords"
+            android:autofillHints="none"
+            android:imeOptions="actionDone"
+            android:maxLines="1" />
 
         <!-- ── Botón Guardar ── -->
         <com.google.android.material.button.MaterialButton
@@ -126,7 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="24dp"
-            android:text="Guardar"
+            android:text="@string/vehicle_btn_save"
             android:textColor="@color/aura_white"
             android:textStyle="bold"
             android:textAllCaps="false"
@@ -141,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:text="Eliminar vehículo"
+            android:text="@string/vehicle_btn_delete"
             android:textColor="@color/aura_error"
             android:textStyle="bold"
             android:textAllCaps="false"
